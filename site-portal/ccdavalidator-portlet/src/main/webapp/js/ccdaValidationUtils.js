@@ -6,6 +6,10 @@ var extendedWarningCount;
 var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
+var ccdaFileContent;
+var ccdaValidationErrorLineNumbers = [];
+var ccdaValidationWarningLineNumbers = [];
+var ccdaValidationInfoLineNumbers = [];
 
 function showValidationResults(data){
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
@@ -96,6 +100,7 @@ function buildCcdaErrorList(data){
 		var message = error.message;
 		var path = error.path;
 		var lineNum = error.lineNumber;
+		ccdaValidationErrorLineNumbers.push(Number(lineNum));
 		var source = error.source;
 		var errorDescription = ['<li> ERROR '+(i+1).toString()+'',
 		                    '<ul>',
@@ -524,16 +529,24 @@ function cleanUpCcdaFilesInResult(data, fileHolder){
 	});
 }
 
-function showResults(resultsHtml){
-	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
+function showResults(){
 	$("#resultModal").modal("show");
-	$("#resultModalTabs a[href='#tabs-1']").tab("show");
-    $("#resultModalTabs a[href='#tabs-2']").hide();
     $("#resultModalTabs a[href='#tabs-3']").hide();
     if(Boolean(validationError)){
     	$("#smartCCDAValidationBtn").hide();
         $("#saveResultsBtn").hide();
     }
+}
+
+function buildCCDAValidationResultsTab(resultsHtml){
+	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
+	$("#resultModalTabs a[href='#tabs-1']").tab("show");
+}
+
+function buildCCDAXMLResultsTab(content){
+	$("#ValidationResult .tab-content #tabs-2").text(content);
+	SyntaxHighlighter.highlight();
+	
 }
 
 function showResultsTable(){
@@ -584,9 +597,39 @@ function removeProgressModal(){
 
 function doCcdaValidation(data){
 	var tabHtml1 = buildResultsHtml(data);
-	showResults(tabHtml1);
+	buildCCDAValidationResultsTab(tabHtml1);
+	buildCCDAXMLResultsTab(data.result.files[0].content);
+	showResults();
+	highlightXMLResults(data.result.body.ccdaResults.errors);
     updateStatisticCount();
     removeProgressModal();
+}
+
+function highlightXMLResults(resultsToHighlight){
+	//var errors = data.result.body.ccdaResults.errors;
+	var nResults = resultsToHighlight.length;
+	var lastLineNum;
+	var tempMessage;
+	for (var i=0; i < nResults; i++){
+		var result = resultsToHighlight[i];
+		var lineNum = result.lineNumber;
+		if(lineNum != lastLineNum){
+			$(".gutter .line.number" + lineNum).append( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
+			$(".code .container .line.number" + lineNum).attr( "style", "border: 2px solid #ebccd1 !important; background-color: #f2dede !important").popover(
+					{ 
+						title: "Validation Message", 
+						html: true,
+						content: '<div id="popovercontent'+ lineNum +'">' + result.message + '</div>', 
+						trigger: "click",
+						placement: "auto",
+						template: '<span class="popover resultpopover"><span class="arrow"></span><div class="popover-content"></div></span>'
+						}); 
+		}else{
+			$("#popovercontent" + lineNum).text('oh no you didnnn');
+		}
+		lastLineNum = lineNum;
+		tempMessage += result.message;
+	}
 }
 
 (function($) {
@@ -636,4 +679,8 @@ function getDoc(frame) {
         doc = frame.document;
     }
     return doc;
+}
+
+function getValueForKeyPair(k,v) {
+    return v[k];
 }

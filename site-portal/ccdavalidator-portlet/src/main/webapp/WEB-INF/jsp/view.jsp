@@ -518,8 +518,8 @@
 						<div class="tab-content" id="resultTabContent">
 							<div class="tab-pane" id="tabs-1">
 							</div>
-							<div class="tab-pane" id="tabs-2">
-							</div>
+							<pre class="brush: xml" id="tabs-2">
+							</pre>
 							<div class="tab-pane" id="tabs-3"></div>
 						</div>
 					</div>
@@ -546,7 +546,6 @@
 					
 				</form>
 			</div>
-
 
 			<portlet:renderURL var="viewCaseURL">
 				<portlet:param name="jspPage" value="/view2.jsp" />
