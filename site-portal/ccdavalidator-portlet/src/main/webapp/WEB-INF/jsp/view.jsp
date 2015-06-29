@@ -509,7 +509,7 @@
 						aria-hidden="true">&times;</button>
 					<ul class="nav nav-tabs" id="resultModalTabs">
 					  <li><a href="#tabs-1" data-toggle="tab">Validation Result</a></li>
-					  <li><a href="#tabs-2" data-toggle="tab">Original C-CDA</a></li>
+					  <li><a href="#ccdaXML" data-toggle="tab">Original C-CDA</a></li>
 					  <li><a href="#tabs-3" data-toggle="tab">Smart C-CDA Result</a></li>
 					</ul>
 				</div>
@@ -518,8 +518,7 @@
 						<div class="tab-content" id="resultTabContent">
 							<div class="tab-pane" id="tabs-1">
 							</div>
-							<pre class="brush: xml" id="tabs-2">
-							</pre>
+							<div id="ccdaXML"></div>
 							<div class="tab-pane" id="tabs-3"></div>
 						</div>
 					</div>

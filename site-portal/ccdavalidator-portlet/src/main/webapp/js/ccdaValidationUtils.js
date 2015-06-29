@@ -6,10 +6,6 @@ var extendedWarningCount;
 var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
-var ccdaFileContent;
-var ccdaValidationErrorLineNumbers = [];
-var ccdaValidationWarningLineNumbers = [];
-var ccdaValidationInfoLineNumbers = [];
 
 function showValidationResults(data){
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
@@ -100,7 +96,6 @@ function buildCcdaErrorList(data){
 		var message = error.message;
 		var path = error.path;
 		var lineNum = error.lineNumber;
-		ccdaValidationErrorLineNumbers.push(Number(lineNum));
 		var source = error.source;
 		var errorDescription = ['<li> ERROR '+(i+1).toString()+'',
 		                    '<ul>',
@@ -122,6 +117,21 @@ function buildCcdaErrorList(data){
 	errorList.push('</ul>');
 	errorList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
 	return (errorList.join('\n'));
+}
+
+function buildCcdaErrorsMap(data){
+	var ccdaValidationErrorsMap = new Object;
+	var errors = data.result.body.ccdaResults.errors;
+	var nErrors = errors.length;
+	for (var i=0; i < nErrors; i++){
+		var error = errors[i];
+		if(ccdaValidationErrorsMap[error.lineNumber] != undefined){
+			ccdaValidationErrorsMap[error.lineNumber].push(error.message);
+		}else{
+			ccdaValidationErrorsMap[error.lineNumber] = [error.message];
+		}
+	}
+	return ccdaValidationErrorsMap;
 }
 
 function buildExtendedCcdaErrorList(data){
@@ -533,6 +543,8 @@ function showResults(){
 	$("#resultModal").modal("show");
     $("#resultModalTabs a[href='#tabs-3']").hide();
     if(Boolean(validationError)){
+    	$("#resultModalTabs a[href='#tabs-2']").hide();
+    	$("#resultModalTabs a[href='#tabs-3']").hide();
     	$("#smartCCDAValidationBtn").hide();
         $("#saveResultsBtn").hide();
     }
@@ -544,9 +556,9 @@ function buildCCDAValidationResultsTab(resultsHtml){
 }
 
 function buildCCDAXMLResultsTab(content){
-	$("#ValidationResult .tab-content #tabs-2").text(content);
+	$('#ccdaXML').html("<pre id=\"tabs-2\" class=\"brush: xml\">" + content + "</pre>");
+	//$("#ValidationResult .tab-content #tabs-2").text(content);
 	SyntaxHighlighter.highlight();
-	
 }
 
 function showResultsTable(){
@@ -600,36 +612,37 @@ function doCcdaValidation(data){
 	buildCCDAValidationResultsTab(tabHtml1);
 	buildCCDAXMLResultsTab(data.result.files[0].content);
 	showResults();
-	highlightXMLResults(data.result.body.ccdaResults.errors);
-    updateStatisticCount();
+    highlightXMLResults(buildCcdaErrorsMap(data));
+	updateStatisticCount();
     removeProgressModal();
 }
 
 function highlightXMLResults(resultsToHighlight){
-	//var errors = data.result.body.ccdaResults.errors;
-	var nResults = resultsToHighlight.length;
-	var lastLineNum;
-	var tempMessage;
-	for (var i=0; i < nResults; i++){
-		var result = resultsToHighlight[i];
-		var lineNum = result.lineNumber;
-		if(lineNum != lastLineNum){
-			$(".gutter .line.number" + lineNum).append( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
-			$(".code .container .line.number" + lineNum).attr( "style", "border: 2px solid #ebccd1 !important; background-color: #f2dede !important").popover(
-					{ 
-						title: "Validation Message", 
-						html: true,
-						content: '<div id="popovercontent'+ lineNum +'">' + result.message + '</div>', 
-						trigger: "click",
-						placement: "auto",
-						template: '<span class="popover resultpopover"><span class="arrow"></span><div class="popover-content"></div></span>'
-						}); 
-		}else{
-			$("#popovercontent" + lineNum).text('oh no you didnnn');
+	for (var key in resultsToHighlight){
+		if(key.hasOwnProperty){
+			var result = resultsToHighlight[key];
+			var lineNum = key;
+				$(".gutter .line.number" + lineNum).append( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
+				$(".code .container .line.number" + lineNum).attr( "style", "border: 2px solid #ebccd1 !important; background-color: #f2dede !important").popover(
+						{ 
+							title: "Validation Message", 
+							html: true,
+							content: createResultListPopoverHtml(result), 
+							trigger: "click",
+							placement: "auto",
+							template: '<span class="popover resultpopover"><span class="arrow"></span><div class="popover-content"></div></span>'
+							}); 
 		}
-		lastLineNum = lineNum;
-		tempMessage += result.message;
 	}
+}
+
+function createResultListPopoverHtml(results){
+	var htmlList = '<ul>';
+	for(var i = 0; i < results.length; i++){
+		htmlList += '<li>' + results[i] + '</li>'
+	}
+	htmlList += '</ul>';
+	return htmlList;
 }
 
 (function($) {
