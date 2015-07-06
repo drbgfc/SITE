@@ -6,6 +6,7 @@ var extendedWarningCount;
 var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
+var resultLinesToHighlight;
 
 function showValidationResults(data){
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
@@ -557,7 +558,7 @@ function buildCCDAValidationResultsTab(resultsHtml){
 
 function buildCCDAXMLResultsTab(content){
 	$('#ccdaXML').html("<pre id=\"tabs-2\" class=\"brush: xml\">" + content + "</pre>");
-	//$("#ValidationResult .tab-content #tabs-2").text(content);
+	SyntaxHighlighter.defaults['auto-links'] = false;
 	SyntaxHighlighter.highlight();
 }
 
@@ -608,11 +609,13 @@ function removeProgressModal(){
 }
 
 function doCcdaValidation(data){
+	var resultMap = buildCcdaErrorsMap(data);
+	resultLinesToHighlight = Object.keys(resultMap);
 	var tabHtml1 = buildResultsHtml(data);
 	buildCCDAValidationResultsTab(tabHtml1);
 	buildCCDAXMLResultsTab(data.result.files[0].content);
 	showResults();
-    highlightXMLResults(buildCcdaErrorsMap(data));
+    highlightXMLResults(resultMap);
 	updateStatisticCount();
     removeProgressModal();
 }
@@ -622,19 +625,40 @@ function highlightXMLResults(resultsToHighlight){
 		if(key.hasOwnProperty){
 			var result = resultsToHighlight[key];
 			var lineNum = key;
-				$(".gutter .line.number" + lineNum).append( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
+				$(".gutter .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
 				$(".code .container .line.number" + lineNum).attr( "style", "border: 2px solid #ebccd1 !important; background-color: #f2dede !important").popover(
 						{ 
-							title: "Validation Message", 
+							title: "Validation Message",
 							html: true,
 							content: createResultListPopoverHtml(result), 
 							trigger: "click",
 							placement: "auto",
-							template: '<span class="popover resultpopover"><span class="arrow"></span><div class="popover-content"></div></span>'
+							template: '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important"></span></div><span class="arrow"></span><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important"></span></div></span>'
 							}); 
 		}
 	}
 }
+
+$('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
+	alert($(this).closest('.gutter').next('.glyphicon.glyphicon-exclamation-sign.alert-danger'))
+	var nextIndex = $(this).index(".glyphicon-arrow-down") + 1;
+	var elementToScrollTo = $(".gutter .line.number" + resultLinesToHighlight[nextIndex]); 
+	if(nextIndex < resultLinesToHighlight.length){
+		$('#resultModal').animate({
+		 	scrollTop: elementToScrollTo.position().top
+		    }, 2000);
+	}
+});
+
+$('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
+	var nextIndex = $(this).index(".glyphicon-arrow-up") - 1;
+	var elementToScrollTo = $(".gutter .line.number" + resultLinesToHighlight[nextIndex]); 
+	if(nextIndex <= resultLinesToHighlight.length){
+	 $('#resultModal').animate({
+	 	scrollTop: elementToScrollTo.position().top
+	    }, 2000);
+	}
+});
 
 function createResultListPopoverHtml(results){
 	var htmlList = '<ul>';
