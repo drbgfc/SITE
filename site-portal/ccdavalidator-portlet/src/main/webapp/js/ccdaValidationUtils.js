@@ -135,6 +135,36 @@ function buildCcdaErrorsMap(data){
 	return ccdaValidationErrorsMap;
 }
 
+function buildCcdaWarningsMap(data){
+	var ccdaValidationWarningsMap = new Object;
+	var warnings = data.result.body.ccdaResults.warnings;
+	var nWarnings = warnings.length;
+	for (var i=0; i < nWarnings; i++){
+		var warning = warnings[i];
+		if(ccdaValidationWarningsMap[warning.lineNumber] != undefined){
+			ccdaValidationWarningsMap[warning.lineNumber].push(warning.message);
+		}else{
+			ccdaValidationWarningsMap[warning.lineNumber] = [warning.message];
+		}
+	}
+	return ccdaValidationWarningsMap;
+}
+
+function buildCcdaInfoMap(data){
+	var ccdaValidationInfoMap = new Object;
+	var infos = data.result.body.ccdaResults.info;
+	var nInfos = infos.length;
+	for (var i=0; i < nInfos; i++){
+		var info = infos[i];
+		if(ccdaValidationInfoMap[info.lineNumber] != undefined){
+			ccdaValidationInfoMap[info.lineNumber].push(info.message);
+		}else{
+			ccdaValidationInfoMap[info.lineNumber] = [info.message];
+		}
+	}
+	return ccdaValidationInfoMap;
+}
+
 function buildExtendedCcdaErrorList(data){
 	var errorList = ['<a name="vocabularyErrors"/><b>Vocabulary Validation Errors:</b>',
 	                 '<ul>'];
@@ -557,7 +587,7 @@ function buildCCDAValidationResultsTab(resultsHtml){
 }
 
 function buildCCDAXMLResultsTab(content){
-	$('#ccdaXML').html("<pre id=\"tabs-2\" class=\"brush: xml\">" + content + "</pre>");
+	$('#tabs-2').html("<pre id=\"ccdaXML\" class=\"brush: xml\">" + content + "</pre>");
 	SyntaxHighlighter.defaults['auto-links'] = false;
 	SyntaxHighlighter.highlight();
 }
@@ -625,8 +655,8 @@ function highlightXMLResults(resultsToHighlight){
 		if(key.hasOwnProperty){
 			var result = resultsToHighlight[key];
 			var lineNum = key;
-				$(".gutter .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
-				$(".code .container .line.number" + lineNum).attr( "style", "border: 2px solid #ebccd1 !important; background-color: #f2dede !important").popover(
+			$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
+				$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
 						{ 
 							title: "Validation Message",
 							html: true,
@@ -640,24 +670,15 @@ function highlightXMLResults(resultsToHighlight){
 }
 
 $('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
-	alert($(this).closest('.gutter').next('.glyphicon.glyphicon-exclamation-sign.alert-danger'))
-	var nextIndex = $(this).index(".glyphicon-arrow-down") + 1;
-	var elementToScrollTo = $(".gutter .line.number" + resultLinesToHighlight[nextIndex]); 
-	if(nextIndex < resultLinesToHighlight.length){
 		$('#resultModal').animate({
-		 	scrollTop: elementToScrollTo.position().top
+		 	scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight').first().position().top
 		    }, 2000);
-	}
 });
 
 $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
-	var nextIndex = $(this).index(".glyphicon-arrow-up") - 1;
-	var elementToScrollTo = $(".gutter .line.number" + resultLinesToHighlight[nextIndex]); 
-	if(nextIndex <= resultLinesToHighlight.length){
 	 $('#resultModal').animate({
-	 	scrollTop: elementToScrollTo.position().top
+	 	scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight')[1]).position().top
 	    }, 2000);
-	}
 });
 
 function createResultListPopoverHtml(results){

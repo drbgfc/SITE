@@ -357,9 +357,23 @@ table tbody{
     word-wrap: break-word;
 }
 
+.resultpopover {
+  max-width: 785px !important;
+  padding: 10px !important;
+  background-color: beige;
+}
 
 .resultpopover {
   max-width: 500px !important;
   padding: 10px !important;
   background-color: beige;
+}
+.syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
+	border: 2px solid #ebccd1 !important; 
+	background-color: #f2dede !important;
+}
+
+.syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
+	border: 2px solid #ebccd1 !important; 
+	background-color: #f2dede !important;
 }
