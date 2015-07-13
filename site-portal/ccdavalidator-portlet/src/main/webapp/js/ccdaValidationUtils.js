@@ -6,7 +6,6 @@ var extendedWarningCount;
 var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
-var resultLinesToHighlight;
 
 function showValidationResults(data){
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
@@ -99,20 +98,20 @@ function buildCcdaErrorList(data){
 		var lineNum = error.lineNumber;
 		var source = error.source;
 		var errorDescription = ['<li> ERROR '+(i+1).toString()+'',
-		                    '<ul>',
-		                    	'<li>Message: '+ message + '</li>',
-		                    '</ul>',
-		                    '<ul>',
-	                    		'<li>Path: '+ path + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-	                    		'<li>Line Number (approximate): '+ lineNum + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-                    			'<li>Source: (approximate): '+ source + '</li>',
-                    		'</ul>',
-                    		'</li>'
-		                    ];
+		                        '<ul>',
+		                        '<li>Message: '+ message + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Path: '+ path + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Line Number (approximate): '+ lineNum + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Source: (approximate): '+ source + '</li>',
+		                        '</ul>',
+		                        '</li>'
+		                        ];
 		errorList = errorList.concat(errorDescription);
 	}
 	errorList.push('</ul>');
@@ -180,29 +179,29 @@ function buildExtendedCcdaErrorList(data){
 		var displayName = error.displayName;
 		var nodeIndex = error.nodeIndex;
 		var errorDescription = ['<li> ERROR '+(i+1).toString()+'',
-		                    '<ul>',
-		                    	'<li>Message: '+ message + '</li>',
-		                    '</ul>',
-		                    '<ul>',
-	                    		'<li>Code System Name: '+ codeSystemName + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-	                    		'<li>XPath Expression: '+ xpathExpression + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-                    			'<li>Code System: '+ codeSystem + '</li>',
-                    		'</ul>',
-	                    	'<ul>',
-                				'<li>Code: '+ code + '</li>',
-                			'</ul>',
-                			'<ul>',
-                				'<li>Display Name: '+ displayName + '</li>',
-                			'</ul>',
-                			'<ul>',
-            					'<li>Node Index: '+ nodeIndex + '</li>',
-            				'</ul>',
-                    		'</li>'
-		                    ];
+		                        '<ul>',
+		                        '<li>Message: '+ message + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Code System Name: '+ codeSystemName + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>XPath Expression: '+ xpathExpression + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Code System: '+ codeSystem + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Code: '+ code + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Display Name: '+ displayName + '</li>',
+		                        '</ul>',
+		                        '<ul>',
+		                        '<li>Node Index: '+ nodeIndex + '</li>',
+		                        '</ul>',
+		                        '</li>'
+		                        ];
 		errorList = errorList.concat(errorDescription);
 	}
 	errorList.push('</ul>');
@@ -211,41 +210,41 @@ function buildExtendedCcdaErrorList(data){
 }
 
 function buildCcdaWarningList(data){
-		var warningList = ['<a name="ccdaWarnings"/><b>C-CDA Validation Warnings:</b>',
-		                   '<ul>'];
-		var warnings = data.result.body.ccdaResults.warnings;
-		var nWarnings = warnings.length;
-		for (var i=0; i < nWarnings; i++){
-			var warning = warnings[i];
-			var message = warning.message;
-			var path = warning.path;
-			var lineNum = warning.lineNumber;
-			var source = warning.source;
-			var warningDescription = ['<li> WARNING '+(i+1).toString()+'',
-			                    '<ul>',
-			                    	'<li>Message: '+ message + '</li>',
-			                    '</ul>',
-			                    '<ul>',
-		                    		'<li>Path: '+ path + '</li>',
-		                    	'</ul>',
-		                    	'<ul>',
-		                    		'<li>Line Number (approximate): '+ lineNum + '</li>',
-		                    	'</ul>',
-		                    	'<ul>',
-	                    			'<li>Source: (approximate): '+ source + '</li>',
-	                    		'</ul>',
-	                    		'</li>'
-			                    ];
-			warningList = warningList.concat(warningDescription);
-		}
-		warningList.push('</ul>');
-		warningList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-		return (warningList.join('\n'));
+	var warningList = ['<a name="ccdaWarnings"/><b>C-CDA Validation Warnings:</b>',
+	                   '<ul>'];
+	var warnings = data.result.body.ccdaResults.warnings;
+	var nWarnings = warnings.length;
+	for (var i=0; i < nWarnings; i++){
+		var warning = warnings[i];
+		var message = warning.message;
+		var path = warning.path;
+		var lineNum = warning.lineNumber;
+		var source = warning.source;
+		var warningDescription = ['<li> WARNING '+(i+1).toString()+'',
+		                          '<ul>',
+		                          '<li>Message: '+ message + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Path: '+ path + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Line Number (approximate): '+ lineNum + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Source: (approximate): '+ source + '</li>',
+		                          '</ul>',
+		                          '</li>'
+		                          ];
+		warningList = warningList.concat(warningDescription);
+	}
+	warningList.push('</ul>');
+	warningList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
+	return (warningList.join('\n'));
 }
 
 function buildExtendedCcdaWarningList(data){
 	var warningList = ['<a name="vocabularyWarnings"/><b>Vocabulary Validation Warnings:</b>',
-	                 '<ul>'];
+	                   '<ul>'];
 	var warnings = data.result.body.ccdaExtendedResults.warningList;
 	var nWarnings = warnings.length;
 	for (var i=0; i < nWarnings; i++){
@@ -258,29 +257,29 @@ function buildExtendedCcdaWarningList(data){
 		var displayName = warning.displayName;
 		var nodeIndex = warning.nodeIndex;
 		var warningDescription = ['<li> WARNING '+(i+1).toString()+'',
-		                    '<ul>',
-		                    	'<li>Message: '+ message + '</li>',
-		                    '</ul>',
-		                    '<ul>',
-	                    		'<li>Code System Name: '+ codeSystemName + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-	                    		'<li>XPath Expression: '+ xpathExpression + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-                    			'<li>Code System: '+ codeSystem + '</li>',
-                    		'</ul>',
-	                    	'<ul>',
-                				'<li>Code: '+ code + '</li>',
-                			'</ul>',
-                			'<ul>',
-                				'<li>Display Name: '+ displayName + '</li>',
-                			'</ul>',
-                			'<ul>',
-            					'<li>Node Index: '+ nodeIndex + '</li>',
-            				'</ul>',
-                    		'</li>'
-		                    ];
+		                          '<ul>',
+		                          '<li>Message: '+ message + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Code System Name: '+ codeSystemName + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>XPath Expression: '+ xpathExpression + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Code System: '+ codeSystem + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Code: '+ code + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Display Name: '+ displayName + '</li>',
+		                          '</ul>',
+		                          '<ul>',
+		                          '<li>Node Index: '+ nodeIndex + '</li>',
+		                          '</ul>',
+		                          '</li>'
+		                          ];
 		warningList = warningList.concat(warningDescription);
 	}
 	warningList.push('</ul>');
@@ -289,41 +288,41 @@ function buildExtendedCcdaWarningList(data){
 }
 
 function buildCcdaInfoList(data){
-		var infoList = ['<a name="ccdaInfo"/><b>C-CDA Validation Info:</b>',
-		                '<ul>'];
-		var infos = data.result.body.ccdaResults.info;
-		var nInfos = infos.length;
-		for (var i=0; i < nInfos; i++){
-			var info = infos[i];
-			var message = info.message;
-			var path = info.path;
-			var lineNum = info.lineNumber;
-			var source = info.source;
-			var infoDescription = ['<li> INFO '+(i+1).toString()+'',
-			                    '<ul>',
-			                    	'<li>Message: '+ message + '</li>',
-			                    '</ul>',
-			                    '<ul>',
-		                    		'<li>Path: '+ path + '</li>',
-		                    	'</ul>',
-		                    	'<ul>',
-		                    		'<li>Line Number (approximate): '+ lineNum + '</li>',
-		                    	'</ul>',
-		                    	'<ul>',
-	                    			'<li>Source: (approximate): '+ source + '</li>',
-	                    		'</ul>',
-	                    		'</li>'
-			                    ];
-			infoList = infoList.concat(infoDescription);
-		}
-		infoList.push('</ul>');
-		infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-		return (infoList.join('\n'));
+	var infoList = ['<a name="ccdaInfo"/><b>C-CDA Validation Info:</b>',
+	                '<ul>'];
+	var infos = data.result.body.ccdaResults.info;
+	var nInfos = infos.length;
+	for (var i=0; i < nInfos; i++){
+		var info = infos[i];
+		var message = info.message;
+		var path = info.path;
+		var lineNum = info.lineNumber;
+		var source = info.source;
+		var infoDescription = ['<li> INFO '+(i+1).toString()+'',
+		                       '<ul>',
+		                       '<li>Message: '+ message + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Path: '+ path + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Line Number (approximate): '+ lineNum + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Source: (approximate): '+ source + '</li>',
+		                       '</ul>',
+		                       '</li>'
+		                       ];
+		infoList = infoList.concat(infoDescription);
+	}
+	infoList.push('</ul>');
+	infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
+	return (infoList.join('\n'));
 }
 
 function buildExtendedCcdaInfoList(data){
 	var infoList = ['<a name="vocabularyInfo"/><b>Vocabulary Validation Info:</b>',
-	                 '<ul>'];
+	                '<ul>'];
 	var infos = data.result.body.ccdaExtendedResults.informationList;
 	var nInfos = infos.length;
 	for (var i=0; i < nInfos; i++){
@@ -336,29 +335,29 @@ function buildExtendedCcdaInfoList(data){
 		var displayName = info.displayName;
 		var nodeIndex = info.nodeIndex;
 		var infoDescription = ['<li> INFO '+(i+1).toString()+'',
-		                    '<ul>',
-		                    	'<li>Message: '+ message + '</li>',
-		                    '</ul>',
-		                    '<ul>',
-	                    		'<li>Code System Name: '+ codeSystemName + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-	                    		'<li>XPath Expression: '+ xpathExpression + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-                    			'<li>Code System: '+ codeSystem + '</li>',
-                    		'</ul>',
-	                    	'<ul>',
-                				'<li>Code: '+ code + '</li>',
-                			'</ul>',
-                			'<ul>',
-                				'<li>Display Name: '+ displayName + '</li>',
-                			'</ul>',
-                			'<ul>',
-            					'<li>Node Index: '+ nodeIndex + '</li>',
-            				'</ul>',
-                    		'</li>'
-		                    ];
+		                       '<ul>',
+		                       '<li>Message: '+ message + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Code System Name: '+ codeSystemName + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Code System: '+ codeSystem + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Code: '+ code + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Display Name: '+ displayName + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Node Index: '+ nodeIndex + '</li>',
+		                       '</ul>',
+		                       '</li>'
+		                       ];
 		infoList = infoList.concat(infoDescription);
 	}
 	infoList.push('</ul>');
@@ -368,7 +367,7 @@ function buildExtendedCcdaInfoList(data){
 
 function buildCcdaDataQualityConcernsList(data){
 	var infoList = ['<a name="dataqualityConcerns"/><b>Data Quality Concerns:</b>',
-	                 '<ul>'];
+	                '<ul>'];
 	var infos = data.result.body.ccdaDataQualityResults.dataQualityConcerns;
 	var nInfos = infos.length;
 	for (var i=0; i < nInfos; i++){
@@ -381,20 +380,20 @@ function buildCcdaDataQualityConcernsList(data){
 		//var displayName = info.displayName;
 		var nodeIndex = info.nodeIndex;
 		var infoDescription = ['<li> CONCERN '+(i+1).toString()+'',
-		                    '<ul>',
-		                    	'<li>Message: '+ message + '</li>',
-		                    '</ul>',
-		                    '<ul>',
-	                    		'<li>xsi:type: '+ xsiType + '</li>',
-	                    	'</ul>',
-	                    	'<ul>',
-	                    		'<li>XPath Expression: '+ xpathExpression + '</li>',
-	                    	'</ul>',
-                			'<ul>',
-            					'<li>Node Index: '+ nodeIndex + '</li>',
-            				'</ul>',
-                    		'</li>'
-		                    ];
+		                       '<ul>',
+		                       '<li>Message: '+ message + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>xsi:type: '+ xsiType + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
+		                       '</ul>',
+		                       '<ul>',
+		                       '<li>Node Index: '+ nodeIndex + '</li>',
+		                       '</ul>',
+		                       '</li>'
+		                       ];
 		infoList = infoList.concat(infoDescription);
 	}
 	infoList.push('</ul>');
@@ -408,38 +407,38 @@ function handleFileUploadError(){
 	$('.blockMsg .progressorpanel .lbl').text('Error uploading file.');
 	if(window.validationpanel){
 		window.validationPanelTimeout = setTimeout(function(){
-				window.validationpanel.unbind("click");
-				window.validationpanel.unblock();
-			},10000);
-		
+			window.validationpanel.unbind("click");
+			window.validationpanel.unblock();
+		},10000);
+
 		window.validationpanel.bind("click", function() { 
 			window.validationpanel.unbind("click");
 			clearTimeout(window.validationPanelTimeout);
 			window.validationpanel.unblock();
 			window.validationpanel.attr('title','Click to hide this message.').click($.unblockUI); 
-        });	
+		});	
 	}
 }
 
 function buildValidationResultErrorHtml(data){
 	var errorHtml = ['<title>Validation Results</title>',
-	    '<h1 align="center">Validation Results</h1>',
-	    '<font color="red">',
-	    'An error occurred during validation with the following details:</br></br>',
-	    '<b>' + data.result.body.ccdaResults.error + '</b></br></br>',
-	    'If possible, please fix the error and try again. If this error persists, please contact the system administrator',
-	    '</font>',
-	    '<hr/>',
-	    '<hr/>',
-	    '<br/>'];
+	                 '<h1 align="center">Validation Results</h1>',
+	                 '<font color="red">',
+	                 'An error occurred during validation with the following details:</br></br>',
+	                 '<b>' + data.result.body.ccdaResults.error + '</b></br></br>',
+	                 'If possible, please fix the error and try again. If this error persists, please contact the system administrator',
+	                 '</font>',
+	                 '<hr/>',
+	                 '<hr/>',
+	                 '<br/>'];
 	return errorHtml;
 }
 
 function buildValidationResultsHeader(uploadedFileName, docTypeSelected){
 	var header =  ['<title>Validation Results</title>',
-				    '<a name="validationResults"/>',
-				    '<div class="row">',
-				    '<b>Upload Results:</b> '+uploadedFileName+' was uploaded successfully.'];
+	               '<a name="validationResults"/>',
+	               '<div class="row">',
+	               '<b>Upload Results:</b> '+uploadedFileName+' was uploaded successfully.'];
 	if(docTypeSelected != ''){
 		header.push(['<b>Document Type Selected: </b>' +docTypeSelected]);
 	}
@@ -451,14 +450,28 @@ function buildValidationSummary(data){
 	var ccdaReport = data.result.body.ccdaResults.report;
 	var uploadedFileName = data.result.files[0].name;
 	var docTypeSelected = ccdaReport.docTypeSelected;
+<<<<<<< Upstream, based on TEST
+=======
+	var nonSpecific = "Non-specific C-CDA";
+	var isNonSpecific = (docTypeSelected.lastIndexOf(nonSpecific, 0) === 0);
+
+	if (isNonSpecific === true){
+		docTypeSelected = docTypeSelected.replace(nonSpecific, "C-CDA R1.1");
+	}
+
+>>>>>>> 689e075 Errors, Warnings and infos are on the popover for a single line with multiple validation results.
 	ccdaErrorCount = data.result.body.ccdaResults.errors.length;
 	ccdaWarningCount = data.result.body.ccdaResults.warnings.length;
 	ccdaInfoCount = data.result.body.ccdaResults.info.length;
+<<<<<<< Upstream, based on TEST
 	
 	if(documentTypeIsNonSpecific(docTypeSelected)){
 		docTypeSelected = buildValidationHeaderForNonSpecificDocumentType(docTypeSelected);
 	}
 	
+=======
+
+>>>>>>> 689e075 Errors, Warnings and infos are on the popover for a single line with multiple validation results.
 	var tabHtml1 = buildValidationResultsHeader(uploadedFileName, docTypeSelected).join('\n');
 	tabHtml1 += ['<br/><div class="row">'];
 	tabHtml1 += buildValidationSummaryDetailHtml(ccdaErrorCount, ccdaWarningCount, ccdaInfoCount, 'ccda', 'C-CDA Validation Summary').join('\n');
@@ -492,16 +505,16 @@ function documentTypeIsNonSpecific(documentType){
 
 function buildValidationSummaryDetailHtml(errorCount, warningCount, infoCount, summaryType, summaryHeading){
 	var ccdaValidationSummary = ['<div class="panel panel-primary col-md-2 col-lg-2">',
-					    '<div class="panel-heading"><h3 class="panel-title">'+summaryHeading+'</h3></div>',
-					    '<div>',
-					    '<div class="list-group">'];
-						if(errorCount != null)
-							ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-danger">'+errorCount+'</span><a href="#'+summaryType+'Errors"> errors</a></div>']);
-						if(warningCount != null)
-							ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-warning">'+warningCount+'</span><a href="#'+summaryType+'Warnings"> warnings</a></div>']);
-					    if(infoCount != null)
-					    	ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-info">'+infoCount+'</span><a href="#'+summaryType+'Info"> info messages</a></div>']);
-					    ccdaValidationSummary.push(['</div></div></div>']);
+	                             '<div class="panel-heading"><h3 class="panel-title">'+summaryHeading+'</h3></div>',
+	                             '<div>',
+	                             '<div class="list-group">'];
+	if(errorCount != null)
+		ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-danger">'+errorCount+'</span><a href="#'+summaryType+'Errors"> errors</a></div>']);
+	if(warningCount != null)
+		ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-warning">'+warningCount+'</span><a href="#'+summaryType+'Warnings"> warnings</a></div>']);
+	if(infoCount != null)
+		ccdaValidationSummary.push(['<div class="list-group-item"><span class="badge btn-info">'+infoCount+'</span><a href="#'+summaryType+'Info"> info messages</a></div>']);
+	ccdaValidationSummary.push(['</div></div></div>']);
 	return ccdaValidationSummary;
 }
 
@@ -572,13 +585,13 @@ function cleanUpCcdaFilesInResult(data, fileHolder){
 
 function showResults(){
 	$("#resultModal").modal("show");
-    $("#resultModalTabs a[href='#tabs-3']").hide();
-    if(Boolean(validationError)){
-    	$("#resultModalTabs a[href='#tabs-2']").hide();
-    	$("#resultModalTabs a[href='#tabs-3']").hide();
-    	$("#smartCCDAValidationBtn").hide();
-        $("#saveResultsBtn").hide();
-    }
+	$("#resultModalTabs a[href='#tabs-3']").hide();
+	if(Boolean(validationError)){
+		$("#resultModalTabs a[href='#tabs-2']").hide();
+		$("#resultModalTabs a[href='#tabs-3']").hide();
+		$("#smartCCDAValidationBtn").hide();
+		$("#saveResultsBtn").hide();
+	}
 }
 
 function buildCCDAValidationResultsTab(resultsHtml){
@@ -587,7 +600,7 @@ function buildCCDAValidationResultsTab(resultsHtml){
 }
 
 function buildCCDAXMLResultsTab(content){
-	$('#tabs-2').html("<pre id=\"ccdaXML\" class=\"brush: xml\">" + content + "</pre>");
+	$('#tabs-2').html("<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + content + "</pre>");
 	SyntaxHighlighter.defaults['auto-links'] = false;
 	SyntaxHighlighter.highlight();
 }
@@ -618,12 +631,12 @@ function buildResultsHtml(data){
 function showFileValidationProgress(data){
 	var progressval = parseInt(data.loaded / data.total * 100, 10);
 	if(progressval < 99){
-    	$('.blockMsg .progressorpanel .lbl').text('Uploading...');
-   		$('.blockMsg .progressorpanel .progressor').text( floorFigure(data.loaded/data.total*100,0).toString()+"%" );
-    }else{
-    	$('.blockMsg .progressorpanel .lbl').text('Validating...');
-    	$('.blockMsg .progressorpanel .progressor').text('');
-    }
+		$('.blockMsg .progressorpanel .lbl').text('Uploading...');
+		$('.blockMsg .progressorpanel .progressor').text( floorFigure(data.loaded/data.total*100,0).toString()+"%" );
+	}else{
+		$('.blockMsg .progressorpanel .lbl').text('Validating...');
+		$('.blockMsg .progressorpanel .progressor').text('');
+	}
 }
 
 function removeProgressModal(){
@@ -633,52 +646,97 @@ function removeProgressModal(){
 	window.setTimeout(function() {
 		$('#progress').fadeOut(400, function() {
 			$('#progress .progress-bar').css('width', '0%');
-			
+
 		});
 	}, 1000);
 }
 
 function doCcdaValidation(data){
 	var resultMap = buildCcdaErrorsMap(data);
-	resultLinesToHighlight = Object.keys(resultMap);
+	var warningresultMap = buildCcdaWarningsMap(data);
+	var inforesultMap = buildCcdaInfoMap(data);
 	var tabHtml1 = buildResultsHtml(data);
 	buildCCDAValidationResultsTab(tabHtml1);
 	buildCCDAXMLResultsTab(data.result.files[0].content);
 	showResults();
-    highlightXMLResults(resultMap);
+	highlightXMLResults(resultMap, 'ccda', 'error');
+	highlightXMLResults(warningresultMap, 'ccda', 'warning');
+	highlightXMLResults(inforesultMap, 'ccda', 'info');
 	updateStatisticCount();
-    removeProgressModal();
+	removeProgressModal();
 }
 
-function highlightXMLResults(resultsToHighlight){
+function highlightXMLResults(resultsToHighlight, validationType, validationLevel){
 	for (var key in resultsToHighlight){
 		if(key.hasOwnProperty){
+			var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important"></span></div></span>';
 			var result = resultsToHighlight[key];
 			var lineNum = key;
-			$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true'></span>" );
-				$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
-						{ 
-							title: "Validation Message",
-							html: true,
-							content: createResultListPopoverHtml(result), 
-							trigger: "click",
-							placement: "auto",
-							template: '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important"></span></div><span class="arrow"></span><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important"></span></div></span>'
-							}); 
+			var popOverContent = createResultListPopoverHtml(result);
+			if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
+				var title;
+				if(validationLevel == 'error'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+					title = "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)";
+				}else if(validationLevel == 'warning'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+					title = "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)";
+				}else if(validationLevel == 'info'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+					title = "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info";
+				}
+				$(".code .container .line.number" + lineNum).data('bs.popover').options.content += "<h3 class='popover-title result-title'>" + title + "</h3>" + popOverContent;
+			}else{
+				if(validationLevel == 'error'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+					$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
+							{ 
+								title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)",
+								html: true,
+								content: popOverContent,
+								trigger: "click",
+								placement: "auto",
+								template:popoverTemplate
+							});
+				}else if(validationLevel == 'warning'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+					$(".code .container .line.number" + lineNum).addClass("ccdaWarningHighlight").popover(
+							{ 
+								title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)",
+								html: true,
+								content: popOverContent,
+								trigger: "click",
+								placement: "auto",
+								template: popoverTemplate
+							});
+				}else if(validationLevel == 'info'){
+					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+					$(".code .container .line.number" + lineNum).addClass("ccdaInfoHighlight").popover(
+							{ 
+								title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info",
+								html: true,
+								content:  popOverContent,
+								trigger: "click",
+								placement: "auto",
+								template: popoverTemplate
+							});
+				}
+
+			}
 		}
 	}
 }
 
 $('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
-		$('#resultModal').animate({
-		 	scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight').first().position().top
-		    }, 2000);
+	$('#resultModal').animate({
+		scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight').first().position().top
+	}, 2000);
 });
 
 $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
-	 $('#resultModal').animate({
-	 	scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight')[1]).position().top
-	    }, 2000);
+	$('#resultModal').animate({
+		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight')[1]).position().top
+	}, 2000);
 });
 
 function createResultListPopoverHtml(results){
@@ -692,53 +750,53 @@ function createResultListPopoverHtml(results){
 
 (function($) {
 	$.fn.serializefiles = function() {
-	    var obj = $(this);
-	    /* ADD FILE TO PARAM AJAX */
-	    var formData = new FormData();
-	    $.each($(obj).find("input[type='file']"), function(i, tag) {
-	        $.each($(tag)[0].files, function(i, file) {
-	            formData.append(tag.name, file);
-	        });
-	    });
-	    var params = $(obj).serializeArray();
-	    $.each(params, function (i, val) {
-	        formData.append(val.name, val.value);
-	    });
-	    return formData;
+		var obj = $(this);
+		/* ADD FILE TO PARAM AJAX */
+		var formData = new FormData();
+		$.each($(obj).find("input[type='file']"), function(i, tag) {
+			$.each($(tag)[0].files, function(i, file) {
+				formData.append(tag.name, file);
+			});
+		});
+		var params = $(obj).serializeArray();
+		$.each(params, function (i, val) {
+			formData.append(val.name, val.value);
+		});
+		return formData;
 	};
-	})(jQuery);
+})(jQuery);
 
 function errorHandler (request, status, error) {
-    alert("error:"+ error);
-    if(window.validationpanel)
-    	window.validationpanel.unblock();
-    $.unblockUI();
+	alert("error:"+ error);
+	if(window.validationpanel)
+		window.validationpanel.unblock();
+	$.unblockUI();
 }
 
 function getDoc(frame) {
-    var doc = null;
+	var doc = null;
 
-    // IE8 cascading access check
-    try {
-        if (frame.contentWindow) {
-            doc = frame.contentWindow.document;
-        }
-    } catch(err) {
-    }
+	// IE8 cascading access check
+	try {
+		if (frame.contentWindow) {
+			doc = frame.contentWindow.document;
+		}
+	} catch(err) {
+	}
 
-    if (doc) { // successful getting content
-        return doc;
-    }
+	if (doc) { // successful getting content
+		return doc;
+	}
 
-    try { // simply checking may throw in ie8 under ssl or mismatched protocol
-        doc = frame.contentDocument ? frame.contentDocument : frame.document;
-    } catch(err) {
-        // last attempt
-        doc = frame.document;
-    }
-    return doc;
+	try { // simply checking may throw in ie8 under ssl or mismatched protocol
+		doc = frame.contentDocument ? frame.contentDocument : frame.document;
+	} catch(err) {
+		// last attempt
+		doc = frame.document;
+	}
+	return doc;
 }
 
 function getValueForKeyPair(k,v) {
-    return v[k];
+	return v[k];
 }

@@ -361,6 +361,37 @@ table tbody{
   max-width: 785px !important;
   padding: 10px !important;
   background-color: beige;
+	border: 0;
+}
+
+.resultPopoverBackground{
+	background-color: beige;
+}
+
+.resultpopover {
+  max-width: 785px !important;
+  padding: 10px !important;
+  background-color: beige;
+}
+
+.result-title{
+	background-color: beige;
+	font-weight: bold;
+}
+
+.syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
+	/* border: 2px solid #ebccd1 !important;  */
+	background-color: #f2dede !important;
+}
+
+.syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
+	/* border: 2px solid #ebccd1 !important; */ 
+	background-color: #f2dede !important;
+}
+
+.syntaxhighlighter div.line.alt2.ccdaWarningHighlight{
+	/* border: 2px solid #f5e79e !important;  */
+	background-color: #fcf8e3 !important;
 }
 
 .resultpopover {
@@ -372,8 +403,21 @@ table tbody{
 	border: 2px solid #ebccd1 !important; 
 	background-color: #f2dede !important;
 }
+.syntaxhighlighter div.line.alt1.ccdaWarningHighlight{
+	/* border: 2px solid #f5e79e !important; */ 
+	background-color: #fcf8e3 !important;
+}
 
 .syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
 	border: 2px solid #ebccd1 !important; 
 	background-color: #f2dede !important;
+}
+.syntaxhighlighter div.line.alt2.ccdaInfoHighlight{
+	/* border: 2px solid #9acfea !important;  */
+	background-color: #d9edf7 !important;
+}
+
+.syntaxhighlighter div.line.alt1.ccdaInfoHighlight{
+	/* border: 2px solid #9acfea !important; */ 
+	background-color: #d9edf7 !important;
 }
