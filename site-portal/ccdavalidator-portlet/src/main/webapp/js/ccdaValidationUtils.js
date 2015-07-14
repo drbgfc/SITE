@@ -729,13 +729,13 @@ function highlightXMLResults(resultsToHighlight, validationType, validationLevel
 
 $('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
 	$('#resultModal').animate({
-		scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight').first().position().top
+		scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight').first().position().top
 	}, 2000);
 });
 
 $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
 	$('#resultModal').animate({
-		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight')[1]).position().top
+		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight')[1]).position().top
 	}, 2000);
 });
 
