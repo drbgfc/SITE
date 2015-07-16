@@ -669,7 +669,7 @@ function doCcdaValidation(data){
 function highlightXMLResults(resultsToHighlight, validationType, validationLevel){
 	for (var key in resultsToHighlight){
 		if(key.hasOwnProperty){
-			var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important"></span></div></span>';
+			var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important" title="go to next result"></span></div></span>';
 			var result = resultsToHighlight[key];
 			var lineNum = key;
 			var popOverContent = createResultListPopoverHtml(result);
