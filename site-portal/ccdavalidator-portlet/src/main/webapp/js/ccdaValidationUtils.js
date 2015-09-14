@@ -7,8 +7,29 @@ var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
 
+
+//R1
+function doCcdaValidation(data){
+	var resultMap = buildCcdaErrorsMap(data);
+	var warningresultMap = buildCcdaWarningsMap(data);
+	var inforesultMap = buildCcdaInfoMap(data);
+	var tabHtml1 = buildResultsHtml(data);
+	buildCCDAXMLResultsTab(data.result.files[0].content);
+	showResults(tabHtml1);
+	highlightXMLResults(resultMap, 'ccda', 'error');
+	highlightXMLResults(warningresultMap, 'ccda', 'warning');
+	highlightXMLResults(inforesultMap, 'ccda', 'info');
+	updateStatisticCount();
+	removeProgressModal();
+}
+
+
+//R2
 function showValidationResults(data){
+	var resultsMap = buildCcdaResultMap(data);
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
+	buildCCDAXMLResultsTab(data.result.files[0].content);
+	highlightCcdaXMLResults(resultsMap);
 	showResults(tabHtml1);
     updateStatisticCount();
     removeProgressModal();
@@ -17,7 +38,6 @@ function showValidationResults(data){
 function buildCcdaValidationResultsHtml(data){
 	var tabHtml1 = buildCcdaValidationSummary(data);
 	tabHtml1 += buildCcdaValidationResults(data);
-	
 	return tabHtml1;
 }
 
@@ -85,6 +105,91 @@ function buildCcdaValidationResults(data){
 	return (resultList.join('\n'));
 }
 
+function buildCcdaResultMap(data){
+	var ccdaValidationResultsMap = new Object;
+	$.each(data.result.body.ccdaValidationResults, function(ccdaValidationResults,result){
+		if(ccdaValidationResultsMap[result.documentLineNumber] != undefined){
+			var resultTypeMap = ccdaValidationResultsMap[result.documentLineNumber];
+			if(resultTypeMap[result.type] != undefined){
+				resultTypeMap[result.type].push(result.description);
+				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
+			}else{
+				resultTypeMap[result.type] = [result.description];
+				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
+			}
+		}else{
+			var ccdaTypeMap = new Object;
+			ccdaTypeMap[result.type] = [result.description];
+			ccdaValidationResultsMap[result.documentLineNumber] = ccdaTypeMap;
+		}
+	});
+	return ccdaValidationResultsMap;
+}
+
+function highlightCcdaXMLResults(resultsMap){
+	for (var resultLineNumber in resultsMap){
+		var lineNum = resultLineNumber;
+		var resultTypesMap = resultsMap[resultLineNumber];
+		for (var resultType in resultTypesMap){
+			var type = resultType;
+			var descriptions = resultTypesMap[resultType];
+			var descriptionsLength = descriptions.length;
+				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important; cursor:pointer" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important; cursor:pointer" title="go to next result"></span></div></span>';			
+				var popOverContent = createResultListPopoverHtml(descriptions);
+				if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
+					var title;
+					if(type.toLowerCase().indexOf("error") >= 0){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)";
+					}else if(type.toLowerCase().indexOf("warn") >= 0){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)";
+					}else{
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)";
+					}
+					$(".code .container .line.number" + lineNum).data('bs.popover').options.content += "<h3 class='popover-title result-title'>" + title + "</h3>" + popOverContent;
+				}else{
+					if(type.toLowerCase().indexOf("error") >= 0){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
+									html: true,
+									content: popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template:popoverTemplate
+								});
+					}else if(type.toLowerCase().indexOf("warn") >= 0){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaWarningHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
+									html: true,
+									content: popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template: popoverTemplate
+								});
+					}else{
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaInfoHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
+									html: true,
+									content:  popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template: popoverTemplate
+								});
+					}
+
+				}
+		}
+	
+	}
+}
 
 function buildCcdaErrorList(data){
 	var errorList = ['<a name="ccdaErrors"/><b>C-CDA Validation Errors:</b>',
@@ -450,28 +555,13 @@ function buildValidationSummary(data){
 	var ccdaReport = data.result.body.ccdaResults.report;
 	var uploadedFileName = data.result.files[0].name;
 	var docTypeSelected = ccdaReport.docTypeSelected;
-<<<<<<< Upstream, based on TEST
-=======
-	var nonSpecific = "Non-specific C-CDA";
-	var isNonSpecific = (docTypeSelected.lastIndexOf(nonSpecific, 0) === 0);
-
-	if (isNonSpecific === true){
-		docTypeSelected = docTypeSelected.replace(nonSpecific, "C-CDA R1.1");
-	}
-
->>>>>>> 689e075 Errors, Warnings and infos are on the popover for a single line with multiple validation results.
 	ccdaErrorCount = data.result.body.ccdaResults.errors.length;
 	ccdaWarningCount = data.result.body.ccdaResults.warnings.length;
 	ccdaInfoCount = data.result.body.ccdaResults.info.length;
-<<<<<<< Upstream, based on TEST
 	
 	if(documentTypeIsNonSpecific(docTypeSelected)){
 		docTypeSelected = buildValidationHeaderForNonSpecificDocumentType(docTypeSelected);
 	}
-	
-=======
-
->>>>>>> 689e075 Errors, Warnings and infos are on the popover for a single line with multiple validation results.
 	var tabHtml1 = buildValidationResultsHeader(uploadedFileName, docTypeSelected).join('\n');
 	tabHtml1 += ['<br/><div class="row">'];
 	tabHtml1 += buildValidationSummaryDetailHtml(ccdaErrorCount, ccdaWarningCount, ccdaInfoCount, 'ccda', 'C-CDA Validation Summary').join('\n');
@@ -583,15 +673,16 @@ function cleanUpCcdaFilesInResult(data, fileHolder){
 	});
 }
 
-function showResults(){
+function showResults(resultsHtml){
+	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
 	$("#resultModal").modal("show");
-	$("#resultModalTabs a[href='#tabs-3']").hide();
-	if(Boolean(validationError)){
-		$("#resultModalTabs a[href='#tabs-2']").hide();
-		$("#resultModalTabs a[href='#tabs-3']").hide();
-		$("#smartCCDAValidationBtn").hide();
-		$("#saveResultsBtn").hide();
-	}
+	$("#resultModalTabs a[href='#tabs-1']").tab("show");
+    $("#resultModalTabs a[href='#tabs-2']").tab("show");
+    $("#resultModalTabs a[href='#tabs-3']").hide();
+    if(Boolean(validationError)){
+    	$("#smartCCDAValidationBtn").hide();
+        $("#saveResultsBtn").hide();
+    }
 }
 
 function buildCCDAValidationResultsTab(resultsHtml){
@@ -603,17 +694,6 @@ function buildCCDAXMLResultsTab(content){
 	$('#tabs-2').html("<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + content + "</pre>");
 	SyntaxHighlighter.defaults['auto-links'] = false;
 	SyntaxHighlighter.highlight();
-}
-
-function showResultsTable(){
-	$("#resultTableModal").modal("show");
-	$("#resultsModalTabs a[href='#resultsTab1']").tab("show");
-    $("#resultsModalTabs a[href='#resultsTab2']").hide();
-    $("#resultsModalTabs a[href='#resultsTab3']").hide();
-    if(Boolean(validationError)){
-    	$("#smartCCDAValidationBtn").hide();
-        $("#saveResultsBtn").hide();
-    }
 }
 
 function buildResultsHtml(data){
@@ -651,20 +731,7 @@ function removeProgressModal(){
 	}, 1000);
 }
 
-function doCcdaValidation(data){
-	var resultMap = buildCcdaErrorsMap(data);
-	var warningresultMap = buildCcdaWarningsMap(data);
-	var inforesultMap = buildCcdaInfoMap(data);
-	var tabHtml1 = buildResultsHtml(data);
-	buildCCDAValidationResultsTab(tabHtml1);
-	buildCCDAXMLResultsTab(data.result.files[0].content);
-	showResults();
-	highlightXMLResults(resultMap, 'ccda', 'error');
-	highlightXMLResults(warningresultMap, 'ccda', 'warning');
-	highlightXMLResults(inforesultMap, 'ccda', 'info');
-	updateStatisticCount();
-	removeProgressModal();
-}
+
 
 function highlightXMLResults(resultsToHighlight, validationType, validationLevel){
 	for (var key in resultsToHighlight){
@@ -727,6 +794,15 @@ function highlightXMLResults(resultsToHighlight, validationType, validationLevel
 	}
 }
 
+function createResultListPopoverHtml(results){
+	var htmlList = '<ul>';
+	for(var i = 0; i < results.length; i++){
+		htmlList += '<li>' + results[i] + '</li>'
+	}
+	htmlList += '</ul>';
+	return htmlList;
+}
+
 $('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
 	$('#resultModal').animate({
 		scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight').first().position().top
@@ -738,15 +814,6 @@ $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
 		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight')[1]).position().top
 	}, 2000);
 });
-
-function createResultListPopoverHtml(results){
-	var htmlList = '<ul>';
-	for(var i = 0; i < results.length; i++){
-		htmlList += '<li>' + results[i] + '</li>'
-	}
-	htmlList += '</ul>';
-	return htmlList;
-}
 
 (function($) {
 	$.fn.serializefiles = function() {

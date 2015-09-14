@@ -382,16 +382,19 @@ table tbody{
 .syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
 	/* border: 2px solid #ebccd1 !important;  */
 	background-color: #f2dede !important;
+	cursor: pointer;
 }
 
 .syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
 	/* border: 2px solid #ebccd1 !important; */ 
 	background-color: #f2dede !important;
+	cursor: pointer;
 }
 
 .syntaxhighlighter div.line.alt2.ccdaWarningHighlight{
 	/* border: 2px solid #f5e79e !important;  */
 	background-color: #fcf8e3 !important;
+	cursor: pointer;
 }
 
 .resultpopover {
@@ -400,24 +403,29 @@ table tbody{
   background-color: beige;
 }
 .syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
-	border: 2px solid #ebccd1 !important; 
+	/* border: 2px solid #ebccd1 !important;  */
 	background-color: #f2dede !important;
+	cursor: pointer;
 }
 .syntaxhighlighter div.line.alt1.ccdaWarningHighlight{
 	/* border: 2px solid #f5e79e !important; */ 
 	background-color: #fcf8e3 !important;
+	cursor: pointer;
 }
 
 .syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
-	border: 2px solid #ebccd1 !important; 
+	/* border: 2px solid #ebccd1 !important;  */
 	background-color: #f2dede !important;
+	cursor: pointer;
 }
 .syntaxhighlighter div.line.alt2.ccdaInfoHighlight{
 	/* border: 2px solid #9acfea !important;  */
 	background-color: #d9edf7 !important;
+	cursor: pointer;
 }
 
 .syntaxhighlighter div.line.alt1.ccdaInfoHighlight{
 	/* border: 2px solid #9acfea !important; */ 
 	background-color: #d9edf7 !important;
+	cursor: pointer;
 }
