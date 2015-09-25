@@ -162,7 +162,7 @@
 			    <div class="panel-heading">
 			      <h3 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#CCDAAccordion" href="#collapseCCDA2_0Validator" tabindex="1">
-			          C-CDA R2.0 Validator
+			          C-CDA R2.1 Validator
 			          
 			        </a>
 			      </h3>

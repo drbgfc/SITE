@@ -15,6 +15,12 @@ public class ValidationResultsMetaData {
 	private final Map<String, AtomicInteger> errorCounts = new LinkedHashMap<String, AtomicInteger>();
 	private List<ResultMetaData> resultMetaData;
 
+	public ValidationResultsMetaData() {
+		for (ValidationResultType resultType : ValidationResultType.values()) {
+			errorCounts.put(resultType.getTypePrettyName(), new AtomicInteger(0));
+		}
+	}
+
 	public String getCcdaDocumentType() {
 		return ccdaDocumentType;
 	}

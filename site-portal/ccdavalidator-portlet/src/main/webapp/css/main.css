@@ -358,20 +358,14 @@ table tbody{
 }
 
 .resultpopover {
-  max-width: 785px !important;
+  max-width: 500px !important;
   padding: 10px !important;
   background-color: beige;
-	border: 0;
+  left: 1000px !important;
 }
 
 .resultPopoverBackground{
 	background-color: beige;
-}
-
-.resultpopover {
-  max-width: 785px !important;
-  padding: 10px !important;
-  background-color: beige;
 }
 
 .result-title{
@@ -379,14 +373,24 @@ table tbody{
 	font-weight: bold;
 }
 
-.syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
-	/* border: 2px solid #ebccd1 !important;  */
-	background-color: #f2dede !important;
-	cursor: pointer;
+div.line:hover{
+    box-shadow: 0px 0px 5px #fff;
 }
 
-.syntaxhighlighter div.line.alt1.ccdaErrorHighlight{
-	/* border: 2px solid #ebccd1 !important; */ 
+.syntaxhighlighter div.line.alt2.ccdaErrorHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaErrorHighlight:hover {
+    box-shadow: inset  0 0 5px red;
+}
+
+.syntaxhighlighter div.line.alt2.ccdaWarningHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaWarningHighlight:hover {
+    box-shadow: inset  0 0 5px yellow;
+}
+
+.syntaxhighlighter div.line.alt2.ccdaInfoHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaInfoHighlight:hover {
+    box-shadow: inset  0 0 5px blue;
+}
+
+.syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
+	/* border: 2px solid #ebccd1 !important;  */
 	background-color: #f2dede !important;
 	cursor: pointer;
 }
@@ -397,19 +401,9 @@ table tbody{
 	cursor: pointer;
 }
 
-.resultpopover {
-  max-width: 500px !important;
-  padding: 10px !important;
-  background-color: beige;
-}
-.syntaxhighlighter div.line.alt2.ccdaErrorHighlight{
-	/* border: 2px solid #ebccd1 !important;  */
-	background-color: #f2dede !important;
-	cursor: pointer;
-}
-.syntaxhighlighter div.line.alt1.ccdaWarningHighlight{
-	/* border: 2px solid #f5e79e !important; */ 
-	background-color: #fcf8e3 !important;
+.syntaxhighlighter div.line.alt2.ccdaInfoHighlight{
+	/* border: 2px solid #9acfea !important;  */
+	background-color: #d9edf7 !important;
 	cursor: pointer;
 }
 
@@ -418,9 +412,10 @@ table tbody{
 	background-color: #f2dede !important;
 	cursor: pointer;
 }
-.syntaxhighlighter div.line.alt2.ccdaInfoHighlight{
-	/* border: 2px solid #9acfea !important;  */
-	background-color: #d9edf7 !important;
+
+.syntaxhighlighter div.line.alt1.ccdaWarningHighlight{
+	/* border: 2px solid #f5e79e !important; */ 
+	background-color: #fcf8e3 !important;
 	cursor: pointer;
 }
 

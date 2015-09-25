@@ -33,6 +33,8 @@ function showValidationResults(data){
 	showResults(tabHtml1);
     updateStatisticCount();
     removeProgressModal();
+    
+    hideSummaryHeadersOfNotYetImplementedValidators();
 }
 
 function buildCcdaValidationResultsHtml(data){
@@ -68,7 +70,7 @@ function buildCcdaValidationSummary(data){
 		resultGroup += '<div class="list-group-item"><span class="badge ' + resultCountBadgeColorClass + '">'+metaData.count+'</span><a href="#'+metaData.type+'">' + metaData.type + '</a></div>';
 		resultTypeCount++;
 		if(resultTypeCount % numberOfTypesOfErrorsPerGroup === 0){
-			tabHtml1 += resultGroupHTMLHeader + resultGroup + resultGroupHTMLEnd;
+			tabHtml1 += '<div id="'+metaData.type.substr(0, +metaData.type.lastIndexOf("_"))+'_SUMMARY">' + resultGroupHTMLHeader + resultGroup + resultGroupHTMLEnd + '</div>';
 			resultGroup = "";
 		}
 	});
@@ -134,7 +136,7 @@ function highlightCcdaXMLResults(resultsMap){
 			var type = resultType;
 			var descriptions = resultTypesMap[resultType];
 			var descriptionsLength = descriptions.length;
-				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important; cursor:pointer" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important; cursor:pointer" title="go to next result"></span></div></span>';			
+				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span>Line Number: '+lineNum+'</span><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important; cursor:pointer" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important; cursor:pointer" title="go to next result"></span></div></span>';			
 				var popOverContent = createResultListPopoverHtml(descriptions);
 				if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
 					var title;
@@ -189,6 +191,11 @@ function highlightCcdaXMLResults(resultsMap){
 		}
 	
 	}
+}
+
+function hideSummaryHeadersOfNotYetImplementedValidators(){
+	$("#CCDA_VOCAB_SUMMARY").hide();
+	$("#REF_CCDA_SUMMARY").hide();
 }
 
 function buildCcdaErrorList(data){
