@@ -370,4 +370,9 @@ div#collapseReference .panel-body {
     border: 0;
 }
 
+table tbody{
+	font-size: 12px;
+    word-wrap: break-word;
+}
+
 

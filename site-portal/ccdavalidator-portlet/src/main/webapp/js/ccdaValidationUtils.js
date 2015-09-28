@@ -7,6 +7,91 @@ var extendedInfoCount;
 var dataQualityConcernCount;
 var validationError;
 
+function showValidationResults(data){
+	var tabHtml1 = buildCcdaValidationResultsHtml(data);
+	showResults(tabHtml1);
+    updateStatisticCount();
+    removeProgressModal();
+    
+    hideSummaryHeadersOfNotYetImplementedValidators();
+}
+
+function buildCcdaValidationResultsHtml(data){
+	var tabHtml1 = buildCcdaValidationSummary(data);
+	tabHtml1 += buildCcdaValidationResults(data);
+	
+	return tabHtml1;
+}
+
+function buildCcdaValidationSummary(data){
+	var uploadedFileName = data.result.files[0].name;
+	var docTypeSelected = data.result.body.resultsMetaData.ccdaDocumentType;
+	var numberOfTypesOfErrorsPerGroup = 3; //error, warning, info
+	var resultTypeCount = 0;
+	var resultGroup = '';
+	var resultCountBadgeColorClass = '';
+	var resultGroupHTMLHeader = '<div class="panel panel-primary col-md-2 col-lg-2"><div><div class="list-group">';
+	var resultGroupHTMLEnd = '</div></div></div>';
+	if(documentTypeIsNonSpecific(docTypeSelected)){
+		docTypeSelected = buildValidationHeaderForNonSpecificDocumentType(docTypeSelected);
+	}
+	
+	var tabHtml1 = buildValidationResultsHeader(uploadedFileName, docTypeSelected).join('\n');
+	tabHtml1 += '<br/><div class="row">';
+	
+	$.each(data.result.body.resultsMetaData.resultMetaData, function(resultMetaData, metaData){
+		if(metaData.type.toLowerCase().indexOf("error") >= 0){
+			resultCountBadgeColorClass = 'btn-danger';
+		}else if(metaData.type.toLowerCase().indexOf("warn") >= 0){
+			resultCountBadgeColorClass = ' btn-warning';
+		}else{
+			resultCountBadgeColorClass = 'btn-info';
+		}
+		resultGroup += '<div class="list-group-item"><span class="badge ' + resultCountBadgeColorClass + '">'+metaData.count+'</span><a href="#'+metaData.type+'">' + metaData.type + '</a></div>';
+		resultTypeCount++;
+		if(resultTypeCount % numberOfTypesOfErrorsPerGroup === 0){
+			tabHtml1 += '<div id="'+metaData.type.substr(0, +metaData.type.lastIndexOf("_"))+'_SUMMARY">' + resultGroupHTMLHeader + resultGroup + resultGroupHTMLEnd + '</div>';
+			resultGroup = "";
+		}
+	});
+	tabHtml1 += '</div>';
+	return tabHtml1;
+}
+
+function buildCcdaValidationResults(data){
+	resultList = [];
+	var currentResultType;
+	$.each(data.result.body.ccdaValidationResults, function(ccdaValidationResults,result){
+		if(result.type.toLowerCase().indexOf("error") >= 0){
+			resultList.push('<font color="red">');
+		}else if(result.type.toLowerCase().indexOf("warn") >= 0){
+			resultList.push('<font color="orange">');
+		}else{
+			resultList.push('<font color="#5bc0de">');
+		}
+		
+		if(currentResultType != result.type.toLowerCase()){
+			resultList.push('<a href="#" name="'+ result.type + '"></a>');
+		}
+		
+		var errorDescription = ['<li>' + result.type + '<ul class="">',
+				                    	'<li class="">Description: '+ result.description + '</li>',
+			                    		'<li class="">xPath: '+ result.xPath + '</li>',
+			                    		'<li class="">Document Line Number: '+ result.documentLineNumber + '</li>',
+		                    		'</ul></li>'];
+		resultList = resultList.concat(errorDescription);
+		resultList.push('</font>');
+		resultList.push('<hr/><div class="pull-right"><a href="#validationResults" title="top">^</a></div>');
+		currentResultType = result.type.toLowerCase();
+	});
+	return (resultList.join('\n'));
+}
+
+function hideSummaryHeadersOfNotYetImplementedValidators(){
+	$("#CCDA_VOCAB_SUMMARY").hide();
+	$("#REF_CCDA_SUMMARY").hide();
+}
+
 function buildCcdaErrorList(data){
 	var errorList = ['<a name="ccdaErrors"/><b>C-CDA Validation Errors:</b>',
 	                 '<ul>'];
@@ -309,6 +394,7 @@ function buildValidationResultErrorHtml(data){
 	    '<br/>'];
 	return errorHtml;
 }
+
 function buildValidationResultsHeader(uploadedFileName, docTypeSelected){
 	var header =  ['<title>Validation Results</title>',
 				    '<a name="validationResults"/>',
@@ -450,6 +536,17 @@ function showResults(resultsHtml){
 	$("#resultModalTabs a[href='#tabs-1']").tab("show");
     $("#resultModalTabs a[href='#tabs-2']").hide();
     $("#resultModalTabs a[href='#tabs-3']").hide();
+    if(Boolean(validationError)){
+    	$("#smartCCDAValidationBtn").hide();
+        $("#saveResultsBtn").hide();
+    }
+}
+
+function showResultsTable(){
+	$("#resultTableModal").modal("show");
+	$("#resultsModalTabs a[href='#resultsTab1']").tab("show");
+    $("#resultsModalTabs a[href='#resultsTab2']").hide();
+    $("#resultsModalTabs a[href='#resultsTab3']").hide();
     if(Boolean(validationError)){
     	$("#smartCCDAValidationBtn").hide();
         $("#saveResultsBtn").hide();

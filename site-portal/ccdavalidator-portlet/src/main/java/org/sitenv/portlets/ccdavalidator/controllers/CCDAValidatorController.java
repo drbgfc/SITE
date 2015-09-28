@@ -203,63 +203,27 @@ public class CCDAValidatorController extends BaseController {
 					.getParameter("referenceFileUsed");
 
 			HttpClient client = new DefaultHttpClient();
-
-			String ccdaURL = props.getProperty("CCDAValidationServiceURL");
-			ccdaURL += "/r2.0/";
-
+			String ccdaURL = props.getProperty("ReferenceCCDAValidationServiceURL");
 			HttpPost post = new HttpPost(ccdaURL);
-
 			MultipartEntity entity = new MultipartEntity();
-			// set the file content
-			entity.addPart("file", new InputStreamBody(file.getInputStream(), file.getOriginalFilename()));
-
-			// set the CCDA type
-			entity.addPart("CCDAR2_0_type_val", new StringBody(CCDAR2_0_type_val));
-			entity.addPart("referenceFileUsed", new StringBody(referenceFileUsedPath));
-
+			entity.addPart("ccdaFile", new InputStreamBody(file.getInputStream(), file.getOriginalFilename()));
+			entity.addPart("validationObjective", new StringBody(CCDAR2_0_type_val));
+			entity.addPart("referenceFileName", new StringBody(referenceFileUsedPath));
 			post.setEntity(entity);
 
 			HttpResponse relayResponse = client.execute(post);
-
-			// create the handler
 			ResponseHandler<String> handler = new BasicResponseHandler();
 
 			int code = relayResponse.getStatusLine().getStatusCode();
-
 			if (code != HttpStatus.SC_OK) {
-				// do the error handling.
 				statisticsManager.addCcdaValidation(CCDAR2_0_type_val, false, false, false, true, "r2.0");
 				throw new RuntimeException("ERROR: " + code + " details: " + relayResponse.getStatusLine().getReasonPhrase());
 			} else {
-				boolean ccdaHasErrors = true, ccdaHasWarnings = true, ccdaHasInfo = true;
-				boolean extendedCcdaHasErrors = true, extendedCcdaHasWarnings = true, extendedCcdaHasInfo = true;
-
 				String json = handler.handleResponse(relayResponse);
 				JSONObject jsonbody = new JSONObject(json);
 
-				if (jsonbody.getJSONObject("ccdaResults").has("error")
-						|| jsonbody.getJSONObject("ccdaExtendedResults").has("error")) {
-					// TODO: Make sure the UI handles this gracefully.
-					responseJSON.setJSONResponseBody(jsonbody);
-					statisticsManager.addCcdaValidation(CCDAR2_0_type_val, false, false, false, false, "r2.0");
-				} else {
-					JSONObject ccdaReport = jsonbody.getJSONObject("ccdaResults").getJSONObject("report");
-					ccdaHasErrors = ccdaReport.getBoolean("hasErrors");
-					ccdaHasWarnings = ccdaReport.getBoolean("hasWarnings");
-					ccdaHasInfo = ccdaReport.getBoolean("hasInfo");
-
-					JSONObject extendedCcdaReport = jsonbody.getJSONObject("ccdaExtendedResults").getJSONObject("report");
-					extendedCcdaHasErrors = extendedCcdaReport.getBoolean("hasErrors");
-					extendedCcdaHasWarnings = extendedCcdaReport.getBoolean("hasWarnings");
-					extendedCcdaHasInfo = extendedCcdaReport.getBoolean("hasInfo");
-
-					boolean hasErrors = ccdaHasErrors || extendedCcdaHasErrors;
-					boolean hasWarnings = ccdaHasWarnings || extendedCcdaHasWarnings;
-					boolean hasInfo = ccdaHasInfo || extendedCcdaHasInfo;
-
-					responseJSON.setJSONResponseBody(jsonbody);
-					statisticsManager.addCcdaValidation(CCDAR2_0_type_val, hasErrors, hasWarnings, hasInfo, false, "r2.0");
-				}
+				responseJSON.setJSONResponseBody(jsonbody);
+				statisticsManager.addCcdaValidation(CCDAR2_0_type_val, true, true, true, false, "r2.0");
 			}
 
 		} catch (JSONException e) {

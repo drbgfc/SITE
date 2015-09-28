@@ -7,8 +7,9 @@
 		<icon>/icon.png</icon>
 		<instanceable>true</instanceable>
 		<private-session-attributes>false</private-session-attributes>
+		<header-portlet-css>https://cdn.datatables.net/r/bs/dt-1.10.8/datatables.min.css</header-portlet-css>
 		<header-portlet-css>/css/jquery.fileupload.css</header-portlet-css>
-		
+		<header-portlet-javascript>https://cdn.datatables.net/r/bs/dt-1.10.8,b-print-1.0.1,r-1.0.7/datatables.min.js</header-portlet-javascript>
 		<header-portlet-javascript>/js/jquery.jstree.js</header-portlet-javascript>
 		
 		<header-portlet-javascript>/js/vendor/jquery.ui.widget.js</header-portlet-javascript>
@@ -18,13 +19,14 @@
 		<header-portlet-javascript>/js/jquery.fileDownload.js</header-portlet-javascript>
 		
 		
-		<footer-portlet-css>/css/main.css</footer-portlet-css>
 		
+		<footer-portlet-css>/css/main.css</footer-portlet-css>
 		<footer-portlet-javascript>/js/ccdaParsleyValidationUtils.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/js/ccdaValidationUtils.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/js/ccda1_1FileUpload.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/js/ccda2_0FileUpload.js</footer-portlet-javascript>
+		
 		
 		<css-class-wrapper>CCDAValidator-portlet</css-class-wrapper>
 	</portlet>

@@ -31,5 +31,6 @@
 	<modules>
 		<module>ccda</module>
 		<module>qrda</module>
-	</modules>
+    <module>site-services-reference-ccda</module>
+  </modules>
 </project>
