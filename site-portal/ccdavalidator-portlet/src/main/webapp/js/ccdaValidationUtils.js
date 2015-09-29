@@ -14,7 +14,7 @@ function doCcdaValidation(data){
 	var warningresultMap = buildCcdaWarningsMap(data);
 	var inforesultMap = buildCcdaInfoMap(data);
 	var tabHtml1 = buildResultsHtml(data);
-	buildCCDAXMLResultsTab(data.result.files[0].content);
+	buildCCDAXMLResultsTab(data);
 	showResults(tabHtml1);
 	highlightXMLResults(resultMap, 'ccda', 'error');
 	highlightXMLResults(warningresultMap, 'ccda', 'warning');
@@ -28,7 +28,7 @@ function doCcdaValidation(data){
 function showValidationResults(data){
 	var resultsMap = buildCcdaResultMap(data);
 	var tabHtml1 = buildCcdaValidationResultsHtml(data);
-	buildCCDAXMLResultsTab(data.result.files[0].content);
+	buildCCDAXMLResultsTab(data);
 	highlightCcdaXMLResults(resultsMap);
 	showResults(tabHtml1);
     updateStatisticCount();
@@ -41,6 +41,15 @@ function buildCcdaValidationResultsHtml(data){
 	var tabHtml1 = buildCcdaValidationSummary(data);
 	tabHtml1 += buildCcdaValidationResults(data);
 	return tabHtml1;
+}
+
+function buildCCDAXMLResultsTab(data){
+	var uploadedFileName = data.result.files[0].name;
+	var docTypeSelected = data.result.body.resultsMetaData.ccdaDocumentType;
+	var resultsHeader = buildValidationResultsHeader(uploadedFileName, docTypeSelected);
+	$('#tabs-2').html(resultsHeader.join(" ") + "<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + data.result.files[0].content + "</pre>");
+	SyntaxHighlighter.defaults['auto-links'] = false;
+	SyntaxHighlighter.highlight();
 }
 
 function buildCcdaValidationSummary(data){
@@ -97,7 +106,7 @@ function buildCcdaValidationResults(data){
 		var errorDescription = ['<li>' + result.type + '<ul class="">',
 				                    	'<li class="">Description: '+ result.description + '</li>',
 			                    		'<li class="">xPath: '+ result.xPath + '</li>',
-			                    		'<li class="">Document Line Number: '+ result.documentLineNumber + '</li>',
+			                    		'<li class="">Document Line Number (approximate): '+ result.documentLineNumber + '</li>',
 		                    		'</ul></li>'];
 		resultList = resultList.concat(errorDescription);
 		resultList.push('</font>');
@@ -191,6 +200,14 @@ function highlightCcdaXMLResults(resultsMap){
 		}
 	
 	}
+	
+	addTitleAttributeToHighlightedDivs();
+}
+
+function addTitleAttributeToHighlightedDivs(){
+	$("div[class$='Highlight']").hover(function(e){
+		$(this).attr('title', 'Show validation result details for this line.')
+	});
 }
 
 function hideSummaryHeadersOfNotYetImplementedValidators(){
@@ -554,6 +571,7 @@ function buildValidationResultsHeader(uploadedFileName, docTypeSelected){
 	if(docTypeSelected != ''){
 		header.push(['<b>Document Type Selected: </b>' +docTypeSelected]);
 	}
+	header.push('<b>Note:</b> Validation result line numbers are approximate.');
 	header.push(['</div>']);
 	return header;
 }
@@ -684,7 +702,7 @@ function showResults(resultsHtml){
 	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
 	$("#resultModal").modal("show");
 	$("#resultModalTabs a[href='#tabs-1']").tab("show");
-    $("#resultModalTabs a[href='#tabs-2']").tab("show");
+    //$("#resultModalTabs a[href='#tabs-2']").tab("show");
     $("#resultModalTabs a[href='#tabs-3']").hide();
     if(Boolean(validationError)){
     	$("#smartCCDAValidationBtn").hide();
@@ -695,12 +713,6 @@ function showResults(resultsHtml){
 function buildCCDAValidationResultsTab(resultsHtml){
 	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
 	$("#resultModalTabs a[href='#tabs-1']").tab("show");
-}
-
-function buildCCDAXMLResultsTab(content){
-	$('#tabs-2').html("<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + content + "</pre>");
-	SyntaxHighlighter.defaults['auto-links'] = false;
-	SyntaxHighlighter.highlight();
 }
 
 function buildResultsHtml(data){
