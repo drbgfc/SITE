@@ -31,10 +31,10 @@ function showValidationResults(data){
 	buildCCDAXMLResultsTab(data);
 	highlightCcdaXMLResults(resultsMap);
 	showResults(tabHtml1);
-    updateStatisticCount();
-    removeProgressModal();
-    
-    hideSummaryHeadersOfNotYetImplementedValidators();
+	updateStatisticCount();
+	removeProgressModal();
+
+	hideSummaryHeadersOfNotYetImplementedValidators();
 }
 
 function buildCcdaValidationResultsHtml(data){
@@ -45,11 +45,25 @@ function buildCcdaValidationResultsHtml(data){
 
 function buildCCDAXMLResultsTab(data){
 	var uploadedFileName = data.result.files[0].name;
-	var docTypeSelected = data.result.body.resultsMetaData.ccdaDocumentType;
+	var docTypeSelected = getSelectedDocumentType(data);
 	var resultsHeader = buildValidationResultsHeader(uploadedFileName, docTypeSelected);
-	$('#tabs-2').html(resultsHeader.join(" ") + "<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + data.result.files[0].content + "</pre>");
-	SyntaxHighlighter.defaults['auto-links'] = false;
-	SyntaxHighlighter.highlight();
+	if(data.result.files[0].content.match(/\n/gm) == null || data.result.files[0].content.match(/\n/gm).length < 10){
+		$('#tabs-2').html(resultsHeader.join(" ") + "<div class='row alert alert-warning'><b>WARNING!</b> Detected an XML document that may not be formatted for this validation display. For example, the XML may be on a single line.</div>");
+	}else{
+		$('#tabs-2').html(resultsHeader.join(" ") + "<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + data.result.files[0].content + "</pre>");
+		SyntaxHighlighter.defaults['auto-links'] = false;
+		SyntaxHighlighter.highlight();
+	}
+}
+
+function getSelectedDocumentType(data){
+	var docTypeSelected = '';
+	if(data.result.body.ccdaResults != undefined){
+		docTypeSelected =  data.result.body.ccdaResults.report.docTypeSelected;
+	}else{
+		docTypeSelected =  data.result.body.resultsMetaData.ccdaDocumentType
+	}
+	return docTypeSelected;
 }
 
 function buildCcdaValidationSummary(data){
@@ -64,10 +78,10 @@ function buildCcdaValidationSummary(data){
 	if(documentTypeIsNonSpecific(docTypeSelected)){
 		docTypeSelected = buildValidationHeaderForNonSpecificDocumentType(docTypeSelected);
 	}
-	
+
 	var tabHtml1 = buildValidationResultsHeader(uploadedFileName, docTypeSelected).join('\n');
 	tabHtml1 += '<br/><div class="row">';
-	
+
 	$.each(data.result.body.resultsMetaData.resultMetaData, function(resultMetaData, metaData){
 		if(metaData.type.toLowerCase().indexOf("error") >= 0){
 			resultCountBadgeColorClass = 'btn-danger';
@@ -98,16 +112,16 @@ function buildCcdaValidationResults(data){
 		}else{
 			resultList.push('<font color="#5bc0de">');
 		}
-		
+
 		if(currentResultType != result.type.toLowerCase()){
 			resultList.push('<a href="#" name="'+ result.type + '"></a>');
 		}
-		
+
 		var errorDescription = ['<li>' + result.type + '<ul class="">',
-				                    	'<li class="">Description: '+ result.description + '</li>',
-			                    		'<li class="">xPath: '+ result.xPath + '</li>',
-			                    		'<li class="">Document Line Number (approximate): '+ result.documentLineNumber + '</li>',
-		                    		'</ul></li>'];
+		                        '<li class="">Description: '+ result.description + '</li>',
+		                        '<li class="">xPath: '+ result.xPath + '</li>',
+		                        '<li class="">Document Line Number (approximate): '+ result.documentLineNumber + '</li>',
+		                        '</ul></li>'];
 		resultList = resultList.concat(errorDescription);
 		resultList.push('</font>');
 		resultList.push('<hr/><div class="pull-right"><a href="#validationResults" title="top">^</a></div>');
@@ -138,13 +152,14 @@ function buildCcdaResultMap(data){
 }
 
 function highlightCcdaXMLResults(resultsMap){
-	for (var resultLineNumber in resultsMap){
-		var lineNum = resultLineNumber;
-		var resultTypesMap = resultsMap[resultLineNumber];
-		for (var resultType in resultTypesMap){
-			var type = resultType;
-			var descriptions = resultTypesMap[resultType];
-			var descriptionsLength = descriptions.length;
+	if($.map(resultsMap, function(n, i) { return i; }).length > 0){
+		for (var resultLineNumber in resultsMap){
+			var lineNum = resultLineNumber;
+			var resultTypesMap = resultsMap[resultLineNumber];
+			for (var resultType in resultTypesMap){
+				var type = resultType;
+				var descriptions = resultTypesMap[resultType];
+				var descriptionsLength = descriptions.length;
 				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span>Line Number: '+lineNum+'</span><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important; cursor:pointer" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important; cursor:pointer" title="go to next result"></span></div></span>';			
 				var popOverContent = createResultListPopoverHtml(descriptions);
 				if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
@@ -197,10 +212,11 @@ function highlightCcdaXMLResults(resultsMap){
 					}
 
 				}
+			}
+
 		}
-	
 	}
-	
+
 	addTitleAttributeToHighlightedDivs();
 }
 
@@ -583,7 +599,7 @@ function buildValidationSummary(data){
 	ccdaErrorCount = data.result.body.ccdaResults.errors.length;
 	ccdaWarningCount = data.result.body.ccdaResults.warnings.length;
 	ccdaInfoCount = data.result.body.ccdaResults.info.length;
-	
+
 	if(documentTypeIsNonSpecific(docTypeSelected)){
 		docTypeSelected = buildValidationHeaderForNonSpecificDocumentType(docTypeSelected);
 	}
@@ -702,12 +718,12 @@ function showResults(resultsHtml){
 	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
 	$("#resultModal").modal("show");
 	$("#resultModalTabs a[href='#tabs-1']").tab("show");
-    //$("#resultModalTabs a[href='#tabs-2']").tab("show");
-    $("#resultModalTabs a[href='#tabs-3']").hide();
-    if(Boolean(validationError)){
-    	$("#smartCCDAValidationBtn").hide();
-        $("#saveResultsBtn").hide();
-    }
+	//$("#resultModalTabs a[href='#tabs-2']").tab("show");
+	$("#resultModalTabs a[href='#tabs-3']").hide();
+	if(Boolean(validationError)){
+		$("#smartCCDAValidationBtn").hide();
+		$("#saveResultsBtn").hide();
+	}
 }
 
 function buildCCDAValidationResultsTab(resultsHtml){
@@ -753,63 +769,66 @@ function removeProgressModal(){
 
 
 function highlightXMLResults(resultsToHighlight, validationType, validationLevel){
-	for (var key in resultsToHighlight){
-		if(key.hasOwnProperty){
-			var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important" title="go to next result"></span></div></span>';
-			var result = resultsToHighlight[key];
-			var lineNum = key;
-			var popOverContent = createResultListPopoverHtml(result);
-			if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
-				var title;
-				if(validationLevel == 'error'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
-					title = "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)";
-				}else if(validationLevel == 'warning'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
-					title = "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)";
-				}else if(validationLevel == 'info'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
-					title = "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info";
-				}
-				$(".code .container .line.number" + lineNum).data('bs.popover').options.content += "<h3 class='popover-title result-title'>" + title + "</h3>" + popOverContent;
-			}else{
-				if(validationLevel == 'error'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
-					$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
-							{ 
-								title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)",
-								html: true,
-								content: popOverContent,
-								trigger: "click",
-								placement: "auto",
-								template:popoverTemplate
-							});
-				}else if(validationLevel == 'warning'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
-					$(".code .container .line.number" + lineNum).addClass("ccdaWarningHighlight").popover(
-							{ 
-								title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)",
-								html: true,
-								content: popOverContent,
-								trigger: "click",
-								placement: "auto",
-								template: popoverTemplate
-							});
-				}else if(validationLevel == 'info'){
-					$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
-					$(".code .container .line.number" + lineNum).addClass("ccdaInfoHighlight").popover(
-							{ 
-								title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info",
-								html: true,
-								content:  popOverContent,
-								trigger: "click",
-								placement: "auto",
-								template: popoverTemplate
-							});
-				}
+	if($.map(resultsToHighlight, function(n, i) { return i; }).length > 0){
+		for (var key in resultsToHighlight){
+			if(key.hasOwnProperty){
+				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important" title="go to next result"></span></div></span>';
+				var result = resultsToHighlight[key];
+				var lineNum = key;
+				var popOverContent = createResultListPopoverHtml(result);
+				if (typeof $(".code .container .line.number" + lineNum).data('bs.popover') !== "undefined") {
+					var title;
+					if(validationLevel == 'error'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)";
+					}else if(validationLevel == 'warning'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)";
+					}else if(validationLevel == 'info'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+						title = "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info";
+					}
+					$(".code .container .line.number" + lineNum).data('bs.popover').options.content += "<h3 class='popover-title result-title'>" + title + "</h3>" + popOverContent;
+				}else{
+					if(validationLevel == 'error'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)",
+									html: true,
+									content: popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template:popoverTemplate
+								});
+					}else if(validationLevel == 'warning'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaWarningHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)",
+									html: true,
+									content: popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template: popoverTemplate
+								});
+					}else if(validationLevel == 'info'){
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).addClass("ccdaInfoHighlight").popover(
+								{ 
+									title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info",
+									html: true,
+									content:  popOverContent,
+									trigger: "click",
+									placement: "auto",
+									template: popoverTemplate
+								});
+					}
 
+				}
 			}
 		}
+		addTitleAttributeToHighlightedDivs();
 	}
 }
 
