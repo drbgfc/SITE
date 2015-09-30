@@ -44,13 +44,20 @@ function buildCcdaValidationResultsHtml(data){
 }
 
 function buildCCDAXMLResultsTab(data){
+    $("#ccdaXML").remove();
+    $("#tabs-2").empty();
 	var uploadedFileName = data.result.files[0].name;
 	var docTypeSelected = getSelectedDocumentType(data);
 	var resultsHeader = buildValidationResultsHeader(uploadedFileName, docTypeSelected);
 	if(data.result.files[0].content.match(/\n/gm) == null || data.result.files[0].content.match(/\n/gm).length < 10){
 		$('#tabs-2').html(resultsHeader.join(" ") + "<div class='row alert alert-warning'><b>WARNING!</b> Detected an XML document that may not be formatted for this validation display. For example, the XML may be on a single line.</div>");
 	}else{
-		$('#tabs-2').html(resultsHeader.join(" ") + "<pre id=\"ccdaXML\" class=\"brush: xml; toolbar: false\">" + data.result.files[0].content + "</pre>");
+		//$('#tabs-2').html(resultsHeader.join(" "));
+        $('<pre/>',{
+            id:'ccdaXML',
+            class:'brush: xml; toolbar: false',
+            text:data.result.files[0].content
+        }).appendTo('#tabs-2');
 		SyntaxHighlighter.defaults['auto-links'] = false;
 		SyntaxHighlighter.highlight();
 	}
