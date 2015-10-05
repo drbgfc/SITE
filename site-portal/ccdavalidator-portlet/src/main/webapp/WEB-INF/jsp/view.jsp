@@ -222,7 +222,7 @@
                                             <br/>
                                             <br/>
                                         </li>
-                                        <li>Select the input file that you used to generate the C-CDA.
+                                        <li>Select the scenario file that you used to generate the C-CDA.
                                             <noscript><input type="hidden" name="redirect" value="true"/></noscript>
                                             <div id="CCDAReferenceUploaderrorlock" style="position: relative;">
                                                 <div class="dropdown">
