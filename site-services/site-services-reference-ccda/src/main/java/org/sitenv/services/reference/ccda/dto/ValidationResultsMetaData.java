@@ -1,12 +1,13 @@
 package org.sitenv.services.reference.ccda.dto;
 
+import org.sitenv.services.reference.ccda.validators.enums.ValidationResultType;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.sitenv.referenceccda.validator.enums.ValidationResultType;
 
 public class ValidationResultsMetaData {
 	private String ccdaDocumentType;

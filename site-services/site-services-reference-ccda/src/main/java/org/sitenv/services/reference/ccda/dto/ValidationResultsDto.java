@@ -1,8 +1,8 @@
 package org.sitenv.services.reference.ccda.dto;
 
-import java.util.List;
+import org.sitenv.services.reference.ccda.validators.RefCCDAValidationResult;
 
-import org.sitenv.referenceccda.validator.RefCCDAValidationResult;
+import java.util.List;
 
 public class ValidationResultsDto {
 	private ValidationResultsMetaData resultsMetaData;

@@ -1,17 +1,18 @@
 package org.sitenv.services.reference.ccda.services;
 
+import org.apache.commons.io.IOUtils;
+import org.sitenv.services.reference.ccda.dto.ValidationResultsDto;
+import org.sitenv.services.reference.ccda.dto.ValidationResultsMetaData;
+import org.sitenv.services.reference.ccda.validators.RefCCDAValidationResult;
+import org.sitenv.services.reference.ccda.validators.schema.ReferenceCCDAValidator;
+import org.sitenv.services.reference.ccda.validators.vocabulary.VocabularyCCDAValidator;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.IOUtils;
-import org.sitenv.referenceccda.validator.RefCCDAValidationResult;
-import org.sitenv.referenceccda.validator.ReferenceCCDAValidator;
-import org.sitenv.services.reference.ccda.dto.ValidationResultsDto;
-import org.sitenv.services.reference.ccda.dto.ValidationResultsMetaData;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ReferenceCCDAValidationService {
@@ -35,14 +36,25 @@ public class ReferenceCCDAValidationService {
 		try {
 			fileIs = ccdaFile.getInputStream();
 			ccdaFileContents = IOUtils.toString(ccdaFile.getInputStream());
-			validatorResults = ReferenceCCDAValidator.validateCCDAWithReferenceFileName(validationObjective, referenceFileName,
-					ccdaFileContents);
+			validatorResults = doSchemaValidation(validationObjective, referenceFileName, ccdaFileContents);
+			if (validatorResults.isEmpty()){
+				validatorResults = DoVocabularyValidation(ccdaFileContents);
+			}
 		} catch (IOException e) {
 			throw new RuntimeException("Error getting CCDA contents from provided file", e);
 		} finally {
 			closeFileInputStream(fileIs);
 		}
 		return validatorResults;
+	}
+
+	private ArrayList<RefCCDAValidationResult> DoVocabularyValidation(String ccdaFileContents) throws IOException {
+		return VocabularyCCDAValidator.validate(ccdaFileContents);
+	}
+
+	private List<RefCCDAValidationResult> doSchemaValidation(String validationObjective, String referenceFileName, String ccdaFileContents) {
+		return ReferenceCCDAValidator.validateCCDAWithReferenceFileName(validationObjective, referenceFileName,
+				ccdaFileContents);
 	}
 
 	private ValidationResultsMetaData buildValidationMedata(List<RefCCDAValidationResult> validatorResults, String ccdaDocType) {

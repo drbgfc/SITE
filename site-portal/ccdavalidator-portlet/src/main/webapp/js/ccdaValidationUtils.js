@@ -234,7 +234,6 @@ function addTitleAttributeToHighlightedDivs(){
 }
 
 function hideSummaryHeadersOfNotYetImplementedValidators(){
-	$("#CCDA_VOCAB_SUMMARY").hide();
 	$("#REF_CCDA_SUMMARY").hide();
 }
 

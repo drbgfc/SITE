@@ -1,6 +1,9 @@
 package org.sitenv.services.reference.ccda.configuration;
 
+import org.sitenv.vocabularies.servlet.listener.VocabularyValidationListener;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.ServletContext;
 
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -18,5 +21,13 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+
+    @Override
+    protected void registerDispatcherServlet(ServletContext servletContext) {
+        super.registerDispatcherServlet(servletContext);
+
+        servletContext.addListener(new VocabularyValidationListener());
+
+    }
 
 }
