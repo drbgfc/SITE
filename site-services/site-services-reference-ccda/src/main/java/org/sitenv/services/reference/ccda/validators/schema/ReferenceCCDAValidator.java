@@ -26,6 +26,8 @@ import java.util.List;
 
 public class ReferenceCCDAValidator {
 
+	public static boolean hasValidationErrors = false;
+
 	public static ArrayList<RefCCDAValidationResult> validateCCDAWithReferenceFileName(String validationObjective,
 			String referenceFileName, String ccdaFile) {
 		final XPathIndexer xpathIndexer = new XPathIndexer();
@@ -33,14 +35,9 @@ public class ReferenceCCDAValidator {
 		InputStream in = null;
 		createValidationResultObjectToCollectDiagnosticsProducedDuringValidation();
 		try {
-			// Identify the objectives and check for the document type
-			// Check if all files are C-CDA compliant
 			in = IOUtils.toInputStream(ccdaFile, "UTF-8");
 			CDAUtil.load(in, result);
 			trackXPathsInXML(xpathIndexer, ccdaFile);
-			// If there are no schema errors, check for Vocabulary errors
-			// If there are no vocab errors, then check for reference CCDA
-			// errors
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -82,6 +79,9 @@ public class ReferenceCCDAValidator {
 			ValidationResult result) {
 		ArrayList<RefCCDAValidationResult> results = new ArrayList<RefCCDAValidationResult>();
 
+        if(!result.getErrorDiagnostics().isEmpty()){
+            hasValidationErrors = true;
+        }
 		for (Diagnostic diagnostic : result.getErrorDiagnostics()) {
 			results.add(buildValidationResult(diagnostic, xpathIndexer, ValidationResultType.CCDA_IG_CONFORMANCE_ERROR));
 		}

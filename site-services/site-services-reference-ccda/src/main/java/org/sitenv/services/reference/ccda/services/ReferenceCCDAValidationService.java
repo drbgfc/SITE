@@ -36,10 +36,12 @@ public class ReferenceCCDAValidationService {
 		try {
 			fileIs = ccdaFile.getInputStream();
 			ccdaFileContents = IOUtils.toString(ccdaFile.getInputStream());
-			validatorResults = doSchemaValidation(validationObjective, referenceFileName, ccdaFileContents);
-			if (validatorResults.isEmpty()){
-				validatorResults = DoVocabularyValidation(ccdaFileContents);
+			validatorResults.addAll(doSchemaValidation(validationObjective, referenceFileName, ccdaFileContents));
+			if(!ReferenceCCDAValidator.hasValidationErrors){
+				validatorResults.addAll(DoVocabularyValidation(ccdaFileContents));
 			}
+
+
 		} catch (IOException e) {
 			throw new RuntimeException("Error getting CCDA contents from provided file", e);
 		} finally {
