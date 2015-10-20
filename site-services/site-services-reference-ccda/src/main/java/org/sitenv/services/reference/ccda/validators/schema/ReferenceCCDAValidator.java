@@ -9,26 +9,24 @@ import org.openhealthtools.mdht.uml.cda.consol.ConsolPackage;
 import org.openhealthtools.mdht.uml.cda.util.CDADiagnostic;
 import org.openhealthtools.mdht.uml.cda.util.CDAUtil;
 import org.openhealthtools.mdht.uml.cda.util.ValidationResult;
+import org.sitenv.services.reference.ccda.validators.BaseCCDAValidator;
+import org.sitenv.services.reference.ccda.validators.CCDAValidator;
 import org.sitenv.services.reference.ccda.validators.RefCCDAValidationResult;
 import org.sitenv.services.reference.ccda.validators.XPathIndexer;
 import org.sitenv.services.reference.ccda.validators.enums.ValidationResultType;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReferenceCCDAValidator {
+@Component
+public class ReferenceCCDAValidator extends BaseCCDAValidator implements CCDAValidator {
+	private boolean schemaErrorInValidationResults;
 
-	public static boolean hasValidationErrors = false;
-
-	public static ArrayList<RefCCDAValidationResult> validateCCDAWithReferenceFileName(String validationObjective,
+	public ArrayList<RefCCDAValidationResult> validateFile(String validationObjective,
 			String referenceFileName, String ccdaFile) {
 		final XPathIndexer xpathIndexer = new XPathIndexer();
 		ValidationResult result = new ValidationResult();
@@ -54,33 +52,16 @@ public class ReferenceCCDAValidator {
 		return processValidationResults(xpathIndexer, result);
 	}
 
-	private static void createValidationResultObjectToCollectDiagnosticsProducedDuringValidation() {
+	private void createValidationResultObjectToCollectDiagnosticsProducedDuringValidation() {
 		ConsolPackage.eINSTANCE.eClass();
 	}
 
-	private static void trackXPathsInXML(XPathIndexer xpathIndexer, String xmlString) {
-		try {
-			XMLReader parser = XMLReaderFactory.createXMLReader();
-			parser.setContentHandler(xpathIndexer);
-			try {
-				InputSource inputSource = new InputSource(new StringReader(xmlString));
-				parser.parse(inputSource);
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Error In Line Number Routine: Bad filename, path or invalid document.");
-			}
-		} catch (SAXException e) {
-			e.printStackTrace();
-			System.out.println("Error In Line Number Routine: Unable to parse document for location data.");
-		}
-	}
-
-	private static ArrayList<RefCCDAValidationResult> processValidationResults(final XPathIndexer xpathIndexer,
+	private ArrayList<RefCCDAValidationResult> processValidationResults(final XPathIndexer xpathIndexer,
 			ValidationResult result) {
 		ArrayList<RefCCDAValidationResult> results = new ArrayList<RefCCDAValidationResult>();
 
         if(!result.getErrorDiagnostics().isEmpty()){
-            hasValidationErrors = true;
+			schemaErrorInValidationResults = true;
         }
 		for (Diagnostic diagnostic : result.getErrorDiagnostics()) {
 			results.add(buildValidationResult(diagnostic, xpathIndexer, ValidationResultType.CCDA_IG_CONFORMANCE_ERROR));
@@ -96,14 +77,14 @@ public class ReferenceCCDAValidator {
 		return results;
 	}
 
-	private static RefCCDAValidationResult buildValidationResult(Diagnostic diagnostic, XPathIndexer xPathIndexer,
+	private RefCCDAValidationResult buildValidationResult(Diagnostic diagnostic, XPathIndexer xPathIndexer,
 			ValidationResultType resultType) {
 		CDADiagnostic diag = new CDADiagnostic(diagnostic);
 		String lineNumber = getLineNumberInXMLUsingXpath(xPathIndexer, diagnostic);
 		return createNewValidationResult(diag, resultType, lineNumber);
 	}
 
-	private static String getLineNumberInXMLUsingXpath(final XPathIndexer xpathIndexer, Diagnostic diagnostic) {
+	private String getLineNumberInXMLUsingXpath(final XPathIndexer xpathIndexer, Diagnostic diagnostic) {
 		String generatedPath = "";
 		if (diagnostic.getData().size() > 0 && diagnostic.getData().get(0) instanceof EObject) {
 			generatedPath = getPath((EObject) diagnostic.getData().get(0));
@@ -113,7 +94,7 @@ public class ReferenceCCDAValidator {
 		return lineNumber;
 	}
 
-	public static String getPath(EObject eObject) {
+	public String getPath(EObject eObject) {
 		String path = "";
 		while (eObject != null && !(eObject instanceof DocumentRoot)) {
 			EStructuralFeature feature = eObject.eContainingFeature();
@@ -131,8 +112,12 @@ public class ReferenceCCDAValidator {
 		return path;
 	}
 
-	private static RefCCDAValidationResult createNewValidationResult(CDADiagnostic cdaDiag, ValidationResultType resultType,
+	private RefCCDAValidationResult createNewValidationResult(CDADiagnostic cdaDiag, ValidationResultType resultType,
 			String resultLineNumber) {
 		return new RefCCDAValidationResult.RefCCDAValidationResultBuilder(cdaDiag.getMessage(), cdaDiag.getPath(), resultType, resultLineNumber).build();
+	}
+
+	public boolean isSchemaErrorInValidationResults() {
+		return schemaErrorInValidationResults;
 	}
 }
