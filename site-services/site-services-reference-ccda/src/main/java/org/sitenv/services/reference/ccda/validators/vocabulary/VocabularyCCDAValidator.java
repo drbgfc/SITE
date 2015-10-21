@@ -29,26 +29,34 @@ public class VocabularyCCDAValidator extends BaseCCDAValidator implements CCDAVa
     }
 
     public ArrayList<RefCCDAValidationResult> validateFile(String validationObjective, String referenceFileName, String ccdaFile) {
-        ArrayList<RefCCDAValidationResult> results = new ArrayList<RefCCDAValidationResult>();
-        final XPathIndexer xpathIndexer = new XPathIndexer();
+        ArrayList<RefCCDAValidationResult> results = null;
+        if (ccdaFile != null) {
+            final XPathIndexer xpathIndexer = new XPathIndexer();
+            initializeVocabularyValidationEngine();
+            trackXPathsInXML(xpathIndexer, ccdaFile);
+            try {
+                results = doValidation(ccdaFile, xpathIndexer);
+            } catch (IOException | SAXException e) {
+                e.printStackTrace();
+            }
+        }
+        return results;
+    }
 
+    private ArrayList<RefCCDAValidationResult> doValidation(String ccdaFile, XPathIndexer xpathIndexer) throws IOException, SAXException {
+        List<XPathValidatorResult> validationResults = engine.validate(IOUtils.toInputStream(ccdaFile, "UTF-8"));
+        ArrayList<RefCCDAValidationResult> results = new ArrayList<>();
+        for (XPathValidatorResult result : validationResults) {
+           results.add(createValidationResult(result, xpathIndexer));
+        }
+        return results;
+    }
+
+    private void initializeVocabularyValidationEngine() {
         if (engine == null) {
             engine = new XPathValidationEngine();
             engine.initialize(vocabularyXpathExpressionConfiguration);
         }
-
-        try {
-            trackXPathsInXML(xpathIndexer, ccdaFile);
-            if (ccdaFile != null) {
-                List<XPathValidatorResult> validationResults = engine.validate(IOUtils.toInputStream(ccdaFile, "UTF-8"));
-                for (XPathValidatorResult result : validationResults) {
-                   results.add(createValidationResult(result, xpathIndexer));
-                }
-            }
-        } catch (IOException | SAXException e) {
-            e.printStackTrace();
-        }
-        return results;
     }
 
     private RefCCDAValidationResult createValidationResult(XPathValidatorResult result, XPathIndexer xpathIndexer) {
