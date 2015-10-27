@@ -424,3 +424,11 @@ div.line:hover{
 	background-color: #d9edf7 !important;
 	cursor: pointer;
 }
+
+.syntaxhighlighter .code .container:before {
+	display: block;
+}
+
+.syntaxhighlighter {
+    overflow-y: hidden !important;
+}

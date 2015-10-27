@@ -100,7 +100,7 @@ function buildCcdaValidationSummary(data){
 		resultGroup += '<div class="list-group-item"><span class="badge ' + resultCountBadgeColorClass + '">'+metaData.count+'</span><a href="#'+metaData.type+'">' + metaData.type + '</a></div>';
 		resultTypeCount++;
 		if(resultTypeCount % numberOfTypesOfErrorsPerGroup === 0){
-			tabHtml1 += '<div id="'+metaData.type.substr(0, +metaData.type.lastIndexOf("_"))+'_SUMMARY">' + resultGroupHTMLHeader + resultGroup + resultGroupHTMLEnd + '</div>';
+			tabHtml1 += '<div id="'+metaData.type.split(' ').join('_') +'_SUMMARY">' + resultGroupHTMLHeader + resultGroup + resultGroupHTMLEnd + '</div>';
 			resultGroup = "";
 		}
 	});
@@ -234,7 +234,7 @@ function addTitleAttributeToHighlightedDivs(){
 }
 
 function hideSummaryHeadersOfNotYetImplementedValidators(){
-	$("#REF_CCDA_SUMMARY").hide();
+	$("#REF_C-CDA_INFO_SUMMARY").hide();
 }
 
 function buildCcdaErrorList(data){
@@ -857,6 +857,15 @@ $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
 	$('#resultModal').animate({
 		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight')[1]).position().top
 	}, 2000);
+});
+
+$('#resultModalTabs a').on('click', function(){
+    var href = $(this).attr('href');
+    if(href == '#tabs-2'){
+        $('#saveResultsBtn').hide();
+    }else{
+        $('#saveResultsBtn').show();
+    }
 });
 
 (function($) {
