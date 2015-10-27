@@ -859,6 +859,15 @@ $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
 	}, 2000);
 });
 
+$('#resultModalTabs a').on('click', function(){
+    var href = $(this).attr('href');
+    if(href == '#tabs-2'){
+        $('#saveResultsBtn').hide();
+    }else{
+        $('#saveResultsBtn').show();
+    }
+});
+
 (function($) {
 	$.fn.serializefiles = function() {
 		var obj = $(this);
