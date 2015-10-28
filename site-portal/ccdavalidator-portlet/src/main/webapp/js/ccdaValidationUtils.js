@@ -234,7 +234,7 @@ function addTitleAttributeToHighlightedDivs(){
 }
 
 function hideSummaryHeadersOfNotYetImplementedValidators(){
-	$("#REF_C-CDA_INFO_SUMMARY").hide();
+	$("#ONC_2015_S\\&CC_Reference_C-CDA_Validation_Info_SUMMARY").hide();
 }
 
 function buildCcdaErrorList(data){
@@ -593,7 +593,6 @@ function buildValidationResultsHeader(uploadedFileName, docTypeSelected){
 	if(docTypeSelected != ''){
 		header.push(['<b>Document Type Selected: </b>' +docTypeSelected]);
 	}
-	header.push('<b>Note:</b> Validation result line numbers are approximate.');
 	header.push(['</div>']);
 	return header;
 }

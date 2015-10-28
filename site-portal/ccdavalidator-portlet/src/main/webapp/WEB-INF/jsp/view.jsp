@@ -197,25 +197,36 @@
                                             <div id="CCDAR2_0_type_radioboxgroup" class="btn-group-vertical">
                                                 <select id="CCDAR2_0_type_val" name="CCDAR2_0_type_val"
                                                         class="form-control" tabindex="1" data-parsley-id="0462">
-                                                    <option value="NonSpecificCCDAR2">Transitions Of Care Inpatient
-                                                        Summary - MU2 170.315(b)(1) Transition of Care Receive - For
-                                                        Ambulatory Care
+                                                    <option value="170.315(b)(1) - Transitions of Care - Send - Ambulatory Setting">170.315(b)(1) - Transitions of Care - Send - Ambulatory Setting
                                                     </option>
-                                                    <option value="NonSpecificCCDAR2">Transitions Of Care Inpatient
-                                                        Summary - MU2 170.315(b)(1) Transition of Care Receive - For
-                                                        Inpatient Care
+                                                    <option value="170.315(b)(1) - Transitions of Care - Send - Inpatient Setting">170.315(b)(1) - Transitions of Care - Send - Inpatient Setting
                                                     </option>
-                                                    <option value="NonSpecificCCDAR2">VDT Ambulatory Summary - MU2
-                                                        170.315 (e)(1) Ambulatory Summary
+                                                    <option value="170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Ambulatory Setting">170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Ambulatory Setting
                                                     </option>
-                                                    <option value="NonSpecificCCDAR2">VDT Inpatient Summary - MU2
-                                                        170.315 (e)(1) Inpatient Summary
+                                                    <option value="170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Inpatient Setting">170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Inpatient Setting
                                                     </option>
-                                                    <option value="NonSpecificCCDAR2">Data Portability - MU2
-                                                        170.315(b)(6)
+                                                    <option value="170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Ambulatory Setting">170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Ambulatory Setting
                                                     </option>
-                                                    <option value="NonSpecificCCDAR2">Care Plan Documentation - MU2
-                                                        170.315(b)(9)
+                                                    <option value="170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Inpatient Setting">170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Inpatient Setting
+                                                    </option>
+
+                                                    <option value="170.315(b)(6) - Data Export - Ambulatory Setting">170.315(b)(6) - Data Export - Ambulatory Setting
+                                                    </option>
+                                                    <option value="170.315(b)(6) - Data Export - Inpatient Setting">170.315(b)(6) - Data Export - Inpatient Setting
+                                                    </option>
+                                                    <option value="170.315(b)(7) - Data Segmentation for Privacy - Send - Ambulatory Setting">170.315(b)(7) - Data Segmentation for Privacy - Send - Ambulatory Setting
+                                                    </option>
+                                                    <option value="170.315(b)(7) - Data Segmentation for Privacy - Send - Inpatient Setting">170.315(b)(7) - Data Segmentation for Privacy - Send - Inpatient Setting
+                                                    </option>
+                                                    <option value="170.315(b)(9) - Care Plan - Create - Ambulatory Setting">170.315(b)(9) - Care Plan - Create - Ambulatory Setting
+                                                    </option>
+                                                    <option value="170.315(b)(9) - Care Plan - Create - Inpatient Setting">170.315(b)(9) - Care Plan - Create - Inpatient Setting
+                                                    </option>
+                                                    <option value="170.315(e)(1) - View,Download and Transmit - Ambulatory Setting">170.315(e)(1) - View,Download and Transmit - Ambulatory Setting
+                                                    </option>
+                                                    <option value="170.315(e)(1) - View,Download and Transmit - Inpatient Setting">170.315(e)(1) - View,Download and Transmit - Inpatient Setting
+                                                    </option>
+                                                    <option value="C-CDA Implementation Guide Conformance">C-CDA Implementation Guide Conformance
                                                     </option>
                                                 </select>
                                             </div>
