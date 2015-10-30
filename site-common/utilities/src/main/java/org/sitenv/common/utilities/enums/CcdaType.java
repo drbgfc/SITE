@@ -14,7 +14,7 @@ public enum CcdaType {
 	TransitionsOfCareInpatientSummaryb1 ("Transitions Of Care Inpatient Summary - MU2 170.314(b)(1) Transition of Care Receive - For Inpatient Care"),
 	VDTAmbulatorySummary ("VDT Ambulatory Summary - MU2 170.314 (e)(1) Ambulatory Summary"),
 	VDTInpatientSummary ("VDT Inpatient Summary - MU2 170.314 (e)(1) Inpatient Summary"),
-	NonSpecificCCDA ("NonSpecificCCDA");
+	NonSpecificCCDA ("NonSpecificC-CDA");
 	
 	private static final Map<String,CcdaType> lookup = new HashMap<String,CcdaType>();
 
