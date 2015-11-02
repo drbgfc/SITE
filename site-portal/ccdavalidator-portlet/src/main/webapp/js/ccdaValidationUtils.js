@@ -10,26 +10,39 @@ var validationError;
 
 //R1
 function doCcdaValidation(data){
-	var resultMap = buildCcdaErrorsMap(data);
-	var warningresultMap = buildCcdaWarningsMap(data);
-	var inforesultMap = buildCcdaInfoMap(data);
-	var tabHtml1 = buildResultsHtml(data);
-	buildCCDAXMLResultsTab(data);
-	showResults(tabHtml1);
-	highlightXMLResults(resultMap, 'ccda', 'error');
-	highlightXMLResults(warningresultMap, 'ccda', 'warning');
-	highlightXMLResults(inforesultMap, 'ccda', 'info');
-	updateStatisticCount();
-	removeProgressModal();
+    showValidationResultsModalButtons();
+    var tabHtml1 = '';
+	if(data.result.body.ccdaResults.error != null){
+		tabHtml1 = buildValidationResultErrorHtml(data.result.body.ccdaResults.error);
+        showResults(tabHtml1);
+	}else{
+		var resultMap = buildCcdaErrorsMap(data);
+		var warningresultMap = buildCcdaWarningsMap(data);
+		var inforesultMap = buildCcdaInfoMap(data);
+		tabHtml1 = buildResultsHtml(data);
+		buildCCDAXMLResultsTab(data);
+		showResults(tabHtml1);
+		highlightXMLResults(resultMap, 'ccda', 'error');
+		highlightXMLResults(warningresultMap, 'ccda', 'warning');
+		highlightXMLResults(inforesultMap, 'ccda', 'info');
+	}
+    updateStatisticCount();
+    removeProgressModal();
 }
 
 
 //R2
 function showValidationResults(data){
-	var resultsMap = buildCcdaResultMap(data);
-	var tabHtml1 = buildCcdaValidationResultsHtml(data);
-	buildCCDAXMLResultsTab(data);
-	highlightCcdaXMLResults(resultsMap);
+    showValidationResultsModalButtons();
+    var tabHtml1 = '';
+    if(data.result.body.resultsMetaData.serviceError){
+        tabHtml1 = buildValidationResultErrorHtml(data.result.body.resultsMetaData.serviceErrorMessage);
+    }else{
+        var resultsMap = buildCcdaResultMap(data);
+        tabHtml1 = buildCcdaValidationResultsHtml(data);
+        buildCCDAXMLResultsTab(data);
+        highlightCcdaXMLResults(resultsMap);
+    }
 	showResults(tabHtml1);
 	updateStatisticCount();
 	removeProgressModal();
@@ -571,18 +584,29 @@ function handleFileUploadError(){
 	}
 }
 
-function buildValidationResultErrorHtml(data){
+function hideValidationResultsModalButtons() {
+    $("#resultModalTabs a[href='#tabs-1']").hide();
+    $("#resultModalTabs a[href='#tabs-2']").hide();
+    $('#saveResultsBtn').hide();
+    $('#smartCCDAValidationBtn').hide();
+}
+
+function showValidationResultsModalButtons() {
+    $("#resultModalTabs a[href='#tabs-1']").show();
+    $("#resultModalTabs a[href='#tabs-2']").show();
+    $('#saveResultsBtn').show();
+    $('#smartCCDAValidationBtn').show();
+}
+
+function buildValidationResultErrorHtml(errorMessage){
 	var errorHtml = ['<title>Validation Results</title>',
 	                 '<h1 align="center">Validation Results</h1>',
-	                 '<font color="red">',
-	                 'An error occurred during validation with the following details:</br></br>',
-	                 '<b>' + data.result.body.ccdaResults.error + '</b></br></br>',
+	                 '<p>An error occurred during validation with the following details:</br>',
+	                 '<b>' + errorMessage + '</b></br>',
 	                 'If possible, please fix the error and try again. If this error persists, please contact the system administrator',
-	                 '</font>',
-	                 '<hr/>',
-	                 '<hr/>',
-	                 '<br/>'];
-	return errorHtml;
+	                 '</p>'];
+    hideValidationResultsModalButtons();
+    return errorHtml;
 }
 
 function buildValidationResultsHeader(uploadedFileName, docTypeSelected){
@@ -740,7 +764,7 @@ function buildResultsHtml(data){
 	var tabHtml1 = "";
 	if (("error" in data.result.body.ccdaResults) || ("error" in data.result.body.ccdaExtendedResults)){
 		validationError = true;
-		tabHtml1 = buildValidationResultErrorHtml(data).join('\n');
+		tabHtml1 = buildValidationResultErrorHtml(data.result.body.ccdaResults.error).join('\n');
 	} else {
 		var tabHtml1 = buildValidationSummary(data);
 		tabHtml1 += buildValidationResultDetailsHtml(data);
