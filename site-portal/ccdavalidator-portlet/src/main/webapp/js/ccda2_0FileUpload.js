@@ -1,3 +1,4 @@
+var ccda2_0ValidationData;
 $(function() {
 	'use strict';
 	$('#progress').hide();
@@ -12,6 +13,7 @@ $(function() {
 			handleFileUploadError();
         },
 		done : function(e, data) {
+			ccda2_0ValidationData = data;
 			showValidationResults(data);
 		},
 		progressall : function(e, data) {
