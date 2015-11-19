@@ -152,19 +152,25 @@ function buildCcdaValidationResults(data){
 
 function buildCcdaResultMap(data){
 	var ccdaValidationResultsMap = new Object;
+    var resultTypeMapValue = '';
 	$.each(data.result.body.ccdaValidationResults, function(ccdaValidationResults,result){
+        if(result.expectedValueSet != null){
+            resultTypeMapValue = result.description + '<br/>Expected Valueset(s): ' + result.expectedValueSet.replace(/,/g , " or ");
+        }else{
+            resultTypeMapValue = result.description;
+        }
 		if(ccdaValidationResultsMap[result.documentLineNumber] != undefined){
 			var resultTypeMap = ccdaValidationResultsMap[result.documentLineNumber];
 			if(resultTypeMap[result.type] != undefined){
-				resultTypeMap[result.type].push(result.description);
+				resultTypeMap[result.type].push(resultTypeMapValue);
 				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
 			}else{
-				resultTypeMap[result.type] = [result.description];
+				resultTypeMap[result.type] = [resultTypeMapValue];
 				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
 			}
 		}else{
 			var ccdaTypeMap = new Object;
-			ccdaTypeMap[result.type] = [result.description];
+			ccdaTypeMap[result.type] = [resultTypeMapValue];
 			ccdaValidationResultsMap[result.documentLineNumber] = ccdaTypeMap;
 		}
 	});
