@@ -1,0 +1,330 @@
+/*
+*	Generic
+*/
+.hide
+{
+	display: none;
+}
+
+/*
+*	Use verdana font for all "results" sections of the form.
+*/
+div#testcase-desc, div#testcase-results, div#hosting-testcase-desc
+{
+	font-family: Verdana, "sans serif" !important;
+}
+
+
+/*
+*	Hosting
+*/
+pre.testcase-hosting-cert {
+	padding: 5px;
+	overflow: scroll;
+	border: 1px solid black;
+	background-color: rgb(220, 220, 220);
+	font: normal 8pt monospace;
+	white-space: pre;
+}
+
+/*
+*	Discover
+*/
+div#testcase-discovery-direct-addr {
+	display: none;
+	font-size: 13px;
+}
+
+div#testcase-discovery-direct-addr span:last-of-type {
+	font-family: monospace;
+}
+
+/*
+*	Testcase Div
+*/
+div.testcase
+{
+	background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.8em;
+    margin: 10px 0;
+    padding: 5px;
+}
+
+/*
+*	Testcases (from DCDT)
+*/
+
+
+div.input-group-small#testcase-info div#testcase-desc div > div,
+div.input-group-small#testcase-results div#testcase-results-accordion div > div {
+    margin: 5px;
+    overflow-x: auto;
+}
+
+div.input-group-small#testcase-results {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dotted black;
+}
+
+div.input-group-small#testcase-results div.form-group span.form-cell.form-cell-label {
+    text-align: left;
+}
+
+div.input-group-small#testcase-results div#testcase-results-accordion:not(:empty) + i {
+    display: none;
+}
+
+div.input-group-small#testcase-results div#testcase-results-accordion h3.ui-accordion-header {
+    background: linear-gradient(to bottom, rgb(255, 255, 255) 0, rgb(220, 220, 220) 100%) repeat-x;
+    border-color: rgb(200, 200, 200);
+}
+
+div.input-group-small#testcase-results div#testcase-results-accordion div.ui-accordion-content {
+    padding: 5px;
+    font-size: 11px;
+}
+
+/*
+*	Generic Input Group
+*/
+div.input-group-small div.form-group {
+    margin-bottom: 10px;
+}
+
+div.input-group-small div.form-group.form-group-addons:not(:first-child),
+div.input-group-small div.form-group.form-group-buttons,
+div.input-group-small div.form-group.form-group-text {
+    margin-left: 0;
+}
+
+div.input-group-small div.form-group.form-group-addons div:not(:first-child) {
+    margin-top: 5px;
+}
+
+div.input-group-small div.form-group.form-group-addons div.input-group-addon,
+div.input-group-small div.form-group.form-group-buttons span.button-group,
+div.input-group-small div.form-group span.form-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+div.input-group-small div.form-group.form-group-addons div.input-group-addon,
+div.input-group-small div.form-group.form-group-buttons span.btn-group {
+    column-span: all;
+    -webkit-column-span: all;
+    -moz-column-span: all;
+    -ms-column-span: all;
+    -o-column-span: all;
+}
+
+div.input-group-small div.form-group.form-group-addons div.input-group-addon {
+    display: none;
+    text-align: left;
+    font-size: 11px;
+    white-space: normal;
+}
+
+div.input-group-small div.form-group.form-group-addons div.input-group-addon.input-group-addon-active {
+    display: table-cell;
+}
+
+div.input-group-small div.form-group.form-group-addons div.input-group-addon:first-child,
+div.input-group-small div.form-group.form-group-addons div.input-group-addon:last-child {
+    border: 1px solid;
+    border-radius: 4px;
+}
+
+div.input-group-small div.form-group span.form-cell.form-cell-label {
+    min-width: 175px;
+    display: block;
+    text-align: left;
+}
+
+div.input-group-small div.form-group span.form-cell.form-cell-label label {
+}
+
+div.input-group-small div.form-group span.form-cell.form-cell-control input.form-control[type="password"],
+div.input-group-small div.form-group span.form-cell.form-cell-control input.form-control[type="text"],
+div.input-group-small div.form-group span.form-cell.form-cell-control select.form-control {
+  
+    padding: 5px;
+}
+
+div.input-group-small div.form-group.form-group-buttons span.btn-group button.btn {
+    margin-left: 5px;
+}
+
+div.input-group-small div.form-group.form-group-buttons span.btn-group button.btn:first-child,
+div.input-group-small div.form-group.form-group-buttons span.btn-group button.btn:last-child {
+    border-radius: 3px;
+}
+
+div.input-group-small div.form-group.form-group-buttons span.btn-group button.btn:first-child {
+    margin-left: 0;
+}
+
+div.input-group-small div.form-group.form-group-buttons span.btn-group.btn-group-sm button.btn {
+    font-size: 13px;
+}
+
+.start, .fileinput-button, .dropdown-toggle {
+	width: 180px;
+}
+
+/*
+	Panel styles
+*/
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0);
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px; }
+
+.panel-heading > .dropdown .dropdown-toggle {
+  color: inherit; }
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit; }
+
+.panel-title > a {
+  color: inherit; }
+
+.panel-footer {
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #dddddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px; }
+
+.panel-group .panel {
+  margin-bottom: 0;
+  overflow: hidden;
+  border-radius: 4px; }
+
+.panel-group .panel + .panel {
+  margin-top: 5px; }
+
+.panel-group .panel-heading {
+  border-bottom: 0; }
+
+.panel-group .panel-heading + .panel-collapse .panel-body {
+  border-top: 1px solid #dddddd; }
+
+.panel-group .panel-footer {
+  border-top: 0; }
+
+.panel-group .panel-footer + .panel-collapse .panel-body {
+  border-bottom: 1px solid #dddddd; }
+
+.panel-default {
+  border-color: #dddddd; }
+
+.panel-default > .panel-heading {
+  color: #333333;
+  background-color: #f5f5f5;
+  border-color: #dddddd; }
+
+.panel-default > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #dddddd; }
+
+.panel-default > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #dddddd; }
+
+.panel-primary {
+  border-color: #428bca; }
+
+.panel-primary > .panel-heading {
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #428bca; }
+
+.panel-primary > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #428bca; }
+
+.panel-primary > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #428bca; }
+
+.panel-success {
+  border-color: #d6e9c6 !important;
+    color: #3c763d  !important;
+  background-color: #dff0d8 !important;
+  border-color: #d6e9c6 !important;
+  background-image: linear-gradient(to bottom, #dff0d8 0%, #d0e9c6 100%) !important;
+    background-repeat: repeat-x !important;
+ }
+
+.panel-success > .panel-heading {
+ }
+
+.panel-success > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #d6e9c6; }
+
+.panel-success > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #d6e9c6; }
+
+.panel-warning {
+  border-color: #faebcc; }
+
+.panel-warning > .panel-heading {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc; }
+
+.panel-warning > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #faebcc; }
+
+.panel-warning > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #faebcc; }
+
+.panel-danger {
+  border-color: #ebccd1 !important;
+    color: #a94442  !important;
+  background-color: #f2dede  !important;
+  border-color: #ebccd1  !important;
+  background-image: linear-gradient(to bottom, #f2dede 0%, #ebcccc 100%) !important;
+    background-repeat: repeat-x !important; 
+   }
+
+.panel-danger > .panel-heading {
+}
+
+.panel-danger > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #ebccd1; }
+
+.panel-danger > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #ebccd1; }
+
+.panel-info {
+  border-color: #bce8f1; }
+
+.panel-info > .panel-heading {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1; }
+
+.panel-info > .panel-heading + .panel-collapse .panel-body {
+  border-top-color: #bce8f1; }
+
+.panel-info > .panel-footer + .panel-collapse .panel-body {
+  border-bottom-color: #bce8f1; }
+
+
+#testcase-results-accordion
+{
+	max-width: 848px;
+	min-width: 300px;
+	width: 100%;
+}
+
+.form-group-addons
+{
+	border-collapse: initial !important;
+}
+
