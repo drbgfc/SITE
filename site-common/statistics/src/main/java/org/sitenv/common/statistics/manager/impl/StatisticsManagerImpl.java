@@ -60,9 +60,9 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	private SmtpTransmissionDAO smtpTransmissionDAO;
 
 	@Transactional
-	public void addDcdtHostingVerification(String testcase, String directAddress, String response) 
+	public void addDcdtHostingVerification(String testcase, String directAddress, String response , String version) 
 	{
-		dcdtHostingVerificationDAO.createDcdtHostingVerification(testcase, directAddress, response);
+		dcdtHostingVerificationDAO.createDcdtHostingVerification(testcase, directAddress, response , version);
 	}
 	
 	

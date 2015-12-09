@@ -70,7 +70,7 @@ public interface StatisticsManager {
 	public Long getHttpErrorPdtiTestCount(Integer numOfDays);
 
 
-	public void addDcdtHostingVerification(String testcase, String directAddress, String response);
+	public void addDcdtHostingVerification(String testcase, String directAddress, String response , String dcdtVersion);
 
 	public List<AggregateWeeklyCounts> getAggregateWeeklyCounts(Integer numOfWeeks);
 
