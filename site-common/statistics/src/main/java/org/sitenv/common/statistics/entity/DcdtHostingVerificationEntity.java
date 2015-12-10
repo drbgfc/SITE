@@ -34,6 +34,9 @@ public class DcdtHostingVerificationEntity
 
 	@Column(name="verification_response")
 	private String verificationResponse;
+	
+	@Column(name="dcdt_version")
+	private String dcdtVersion = "2014";
 
 	@Override
 	public int hashCode() {
@@ -44,6 +47,7 @@ public class DcdtHostingVerificationEntity
 		result = prime * result + ((verificationDirectAddress == null) ? 0 : verificationDirectAddress.hashCode());
 		result = prime * result + ((verificationResponse == null) ? 0 : verificationResponse.hashCode());
 		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
+		result = prime * result + ((dcdtVersion == null) ? 0 : dcdtVersion.hashCode());
 		return result;
 	}
 
@@ -80,6 +84,11 @@ public class DcdtHostingVerificationEntity
 			if (other.timestamp != null)
 				return false;
 		} else if (!timestamp.equals(other.timestamp))
+			return false;
+		if (dcdtVersion == null) {
+			if (other.dcdtVersion != null)
+				return false;
+		} else if (!dcdtVersion.equals(other.dcdtVersion))
 			return false;
 		return true;
 	}
@@ -123,4 +132,14 @@ public class DcdtHostingVerificationEntity
 	public void setVerificationResponse(String verificationResponse) {
 		this.verificationResponse = verificationResponse;
 	}
+
+	public String getDcdtVersion() {
+		return dcdtVersion;
+	}
+
+	public void setDcdtVersion(String dcdtVersion) {
+		this.dcdtVersion = dcdtVersion;
+	}
+	
+	
 }

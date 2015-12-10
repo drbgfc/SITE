@@ -236,7 +236,7 @@ function writeSmartCCDAResultHTML(data){
     		
     		
     		$("#resultModalTabs a[href='#tabs-3']").show();
-    		
+			$('#saveResultsBtn').show();
     		$(".modal-body").scrollTop(0);
     		
     		$("#resultModalTabs a[href='#tabs-3']").tab("show");

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 public class DCDTHostingController extends BaseController {
 
 	public static final String DCDT_HOSTING_URL = "http://demo.direct-test.com/dcdt-web/hosting/process";
+	public static final String DCDT_VERSION = "2014";
 	
 	@Autowired
 	private StatisticsManager statisticsManager;
@@ -104,7 +105,7 @@ public class DCDTHostingController extends BaseController {
 				testcase = requestObject.getString("testcase");
 				directAddress = requestObject.getString("directAddr");
 			}
-			statisticsManager.addDcdtHostingVerification(testcase, directAddress, json.toString());
+			statisticsManager.addDcdtHostingVerification(testcase, directAddress, json.toString(),DCDT_VERSION);
 		}
 		catch (Exception ignore)
 		{
