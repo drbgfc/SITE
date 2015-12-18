@@ -1,3 +1,5 @@
+var documentLocationMap;
+
 (function($) {
 $.fn.serializefiles = function() {
     var obj = $(this);
@@ -962,3 +964,53 @@ $(function(){
 	});
 	loadSampleTrees();
 });
+
+$.getJSON("//api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Receiver%20SUT%20Test%20Data", function(data){
+    $("#CCDAR2_0_type_val option").remove();
+    $("#CCDAR2_0_type_val").append(
+        $("<option></option>")
+            .text('-- select one ---')
+            .val(''));
+    $.each(data, function(index, item){
+        var optionText = item.name;
+        var optionValue = item.url;
+        $("#CCDAR2_0_type_val").append(
+            $("<option></option>")
+            .text(optionText)
+            .val(optionValue));
+    })
+});
+
+$('#CCDAR2_0_type_val').change(function(){
+    documentLocationMap = new Object();
+    $.getJSON($( this ).val(), function(data){
+        $("#CCDAR2_refdocsfordocumenttype option").remove();
+        $("#CCDAR2_refdocsfordocumenttype").append(
+            $("<option></option>")
+                .text('-- select one ---')
+                .val(''));
+        $.each(data, function(index, item){
+            var optionText = item.name;
+            var documentDownloadUrl = item.download_url;
+            documentLocationMap[optionText] = documentDownloadUrl;
+            $("#CCDAR2_refdocsfordocumenttype").append(
+                $("<option></option>")
+                    .text(optionText)
+                    .val(optionText));
+        })
+    });
+});
+
+$('#CCDAR2_refdocsfordocumenttype').change(function(){
+    $("#scenariofiledownload").attr({'href' : documentLocationMap[$( this ).val()], target : '_blank'});
+});
+
+$("#scenariofiledownload").click(function(e){
+    e.preventDefault();
+    $("body").append("<iframe src='" + $(this).prop('href') + "' style='display: none;' ></iframe>");
+    //$.fileDownload($(this).prop('href'), {
+    //    preparingMessageHtml: "We are preparing your report, please wait...",
+    //    failMessageHtml: "There was a problem generating your report, please try again."
+    //});
+    return false;
+})

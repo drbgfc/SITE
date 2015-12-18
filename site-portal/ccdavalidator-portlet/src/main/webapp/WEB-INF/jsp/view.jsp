@@ -1,17 +1,9 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
-<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
-<%@ page import="com.liferay.portal.kernel.util.Validator" %>
-<%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
-<%@ page import="javax.portlet.PortletPreferences" %>
-<%@ page import="com.liferay.util.PwdGenerator" %>
-<%@ page import="com.liferay.portal.service.PortletPreferencesLocalServiceUtil" %>
-<%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://sitenv.org/tags" prefix="site" %>
-<%@ page import="org.sitenv.common.utilities.enums.CcdaType" %>
 
 
 <portlet:actionURL var="sampleCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -197,37 +189,6 @@
                                             <div id="CCDAR2_0_type_radioboxgroup" class="btn-group-vertical">
                                                 <select id="CCDAR2_0_type_val" name="CCDAR2_0_type_val"
                                                         class="form-control" tabindex="1" data-parsley-id="0462">
-                                                    <option value="170.315(b)(1) - Transitions of Care - Send - Ambulatory Setting">170.315(b)(1) - Transitions of Care - Send - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(1) - Transitions of Care - Send - Inpatient Setting">170.315(b)(1) - Transitions of Care - Send - Inpatient Setting
-                                                    </option>
-                                                    <option value="170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Ambulatory Setting">170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Inpatient Setting">170.315(b)(2) - Clinical Information Reconciliation and Incorporation - Inpatient Setting
-                                                    </option>
-                                                    <option value="170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Ambulatory Setting">170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Inpatient Setting">170.315(b)(4) - Common Clinical Data Set Summary Record - Create - Inpatient Setting
-                                                    </option>
-
-                                                    <option value="170.315(b)(6) - Data Export - Ambulatory Setting">170.315(b)(6) - Data Export - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(6) - Data Export - Inpatient Setting">170.315(b)(6) - Data Export - Inpatient Setting
-                                                    </option>
-                                                    <option value="170.315(b)(7) - Data Segmentation for Privacy - Send - Ambulatory Setting">170.315(b)(7) - Data Segmentation for Privacy - Send - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(7) - Data Segmentation for Privacy - Send - Inpatient Setting">170.315(b)(7) - Data Segmentation for Privacy - Send - Inpatient Setting
-                                                    </option>
-                                                    <option value="170.315(b)(9) - Care Plan - Create - Ambulatory Setting">170.315(b)(9) - Care Plan - Create - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(b)(9) - Care Plan - Create - Inpatient Setting">170.315(b)(9) - Care Plan - Create - Inpatient Setting
-                                                    </option>
-                                                    <option value="170.315(e)(1) - View,Download and Transmit - Ambulatory Setting">170.315(e)(1) - View,Download and Transmit - Ambulatory Setting
-                                                    </option>
-                                                    <option value="170.315(e)(1) - View,Download and Transmit - Inpatient Setting">170.315(e)(1) - View,Download and Transmit - Inpatient Setting
-                                                    </option>
-                                                    <option value="C-CDA Implementation Guide Conformance">C-CDA Implementation Guide Conformance
-                                                    </option>
                                                 </select>
                                             </div>
                                             <br/>
@@ -236,24 +197,10 @@
                                         <li>Select the scenario file that you used to generate the C-CDA.
                                             <noscript><input type="hidden" name="redirect" value="true"/></noscript>
                                             <div id="CCDAReferenceUploaderrorlock" style="position: relative;">
-                                                <div class="dropdown">
-                                                    <button id="referenceFileUsedLabel" data-toggle="dropdown"
-                                                            class="treeButton btn btn-success dropdown-toggle"
-                                                            type="button" tabindex="1">
-                                                        Select file <i class="glyphicon glyphicon-play"></i>
-                                                    </button>
-
-                                                    <ul class="dropdown-menu rightMenu" role="menu"
-                                                        aria-labelledby="referenceFileUsedLabel"
-                                                        style=" overflow: scroll; /* position: absolute; */ ">
-                                                        <li>
-                                                            <div id="referenceFileUsedTreePanel"></div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div><span id="referenceFileUsed"></span></div>
-                                                <input id="referenceFileUsedFilepath" name="referenceFileUsedFilepath"
-                                                       type="hidden">
+                                                <select id="CCDAR2_refdocsfordocumenttype" name="CCDAR2_refdocsfordocumenttype"
+                                                        class="form-control" tabindex="1">
+                                                </select>
+                                               <a href="#" id="scenariofiledownload" title="Download the selected file to use for generating a C-CDA." class="pull-right">Download this file</a>
                                                 <br/>
                                                 <br/>
                                             </div>
