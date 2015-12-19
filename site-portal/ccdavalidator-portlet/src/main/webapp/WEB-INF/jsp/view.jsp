@@ -185,8 +185,18 @@
                                       relay="<%= smartCCDAAction %>" enctype="multipart/form-data">
 
                                     <ol>
+                                        <li>Select the message format for the system under test.
+                                            <div class="clearfix">
+                                                <div id="messagetype" class="btn-group" role="group" aria-label="...">
+                                                    <button type="button" class="btn btn-default active" value="sender">Sender</button>
+                                                    <button type="button" class="btn btn-default" value="receiver">Receiver</button>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                        </li>
                                         <li>Select a C-CDA Document Type or MU Stage 2 Objective from the list below.
-                                            <div id="CCDAR2_0_type_radioboxgroup" class="btn-group-vertical">
+                                            <div>
                                                 <select id="CCDAR2_0_type_val" name="CCDAR2_0_type_val"
                                                         class="form-control" tabindex="1" data-parsley-id="0462">
                                                 </select>
@@ -200,7 +210,7 @@
                                                 <select id="CCDAR2_refdocsfordocumenttype" name="CCDAR2_refdocsfordocumenttype"
                                                         class="form-control" tabindex="1">
                                                 </select>
-                                               <a href="#" id="scenariofiledownload" title="Download the selected file to use for generating a C-CDA." class="pull-right">Download this file</a>
+                                                <a href="#" id="scenariofiledownload" title="View and download the selected file to use for generating a C-CDA." class="pull-right">Get this file to be used as input for generating a C-CDA. <img src="<%=request.getContextPath()%>\images\GitHub-Mark-32px.png" style="max-height: 15px; max-width: 15px;"/></a>
                                                 <br/>
                                                 <br/>
                                             </div>
@@ -246,67 +256,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading"><h2 class="panel-title"><a data-toggle="collapse"
-                                                          href="#collapseScenarioDownload" tabindex="1">
-        Download C-CDA Scenario Test Data
-    </a></h2></div>
-    <div id="collapseScenarioDownload" class="panel-collapse collapse">
-        <div class="panel-body">
-            <span class="directions">Directions:</span>
-            <ol>
-                <li>Download scenario test data to be used as input for generating a C-CDA.
-
-                    <div id="referenceDownloadFormWrapper">
-                        <form id="referenceDownloadForm" action="${downloadReferenceTestDataAction}" method="POST">
-                            <p>
-                            <noscript><input type="hidden" name="redirect" value="true"/></noscript>
-                            <div id="referenceDownloadErrorlock" style="position: relative;">
-
-                                <div class="col-md-4">
-                                    <div class="dropdown">
-                                        <button id="referenceDownloadLabel" data-toggle="dropdown"
-                                                class="treeButton btn btn-success dropdown-toggle" type="button"
-                                                tabindex="1">
-                                            Select file to download <i class="glyphicon glyphicon-play"></i>
-                                        </button>
-
-                                        <ul class="dropdown-menu rightMenu" role="menu"
-                                            aria-labelledby="referenceDownloadLabel"
-                                            style=" overflow: scroll; /* position: absolute; */ ">
-                                            <li>
-                                                <div id="referenceDownloadFileTreePanel"></div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div><span id="referenceDownloadFilePathOutput"></span></div>
-                                </div>
-                                <div class="col-md-4">
-                                    <button id="referenceDownloadCCDAsubmit" type="submit" class="btn btn-primary start"
-                                            onclick="return false;" tabindex="1">
-                                        <i class="glyphicon glyphicon-download"></i> <span>Download</span>
-                                    </button>
-                                </div>
-
-                            </div>
-                            <!--  <hr />-->
-                            <br/>
-                            <br/>
-
-                            <input id="referenceDownloadFilepath"
-                                   name="referenceDownloadFilepath" type="hidden">
-                        </form>
-                        <br/>
-                    </div>
-                </li>
-            </ol>
-            <ol start=2>
-                <li>Generate the C-CDA file and proceed to C-CDA Validation.</li>
-            </ol>
         </div>
     </div>
 </div>
