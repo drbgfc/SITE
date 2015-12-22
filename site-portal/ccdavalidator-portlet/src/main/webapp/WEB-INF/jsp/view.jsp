@@ -196,21 +196,25 @@
                                             <br/>
                                         </li>
                                         <li>Select a C-CDA Document Type or MU Stage 2 Objective from the list below.
-                                            <div>
+                                            <div class="form-group">
                                                 <select id="CCDAR2_0_type_val" name="CCDAR2_0_type_val"
-                                                        class="form-control" tabindex="1" data-parsley-id="0462">
+                                                        class="form-control" tabindex="1"  data-parsley-trigger="change" data-parsley-required
+                                                        data-parsley-required-message="Document Type / MU Stage 2 Objective is required.">
                                                 </select>
+                                                <div id="CCDAR2_0_type_valInfoArea" class="infoArea"></div>
                                             </div>
                                             <br/>
                                             <br/>
                                         </li>
                                         <li>Select the scenario file that you used to generate the C-CDA.
                                             <noscript><input type="hidden" name="redirect" value="true"/></noscript>
-                                            <div id="CCDAReferenceUploaderrorlock" style="position: relative;">
+                                            <div class="form-group">
                                                 <select id="CCDAR2_refdocsfordocumenttype" name="CCDAR2_refdocsfordocumenttype"
-                                                        class="form-control" tabindex="1">
+                                                        class="form-control" tabindex="1"  data-parsley-trigger="change" data-parsley-required
+                                                        data-parsley-required-message="Scenario file selection is required.">
                                                 </select>
                                                 <a href="#" id="scenariofiledownload" title="View and download the selected file to use for generating a C-CDA." class="pull-right">Get this file to be used as input for generating a C-CDA. <img src="<%=request.getContextPath()%>/images/GitHub-Mark-32px.png" style="max-height: 15px; max-width: 15px;"/></a>
+                                                <div id="CCDAR2_refdocsfordocumenttypeInfoArea" class="infoArea"></div>
                                                 <br/>
                                                 <br/>
                                             </div>
