@@ -1,6 +1,6 @@
 var documentLocationMap;
-var senderGitHubUrl = '//api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Sender%20SUT%20Test%20Data';
-var receiverGitHubUrl = '//api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Receiver%20SUT%20Test%20Data';
+var senderGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Sender SUT Test Data?callback=?';
+var receiverGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Receiver SUT Test Data?callback=?';
 
 (function($) {
 $.fn.serializefiles = function() {
@@ -976,7 +976,7 @@ function getTestDocuments(endpointToDocuments){
             $("<option></option>")
                 .text('-- select one ---')
                 .val(''));
-        $.each(data, function(index, item){
+        $.each(data.data, function(index, item){
             var optionText = item.name;
             var optionValue = item.url;
             $("#CCDAR2_0_type_val").append(
@@ -991,13 +991,13 @@ $('#CCDAR2_0_type_val').change(function(){
     documentLocationMap = new Object();
     $("#scenariofiledownload").hide();
     if($( this ).val() != ''){
-        $.getJSON($( this ).val(), function(data){
+        $.getJSON($( this ).val()+ '&callback=?', function(data){
             $("#CCDAR2_refdocsfordocumenttype option").remove();
             $("#CCDAR2_refdocsfordocumenttype").append(
                 $("<option></option>")
                     .text('-- select one ---')
                     .val(''));
-            $.each(data, function(index, item){
+            $.each(data.data, function(index, item){
                 var optionText = item.name;
                 var documentDownloadUrl = item.html_url;
                 documentLocationMap[optionText] = documentDownloadUrl;

@@ -210,7 +210,7 @@
                                                 <select id="CCDAR2_refdocsfordocumenttype" name="CCDAR2_refdocsfordocumenttype"
                                                         class="form-control" tabindex="1">
                                                 </select>
-                                                <a href="#" id="scenariofiledownload" title="View and download the selected file to use for generating a C-CDA." class="pull-right">Get this file to be used as input for generating a C-CDA. <img src="<%=request.getContextPath()%>\images\GitHub-Mark-32px.png" style="max-height: 15px; max-width: 15px;"/></a>
+                                                <a href="#" id="scenariofiledownload" title="View and download the selected file to use for generating a C-CDA." class="pull-right">Get this file to be used as input for generating a C-CDA. <img src="<%=request.getContextPath()%>/images/GitHub-Mark-32px.png" style="max-height: 15px; max-width: 15px;"/></a>
                                                 <br/>
                                                 <br/>
                                             </div>
