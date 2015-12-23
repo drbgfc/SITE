@@ -38,8 +38,8 @@ $(function() {
 						window.ParsleyUI.removeError(hideMsg3,'required');
 						$( "#ValidationResult [href='#tabs-1']").trigger( "click" );
 						BlockPortletUI();
-						var selectedValue = $("#CCDAR2_0_type_val").val();
-						var selectedReferenceValue = $("#referenceFileUsedFilepath").val();
+						var selectedValue = $("#CCDAR2_0_type_val :selected").text();
+						var selectedReferenceValue = $("#CCDAR2_refdocsfordocumenttype").val();
 						data.formData = { };
 						if (selectedValue != undefined) {
 							data.formData.CCDAR2_0_type_val = selectedValue;
@@ -71,20 +71,5 @@ $(function() {
 					window.ParsleyUI.removeError(hideMsg3,'required');
 				}
 			});
-	});	
-	
-	$('#CCDAR2_0Fileupload-btn').bind('click', function(e, data){
-		//$('#CCDA1ValidationForm .formError').hide(0);
-		var selectedText = $("#CCDAR2_0_type_val :selected").text();
-		$("#CCDAR2_0_type_val option").each(function() {
-			  if($(this).text() == selectedText) {
-			    $(this).attr('selected', 'selected');
-			  } else {
-				$(this).removeAttr('selected');
-			  }
-			});
-		$('#CCDAR2_0ValidationForm').trigger('reset');
-		$('#CCDAR2_0FormSubmit').unbind("click");
-		$('#CCDAR2_0Files').empty();
 	});
 });
