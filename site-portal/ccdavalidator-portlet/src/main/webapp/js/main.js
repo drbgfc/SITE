@@ -1005,7 +1005,11 @@ $('#CCDAR2_0_type_val').change(function(){
                     $("<option></option>")
                         .text(optionText)
                         .val(optionText));
-            })
+            });
+			$("#CCDAR2_refdocsfordocumenttype").append(
+				$("<option></option>")
+					.text('No Scenario File')
+					.val('noscenariofile'));
         });
     }else{
         $("#CCDAR2_refdocsfordocumenttype option").remove();
@@ -1014,7 +1018,7 @@ $('#CCDAR2_0_type_val').change(function(){
 });
 
 $('#CCDAR2_refdocsfordocumenttype').change(function(){
-    if($( this ).val() != ''){
+    if($( this ).val() != '' && $( this ).val() !== 'noscenariofile'){
         $("#scenariofiledownload").attr({'href' : documentLocationMap[$( this ).val()], target : '_blank'});
         $("#scenariofiledownload").show();
     }else{
