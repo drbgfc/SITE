@@ -5,27 +5,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://sitenv.org/tags" prefix="site" %>
 
-
-<portlet:actionURL var="sampleCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="sampleCCDATree"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="reconciledCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="reconciledCCDATree"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="referenceCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="referenceCCDATree"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="referenceCCDAIncorpTree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="referenceCCDAIncorpTree"/>
-</portlet:actionURL>
-
-<portlet:actionURL var="negativeTestCCDATree" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="negativeTestCCDATree"/>
-</portlet:actionURL>
-
 <portlet:actionURL var="urlAction1_1" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
     <portlet:param name="javax.portlet.action" value="uploadCCDA1.1"/>
 </portlet:actionURL>
@@ -42,24 +21,6 @@
 <portlet:resourceURL id="saveAsPDF" var="downloadCCDAAction">
 </portlet:resourceURL>
 
-<portlet:resourceURL id="downloadReconciledBundle" var="downloadReconciledBundleAction">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="downloadReferenceTestData" var="downloadReferenceTestDataAction">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="downloadTestInputFile" var="downloadTestInputAction">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="downloadVendorIncorporation" var="downloadVendorIncorporationAction">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="downloadReferenceTreeIncorporation" var="downloadReferenceTreeIncorporationAction">
-</portlet:resourceURL>
-
-<portlet:resourceURL id="downloadNegativeTestTreeIncorporation" var="downloadNegativeTestTreeIncorporationAction">
-</portlet:resourceURL>
-
 <portlet:defineObjects/>
 
 <portlet:actionURL var="editCaseURL" name="uploadFile">
@@ -72,15 +33,6 @@
 
 <script type="text/javascript">
     window.currentContextPath = "<%=request.getContextPath()%>";
-    var sampleCCDATreeURL = '${sampleCCDATree}';
-    var showVocab = '${showVocabulary}';
-    var showDataQuality = '${showDataQualityValidation}';
-    var showVocabularyValidation = (showVocab === 'true');
-    var showDataQualityValidation = (showDataQuality === 'true');
-    var reconciledCCDATreeURL = '${reconciledCCDATree}';
-    var referenceCCDATreeURL = '${referenceCCDATree}';
-    var referenceCCDAIncorpTreeURL = '${referenceCCDAIncorpTree}';
-    var negativeTestCCDATreeURL = '${negativeTestCCDATree}';
 </script>
 
 <div id="CCDAvalidator" class="panel panel-default">
@@ -256,26 +208,10 @@
     </div>
 </div>
 
-<!--<div class="panel panel-default">
-<div class="panel-heading"><h2 class="panel-title">Downloads</h2></div>
-<div class="panel-body">
-<div class="col-sm-12 btn-group-vertical" style="width:100%">
-<a class="btn btn-default" href="http://www.hl7.org/documentcenter/private/standards/cda/CDAR2_IG_IHE_CONSOL_DSTU_R1dot1_2012JUL.zip" style="width: 100%;" target="_blank" tabindex="1">Download the latest HL7 C-CDA IG</a>
-<a class="btn btn-default" href="http://wiki.siframework.org/Companion+Guide+to+Consolidated+CDA+for+MU2" style="width: 100%;" target="_blank" tabindex="1">S&amp;I Framework C-CDA Companion Guide for MU2</a>
-<a class="btn btn-default" href="http://ttt.transport-testing.org/ttt" style="width: 100%;" target="_blank" tabindex="1">NIST C-CDA Validator</a>
-<a class="btn btn-default" href="http://ccda-scorecard.smartplatforms.org/static/ccdaScorecard/#/" style="width: 100%; margin-bottom: 3px;" target="_blank" tabindex="1">SMART C-CDA Scorecard</a>
-</div>
-</div>
-</div>
--->
 <script type="text/javascript">
     var urlCCDA1_1 = '${urlAction1_1}';
     var urlCCDA2_0 = '${urlAction2_0}';
-    var urlCCDAReconciled = '${urlActionReconciled}';
-    var urlCCDAReference = '${urlActionReference}';
-    var urlCCDASuper = '${urlActionSuper}';
 </script>
-
 
 <div class="modal modal-wide fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
      aria-hidden="true">
