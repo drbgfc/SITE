@@ -1,13 +1,5 @@
 package org.sitenv.portlets.ccdavalidator.controllers;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -33,6 +25,13 @@ import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.multipart.MultipartActionRequest;
+
+import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("VIEW")
@@ -140,31 +139,20 @@ public class CCDAValidatorController extends BaseController {
 				// do the error handling.
 				statisticsManager.addCcdaValidation(ccda_type, false, false, false, true, "r1.1");
 			} else {
-				boolean ccdaHasErrors = true, ccdaHasWarnings = true, ccdaHasInfo = true;
-				boolean extendedCcdaHasErrors = true, extendedCcdaHasWarnings = true, extendedCcdaHasInfo = true;
+				boolean hasErrors = true, hasWarnings = true, hasInfo = true;
 
 				String json = handler.handleResponse(relayResponse);
 				JSONObject jsonbody = new JSONObject(json);
 
-				if (jsonbody.getJSONObject("ccdaResults").has("error")
-						|| jsonbody.getJSONObject("ccdaExtendedResults").has("error")) {
+				if (jsonbody.getJSONObject("ccdaResults").has("error")) {
 					// TODO: Make sure the UI handles this gracefully.
 					responseJSON.setJSONResponseBody(jsonbody);
 					statisticsManager.addCcdaValidation(ccda_type, false, false, false, false, "r1.1");
 				} else {
 					JSONObject ccdaReport = jsonbody.getJSONObject("ccdaResults").getJSONObject("report");
-					ccdaHasErrors = ccdaReport.getBoolean("hasErrors");
-					ccdaHasWarnings = ccdaReport.getBoolean("hasWarnings");
-					ccdaHasInfo = ccdaReport.getBoolean("hasInfo");
-
-					JSONObject extendedCcdaReport = jsonbody.getJSONObject("ccdaExtendedResults").getJSONObject("report");
-					extendedCcdaHasErrors = extendedCcdaReport.getBoolean("hasErrors");
-					extendedCcdaHasWarnings = extendedCcdaReport.getBoolean("hasWarnings");
-					extendedCcdaHasInfo = extendedCcdaReport.getBoolean("hasInfo");
-
-					boolean hasErrors = ccdaHasErrors || extendedCcdaHasErrors;
-					boolean hasWarnings = ccdaHasWarnings || extendedCcdaHasWarnings;
-					boolean hasInfo = ccdaHasInfo || extendedCcdaHasInfo;
+					hasErrors = ccdaReport.getBoolean("hasErrors");
+					hasWarnings = ccdaReport.getBoolean("hasWarnings");
+					hasInfo = ccdaReport.getBoolean("hasInfo");
 
 					responseJSON.setJSONResponseBody(jsonbody);
 					statisticsManager.addCcdaValidation(ccda_type, hasErrors, hasWarnings, hasInfo, false, "r1.1");
