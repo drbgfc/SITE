@@ -363,51 +363,6 @@ function buildCcdaWarningList(data){
 	return (warningList.join('\n'));
 }
 
-function buildExtendedCcdaWarningList(data){
-	var warningList = ['<a name="vocabularyWarnings"/><b>Vocabulary Validation Warnings:</b>',
-	                   '<ul>'];
-	var warnings = data.result.body.ccdaExtendedResults.warningList;
-	var nWarnings = warnings.length;
-	for (var i=0; i < nWarnings; i++){
-		var warning = warnings[i];
-		var message = warning.message;
-		var codeSystemName = warning.codeSystemName;
-		var xpathExpression = warning.xpathExpression;
-		var codeSystem = warning.codeSystem;
-		var code = warning.code;
-		var displayName = warning.displayName;
-		var nodeIndex = warning.nodeIndex;
-		var warningDescription = ['<li> WARNING '+(i+1).toString()+'',
-		                          '<ul>',
-		                          '<li>Message: '+ message + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code System Name: '+ codeSystemName + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code System: '+ codeSystem + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code: '+ code + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Display Name: '+ displayName + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Node Index: '+ nodeIndex + '</li>',
-		                          '</ul>',
-		                          '</li>'
-		                          ];
-		warningList = warningList.concat(warningDescription);
-	}
-	warningList.push('</ul>');
-	warningList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (warningList.join('\n'));
-}
-
 function buildCcdaInfoList(data){
 	var infoList = ['<a name="ccdaInfo"/><b>C-CDA Validation Info:</b>',
 	                '<ul>'];
@@ -431,87 +386,6 @@ function buildCcdaInfoList(data){
 		                       '</ul>',
 		                       '<ul>',
 		                       '<li>Source: (approximate): '+ source + '</li>',
-		                       '</ul>',
-		                       '</li>'
-		                       ];
-		infoList = infoList.concat(infoDescription);
-	}
-	infoList.push('</ul>');
-	infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (infoList.join('\n'));
-}
-
-function buildExtendedCcdaInfoList(data){
-	var infoList = ['<a name="vocabularyInfo"/><b>Vocabulary Validation Info:</b>',
-	                '<ul>'];
-	var infos = data.result.body.ccdaExtendedResults.informationList;
-	var nInfos = infos.length;
-	for (var i=0; i < nInfos; i++){
-		var info = infos[i];
-		var message = info.message;
-		var codeSystemName = info.codeSystemName;
-		var xpathExpression = info.xpathExpression;
-		var codeSystem = info.codeSystem;
-		var code = info.code;
-		var displayName = info.displayName;
-		var nodeIndex = info.nodeIndex;
-		var infoDescription = ['<li> INFO '+(i+1).toString()+'',
-		                       '<ul>',
-		                       '<li>Message: '+ message + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code System Name: '+ codeSystemName + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code System: '+ codeSystem + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code: '+ code + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Display Name: '+ displayName + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Node Index: '+ nodeIndex + '</li>',
-		                       '</ul>',
-		                       '</li>'
-		                       ];
-		infoList = infoList.concat(infoDescription);
-	}
-	infoList.push('</ul>');
-	infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (infoList.join('\n'));
-}
-
-function buildCcdaDataQualityConcernsList(data){
-	var infoList = ['<a name="dataqualityConcerns"/><b>Data Quality Concerns:</b>',
-	                '<ul>'];
-	var infos = data.result.body.ccdaDataQualityResults.dataQualityConcerns;
-	var nInfos = infos.length;
-	for (var i=0; i < nInfos; i++){
-		var info = infos[i];
-		var message = info.message;
-		//var codeSystemName = info.codeSystemName;
-		var xpathExpression = info.xpathExpression;
-		var xsiType = info.xsiType;
-		//var code = info.code;
-		//var displayName = info.displayName;
-		var nodeIndex = info.nodeIndex;
-		var infoDescription = ['<li> CONCERN '+(i+1).toString()+'',
-		                       '<ul>',
-		                       '<li>Message: '+ message + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>xsi:type: '+ xsiType + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Node Index: '+ nodeIndex + '</li>',
 		                       '</ul>',
 		                       '</li>'
 		                       ];
