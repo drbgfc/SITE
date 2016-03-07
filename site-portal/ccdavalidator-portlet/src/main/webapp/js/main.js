@@ -236,7 +236,7 @@ function writeSmartCCDAResultHTML(data){
     		
     		
     		$("#resultModalTabs a[href='#tabs-3']").show();
-			$('#saveResultsBtn').show();
+			$('.saveResultsBtn').show();
     		$(".modal-body").scrollTop(0);
     		
     		$("#resultModalTabs a[href='#tabs-3']").tab("show");
@@ -343,7 +343,7 @@ function smartCCDAValidation()
 }
 
 $(function(){
-	$('#smartCCDAValidationBtn').bind('click', function(e, data) {
+	$('.smartCCDAValidationBtn').bind('click', function(e, data) {
 		smartCCDAValidation();
 	});
 	
@@ -351,7 +351,7 @@ $(function(){
 	
 	
 	
-	$('#saveResultsBtn').on('click', function(e){
+	$('.saveResultsBtn').on('click', function(e){
 		e.preventDefault();
 		
 		var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
