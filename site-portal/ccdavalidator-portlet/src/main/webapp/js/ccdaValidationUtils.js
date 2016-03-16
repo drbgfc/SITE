@@ -139,6 +139,10 @@ function buildCcdaValidationResults(data){
 		                        '<li class="">Document Line Number (approximate): '+ result.documentLineNumber + '</li>',
 		                        '</ul></li>'];
 		resultList = resultList.concat(errorDescription);
+		if(result.expectedValueSet != null){
+			var expectedValueSets = ['<a href=">' + result.expectedValueSet + '</a>'];
+			resultList = resultList.concat(expectedValueSets);
+		}
 		resultList.push('</font>');
 		resultList.push('<hr/><div class="pull-right"><a href="#validationResults" title="top">^</a></div>');
 		currentResultType = result.type.toLowerCase();
@@ -418,15 +422,15 @@ function handleFileUploadError(){
 function hideValidationResultsModalButtons() {
     $("#resultModalTabs a[href='#tabs-1']").hide();
     $("#resultModalTabs a[href='#tabs-2']").hide();
-    $('#saveResultsBtn').hide();
-    $('#smartCCDAValidationBtn').hide();
+    $('.saveResultsBtn').hide();
+    $('.smartCCDAValidationBtn').hide();
 }
 
 function showValidationResultsModalButtons() {
     $("#resultModalTabs a[href='#tabs-1']").show();
     $("#resultModalTabs a[href='#tabs-2']").show();
-    $('#saveResultsBtn').show();
-    $('#smartCCDAValidationBtn').show();
+    $('.saveResultsBtn').show();
+    $('.smartCCDAValidationBtn').show();
 }
 
 function buildValidationResultErrorHtml(errorMessage){
@@ -544,8 +548,8 @@ function showResults(resultsHtml){
 	//$("#resultModalTabs a[href='#tabs-2']").tab("show");
 	$("#resultModalTabs a[href='#tabs-3']").hide();
 	if(Boolean(validationError)){
-		$("#smartCCDAValidationBtn").hide();
-		$("#saveResultsBtn").hide();
+		$(".smartCCDAValidationBtn").hide();
+		$(".saveResultsBtn").hide();
 	}
 }
 
@@ -672,9 +676,9 @@ $('#resultModal').on('click', '.glyphicon-arrow-up', function(){
 $('#resultModalTabs a').on('click', function(){
     var href = $(this).attr('href');
     if(href == '#tabs-2'){
-        $('#saveResultsBtn').hide();
+        $('.saveResultsBtn').hide();
     }else{
-        $('#saveResultsBtn').show();
+        $('.saveResultsBtn').show();
     }
 });
 

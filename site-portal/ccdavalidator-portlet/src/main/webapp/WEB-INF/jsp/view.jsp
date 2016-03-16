@@ -218,12 +218,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
                 <ul class="nav nav-tabs" id="resultModalTabs">
                     <li><a href="#tabs-1" data-toggle="tab">Validation Result</a></li>
                     <li><a href="#tabs-2" data-toggle="tab">Original C-CDA</a></li>
                     <li><a href="#tabs-3" data-toggle="tab">Smart C-CDA Result</a></li>
+                    <li class="pull-right"><button type="button" class="btn btn-primary smartCCDAValidationBtn">Smart C-CDA Validation </button> <button type="button" class="btn btn-primary saveResultsBtn" style="display: inline-block;">Save Results</button> <button type="button" class="btn btn-default closeResultsBtn" data-dismiss="modal">Close Results </button> </li>
                 </ul>
             </div>
             <div class="modal-body">
@@ -236,10 +235,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="smartCCDAValidationBtn">Smart C-CDA Validation
+                <button type="button" class="btn btn-primary smartCCDAValidationBtn">Smart C-CDA Validation
                 </button>
-                <button type="button" class="btn btn-primary" id="saveResultsBtn">Save Results</button>
-                <button type="button" class="btn btn-default" id="closeResultsBtn" data-dismiss="modal">Close Results
+                <button type="button" class="btn btn-primary saveResultsBtn">Save Results</button>
+                <button type="button" class="btn btn-default closeResultsBtn" data-dismiss="modal">Close Results
                 </button>
             </div>
         </div>

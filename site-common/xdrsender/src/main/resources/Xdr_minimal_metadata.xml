@@ -1,12 +1,13 @@
 <s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope"
-   xmlns:a="http://www.w3.org/2005/08/addressing">
+>
    <soapenv:Header xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope">            
       <direct:metadata-level xmlns:direct="urn:direct:addressing">minimal</direct:metadata-level>      
       <direct:addressBlock xmlns:direct="urn:direct:addressing"
          soapenv:role="urn:direct:addressing:destination"
          soapenv:relay="true">
          <direct:from>#DIRECT_FROM#</direct:from>
-         <direct:to>#DIRECT_TO#</direct:to>                 
+         <direct:to>#DIRECT_TO#</direct:to>
+         <direct:X-DIRECT-FINAL-DESTINATION-DELIVERY>true</direct:X-DIRECT-FINAL-DESTINATION-DELIVERY>
       </direct:addressBlock>
       <wsa:To soapenv:mustUnderstand="true" xmlns:soapenv="http://www.w3.org/2003/05/soap-envelope"
          xmlns:wsa="http://www.w3.org/2005/08/addressing"
