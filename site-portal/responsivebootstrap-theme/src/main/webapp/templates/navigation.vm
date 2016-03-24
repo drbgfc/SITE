@@ -36,7 +36,8 @@
 									&& $nav_child.getName() != "Direct SMTP Edge Test Tool"
 									&& $nav_child.getName() != "Direct XDR Edge Test Tool"
 									&& $nav_child.getName() != "Provider Directory Test Tool"
-									&& $nav_child.getName() != "QRDA Validator")
+									&& $nav_child.getName() != "QRDA Validator"
+									&& $nav_child.getName() != "Direct Certificate Discovery Tool 2015")
 									<span class="external-page"><a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1"><span class="hiddenText">Web Site Disclaimers</span></a></span>
 								#end
 							</li>

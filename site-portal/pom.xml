@@ -107,5 +107,6 @@
     	<module>directcertificatediscovery-portlet</module>
     	<module>responsivebootstrap-theme</module>
     	<module>responsivebootstrap-portlet-layouttpl</module>
+		<module>directcertificatediscovery2015-portlet</module>
   	</modules>
 </project>

@@ -1,10 +1,6 @@
 var ccdaErrorCount;
 var ccdaWarningCount;
 var ccdaInfoCount;
-var extendedErrorCount;
-var extendedWarningCount;
-var extendedInfoCount;
-var dataQualityConcernCount;
 var validationError;
 
 
@@ -22,9 +18,9 @@ function doCcdaValidation(data){
 		tabHtml1 = buildResultsHtml(data);
 		buildCCDAXMLResultsTab(data);
 		showResults(tabHtml1);
-		highlightXMLResults(resultMap, 'ccda', 'error');
-		highlightXMLResults(warningresultMap, 'ccda', 'warning');
-		highlightXMLResults(inforesultMap, 'ccda', 'info');
+		highlightXMLResults(resultMap, 'error');
+		highlightXMLResults(warningresultMap, 'warning');
+		highlightXMLResults(inforesultMap, 'info');
 	}
     updateStatisticCount();
     removeProgressModal();
@@ -122,7 +118,7 @@ function buildCcdaValidationSummary(data){
 }
 
 function buildCcdaValidationResults(data){
-	resultList = [];
+	var resultList = [];
 	var currentResultType;
 	$.each(data.result.body.ccdaValidationResults, function(ccdaValidationResults,result){
 		if(result.type.toLowerCase().indexOf("error") >= 0){
@@ -143,6 +139,10 @@ function buildCcdaValidationResults(data){
 		                        '<li class="">Document Line Number (approximate): '+ result.documentLineNumber + '</li>',
 		                        '</ul></li>'];
 		resultList = resultList.concat(errorDescription);
+		if(result.expectedValueSet != null){
+			var expectedValueSets = ['<a href=">' + result.expectedValueSet + '</a>'];
+			resultList = resultList.concat(expectedValueSets);
+		}
 		resultList.push('</font>');
 		resultList.push('<hr/><div class="pull-right"><a href="#validationResults" title="top">^</a></div>');
 		currentResultType = result.type.toLowerCase();
@@ -151,20 +151,26 @@ function buildCcdaValidationResults(data){
 }
 
 function buildCcdaResultMap(data){
-	var ccdaValidationResultsMap = new Object;
+	var ccdaValidationResultsMap = {};
+    var resultTypeMapValue = '';
 	$.each(data.result.body.ccdaValidationResults, function(ccdaValidationResults,result){
+        if(result.expectedValueSet != null){
+            resultTypeMapValue = result.description + '<br/>Expected Valueset(s): ' + result.expectedValueSet.replace(/,/g , " or ");
+        }else{
+            resultTypeMapValue = result.description;
+        }
 		if(ccdaValidationResultsMap[result.documentLineNumber] != undefined){
 			var resultTypeMap = ccdaValidationResultsMap[result.documentLineNumber];
 			if(resultTypeMap[result.type] != undefined){
-				resultTypeMap[result.type].push(result.description);
+				resultTypeMap[result.type].push(resultTypeMapValue);
 				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
 			}else{
-				resultTypeMap[result.type] = [result.description];
+				resultTypeMap[result.type] = [resultTypeMapValue];
 				ccdaValidationResultsMap[result.documentLineNumber] = resultTypeMap;
 			}
 		}else{
-			var ccdaTypeMap = new Object;
-			ccdaTypeMap[result.type] = [result.description];
+			var ccdaTypeMap = {};
+			ccdaTypeMap[result.type] = [resultTypeMapValue];
 			ccdaValidationResultsMap[result.documentLineNumber] = ccdaTypeMap;
 		}
 	});
@@ -241,7 +247,7 @@ function highlightCcdaXMLResults(resultsMap){
 }
 
 function addTitleAttributeToHighlightedDivs(){
-	$("div[class$='Highlight']").hover(function(e){
+	$("div[class$='Highlight']").hover(function(){
 		$(this).attr('title', 'Show validation result details for this line.')
 	});
 }
@@ -284,7 +290,7 @@ function buildCcdaErrorList(data){
 }
 
 function buildCcdaErrorsMap(data){
-	var ccdaValidationErrorsMap = new Object;
+	var ccdaValidationErrorsMap = {};
 	var errors = data.result.body.ccdaResults.errors;
 	var nErrors = errors.length;
 	for (var i=0; i < nErrors; i++){
@@ -299,7 +305,7 @@ function buildCcdaErrorsMap(data){
 }
 
 function buildCcdaWarningsMap(data){
-	var ccdaValidationWarningsMap = new Object;
+	var ccdaValidationWarningsMap = {};
 	var warnings = data.result.body.ccdaResults.warnings;
 	var nWarnings = warnings.length;
 	for (var i=0; i < nWarnings; i++){
@@ -314,7 +320,7 @@ function buildCcdaWarningsMap(data){
 }
 
 function buildCcdaInfoMap(data){
-	var ccdaValidationInfoMap = new Object;
+	var ccdaValidationInfoMap = {};
 	var infos = data.result.body.ccdaResults.info;
 	var nInfos = infos.length;
 	for (var i=0; i < nInfos; i++){
@@ -326,51 +332,6 @@ function buildCcdaInfoMap(data){
 		}
 	}
 	return ccdaValidationInfoMap;
-}
-
-function buildExtendedCcdaErrorList(data){
-	var errorList = ['<a name="vocabularyErrors"/><b>Vocabulary Validation Errors:</b>',
-	                 '<ul>'];
-	var errors = data.result.body.ccdaExtendedResults.errorList;
-	var nErrors = errors.length;
-	for (var i=0; i < nErrors; i++){
-		var error = errors[i];
-		var message = error.message;
-		var codeSystemName = error.codeSystemName;
-		var xpathExpression = error.xpathExpression;
-		var codeSystem = error.codeSystem;
-		var code = error.code;
-		var displayName = error.displayName;
-		var nodeIndex = error.nodeIndex;
-		var errorDescription = ['<li> ERROR '+(i+1).toString()+'',
-		                        '<ul>',
-		                        '<li>Message: '+ message + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>Code System Name: '+ codeSystemName + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>Code System: '+ codeSystem + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>Code: '+ code + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>Display Name: '+ displayName + '</li>',
-		                        '</ul>',
-		                        '<ul>',
-		                        '<li>Node Index: '+ nodeIndex + '</li>',
-		                        '</ul>',
-		                        '</li>'
-		                        ];
-		errorList = errorList.concat(errorDescription);
-	}
-	errorList.push('</ul>');
-	errorList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (errorList.join('\n'));
 }
 
 function buildCcdaWarningList(data){
@@ -396,51 +357,6 @@ function buildCcdaWarningList(data){
 		                          '</ul>',
 		                          '<ul>',
 		                          '<li>Source: (approximate): '+ source + '</li>',
-		                          '</ul>',
-		                          '</li>'
-		                          ];
-		warningList = warningList.concat(warningDescription);
-	}
-	warningList.push('</ul>');
-	warningList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (warningList.join('\n'));
-}
-
-function buildExtendedCcdaWarningList(data){
-	var warningList = ['<a name="vocabularyWarnings"/><b>Vocabulary Validation Warnings:</b>',
-	                   '<ul>'];
-	var warnings = data.result.body.ccdaExtendedResults.warningList;
-	var nWarnings = warnings.length;
-	for (var i=0; i < nWarnings; i++){
-		var warning = warnings[i];
-		var message = warning.message;
-		var codeSystemName = warning.codeSystemName;
-		var xpathExpression = warning.xpathExpression;
-		var codeSystem = warning.codeSystem;
-		var code = warning.code;
-		var displayName = warning.displayName;
-		var nodeIndex = warning.nodeIndex;
-		var warningDescription = ['<li> WARNING '+(i+1).toString()+'',
-		                          '<ul>',
-		                          '<li>Message: '+ message + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code System Name: '+ codeSystemName + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code System: '+ codeSystem + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Code: '+ code + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Display Name: '+ displayName + '</li>',
-		                          '</ul>',
-		                          '<ul>',
-		                          '<li>Node Index: '+ nodeIndex + '</li>',
 		                          '</ul>',
 		                          '</li>'
 		                          ];
@@ -484,87 +400,6 @@ function buildCcdaInfoList(data){
 	return (infoList.join('\n'));
 }
 
-function buildExtendedCcdaInfoList(data){
-	var infoList = ['<a name="vocabularyInfo"/><b>Vocabulary Validation Info:</b>',
-	                '<ul>'];
-	var infos = data.result.body.ccdaExtendedResults.informationList;
-	var nInfos = infos.length;
-	for (var i=0; i < nInfos; i++){
-		var info = infos[i];
-		var message = info.message;
-		var codeSystemName = info.codeSystemName;
-		var xpathExpression = info.xpathExpression;
-		var codeSystem = info.codeSystem;
-		var code = info.code;
-		var displayName = info.displayName;
-		var nodeIndex = info.nodeIndex;
-		var infoDescription = ['<li> INFO '+(i+1).toString()+'',
-		                       '<ul>',
-		                       '<li>Message: '+ message + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code System Name: '+ codeSystemName + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code System: '+ codeSystem + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Code: '+ code + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Display Name: '+ displayName + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Node Index: '+ nodeIndex + '</li>',
-		                       '</ul>',
-		                       '</li>'
-		                       ];
-		infoList = infoList.concat(infoDescription);
-	}
-	infoList.push('</ul>');
-	infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (infoList.join('\n'));
-}
-
-function buildCcdaDataQualityConcernsList(data){
-	var infoList = ['<a name="dataqualityConcerns"/><b>Data Quality Concerns:</b>',
-	                '<ul>'];
-	var infos = data.result.body.ccdaDataQualityResults.dataQualityConcerns;
-	var nInfos = infos.length;
-	for (var i=0; i < nInfos; i++){
-		var info = infos[i];
-		var message = info.message;
-		//var codeSystemName = info.codeSystemName;
-		var xpathExpression = info.xpathExpression;
-		var xsiType = info.xsiType;
-		//var code = info.code;
-		//var displayName = info.displayName;
-		var nodeIndex = info.nodeIndex;
-		var infoDescription = ['<li> CONCERN '+(i+1).toString()+'',
-		                       '<ul>',
-		                       '<li>Message: '+ message + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>xsi:type: '+ xsiType + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>XPath Expression: '+ xpathExpression + '</li>',
-		                       '</ul>',
-		                       '<ul>',
-		                       '<li>Node Index: '+ nodeIndex + '</li>',
-		                       '</ul>',
-		                       '</li>'
-		                       ];
-		infoList = infoList.concat(infoDescription);
-	}
-	infoList.push('</ul>');
-	infoList.push('<hr/><div class="pull-right"><a href="#validationResults">top</a></div>');
-	return (infoList.join('\n'));
-}
-
 function handleFileUploadError(){
 	var iconurl = window.currentContextPath + "/css/icn_alert_error.png" ;
 	$('.blockMsg .progressorpanel img').attr('src',iconurl);
@@ -587,15 +422,15 @@ function handleFileUploadError(){
 function hideValidationResultsModalButtons() {
     $("#resultModalTabs a[href='#tabs-1']").hide();
     $("#resultModalTabs a[href='#tabs-2']").hide();
-    $('#saveResultsBtn').hide();
-    $('#smartCCDAValidationBtn').hide();
+    $('.saveResultsBtn').hide();
+    $('.smartCCDAValidationBtn').hide();
 }
 
 function showValidationResultsModalButtons() {
     $("#resultModalTabs a[href='#tabs-1']").show();
     $("#resultModalTabs a[href='#tabs-2']").show();
-    $('#saveResultsBtn').show();
-    $('#smartCCDAValidationBtn').show();
+    $('.saveResultsBtn').show();
+    $('.smartCCDAValidationBtn').show();
 }
 
 function buildValidationResultErrorHtml(errorMessage){
@@ -635,16 +470,6 @@ function buildValidationSummary(data){
 	var tabHtml1 = buildValidationResultsHeader(uploadedFileName, docTypeSelected).join('\n');
 	tabHtml1 += ['<br/><div class="row">'];
 	tabHtml1 += buildValidationSummaryDetailHtml(ccdaErrorCount, ccdaWarningCount, ccdaInfoCount, 'ccda', 'C-CDA Validation Summary').join('\n');
-	if (showVocabularyValidation){
-		extendedErrorCount = data.result.body.ccdaExtendedResults.errorList.length;
-		extendedWarningCount = data.result.body.ccdaExtendedResults.warningList.length;
-		extendedInfoCount = data.result.body.ccdaExtendedResults.informationList.length;
-		tabHtml1 += buildValidationSummaryDetailHtml(extendedErrorCount, extendedWarningCount, extendedInfoCount, 'vocabulary', 'C-CDA Vocabulary Summary').join('\n');
-	} 
-	if (showDataQualityValidation){
-		dataQualityConcernCount = data.result.body.ccdaDataQualityResults.dataQualityConcerns.length;
-		tabHtml1 += buildValidationSummaryDetailHtml(null, null, dataQualityConcernCount, 'dataqualityConcerns', 'C-CDA Data Quality Summary').join('\n');
-	} 
 	tabHtml1 += '</div>';
 	return tabHtml1;
 }
@@ -689,11 +514,6 @@ function buildCcdaValidationErrorsListHtml(data){
 	var ccdaErrors = '<font color="red">';
 	if (ccdaErrorCount > 0) {
 		ccdaErrors += buildCcdaErrorList(data);
-	}				
-	if (showVocabularyValidation){
-		if (extendedErrorCount > 0){
-			ccdaErrors += buildExtendedCcdaErrorList(data);
-		}
 	}
 	ccdaErrors += '</font>';
 	return ccdaErrors;
@@ -704,11 +524,6 @@ function buildCcdaValidationWarningsListHtml(data){
 	if (ccdaWarningCount > 0){
 		ccdaWarnings += buildCcdaWarningList(data);
 	}
-	if (showVocabularyValidation){
-		if (extendedWarningCount > 0){
-			ccdaWarnings += buildExtendedCcdaWarningList(data);
-		}		
-	}
 	ccdaWarnings += '</font>';
 	return ccdaWarnings;
 }
@@ -718,29 +533,12 @@ function buildCcdaValidationInfoListHtml(data){
 	if (ccdaInfoCount > 0){
 		ccdaInfos += buildCcdaInfoList(data);
 	}
-	if (showVocabularyValidation){
-		if (extendedInfoCount > 0){
-			ccdaInfos += buildExtendedCcdaInfoList(data);
-		}
-	}
-	if(showDataQualityValidation){
-		if (dataQualityConcernCount > 0) {
-			ccdaInfos += buildCcdaDataQualityConcernsList(data);
-		}
-	}	
 	ccdaInfos += '</font>';
 	return ccdaInfos;
 }
 
 function updateStatisticCount(){
 	Liferay.Portlet.refresh("#p_p_id_Statistics_WAR_siteportalstatisticsportlet_"); 
-}
-
-function cleanUpCcdaFilesInResult(data, fileHolder){
-	$.each(data.result.files, function(index, file) {
-		$('#' + fileHolder).empty();
-		$('#' + fileHolder).text(file.name);
-	});
 }
 
 function showResults(resultsHtml){
@@ -750,19 +548,14 @@ function showResults(resultsHtml){
 	//$("#resultModalTabs a[href='#tabs-2']").tab("show");
 	$("#resultModalTabs a[href='#tabs-3']").hide();
 	if(Boolean(validationError)){
-		$("#smartCCDAValidationBtn").hide();
-		$("#saveResultsBtn").hide();
+		$(".smartCCDAValidationBtn").hide();
+		$(".saveResultsBtn").hide();
 	}
-}
-
-function buildCCDAValidationResultsTab(resultsHtml){
-	$("#ValidationResult .tab-content #tabs-1").html(resultsHtml);
-	$("#resultModalTabs a[href='#tabs-1']").tab("show");
 }
 
 function buildResultsHtml(data){
 	var tabHtml1 = "";
-	if (("error" in data.result.body.ccdaResults) || ("error" in data.result.body.ccdaExtendedResults)){
+	if (("error" in data.result.body.ccdaResults)){
 		validationError = true;
 		tabHtml1 = buildValidationResultErrorHtml(data.result.body.ccdaResults.error).join('\n');
 	} else {
@@ -795,9 +588,7 @@ function removeProgressModal(){
 	}, 1000);
 }
 
-
-
-function highlightXMLResults(resultsToHighlight, validationType, validationLevel){
+function highlightXMLResults(resultsToHighlight, validationLevel){
 	if($.map(resultsToHighlight, function(n, i) { return i; }).length > 0){
 		for (var key in resultsToHighlight){
 			if(key.hasOwnProperty){
@@ -870,13 +661,13 @@ function createResultListPopoverHtml(results){
 	return htmlList;
 }
 
-$('#resultModal').on('click', '.glyphicon-arrow-down', function(e){
+$('#resultModal').on('click', '.glyphicon-arrow-down', function(){
 	$('#resultModal').animate({
 		scrollTop: $(this).parent().parent().nextAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight').first().position().top
 	}, 2000);
 });
 
-$('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
+$('#resultModal').on('click', '.glyphicon-arrow-up', function(){
 	$('#resultModal').animate({
 		scrollTop: $($(this).parent().parent().prevAll('.ccdaErrorHighlight, .ccdaWarningHighlight, .ccdaInfoHighlight')[1]).position().top
 	}, 2000);
@@ -885,9 +676,9 @@ $('#resultModal').on('click', '.glyphicon-arrow-up', function(e){
 $('#resultModalTabs a').on('click', function(){
     var href = $(this).attr('href');
     if(href == '#tabs-2'){
-        $('#saveResultsBtn').hide();
+        $('.saveResultsBtn').hide();
     }else{
-        $('#saveResultsBtn').show();
+        $('.saveResultsBtn').show();
     }
 });
 
@@ -908,13 +699,6 @@ $('#resultModalTabs a').on('click', function(){
 		return formData;
 	};
 })(jQuery);
-
-function errorHandler (request, status, error) {
-	alert("error:"+ error);
-	if(window.validationpanel)
-		window.validationpanel.unblock();
-	$.unblockUI();
-}
 
 function getDoc(frame) {
 	var doc = null;
@@ -938,8 +722,4 @@ function getDoc(frame) {
 		doc = frame.document;
 	}
 	return doc;
-}
-
-function getValueForKeyPair(k,v) {
-	return v[k];
 }

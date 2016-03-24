@@ -1,3 +1,7 @@
+var documentLocationMap;
+var senderGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Sender SUT Test Data?callback=?';
+var receiverGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Receiver SUT Test Data?callback=?';
+
 (function($) {
 $.fn.serializefiles = function() {
     var obj = $(this);
@@ -97,10 +101,6 @@ function floorFigure(figure, decimals){
     var d = Math.pow(10,decimals);
     return (parseInt(figure*d)/d).toFixed(decimals);
 };
-
-
-
-
 
 function writeSmartCCDAResultHTML(data){
 	var results = JSON.parse(data);
@@ -236,7 +236,7 @@ function writeSmartCCDAResultHTML(data){
     		
     		
     		$("#resultModalTabs a[href='#tabs-3']").show();
-			$('#saveResultsBtn').show();
+			$('.saveResultsBtn').show();
     		$(".modal-body").scrollTop(0);
     		
     		$("#resultModalTabs a[href='#tabs-3']").tab("show");
@@ -256,14 +256,6 @@ function writeSmartCCDAResultHTML(data){
 		$.unblockUI();
 	}
 }
-
-
-
-
-
-
-
-
 
 function smartCCDAValidation()
 {
@@ -350,570 +342,8 @@ function smartCCDAValidation()
 	}
 }
 
-
-function incorpRequired(field, rules, i, options){
-	if($('#incorpfilepath').val()== '')
-	{
-		return "Please select a C-CDA sample";
-	}
-}
-
-
-
-
-function loadSampleTrees(){
-	//loadReferenceCCDAIncorpTree();
-	loadNegativeTestCCDATree();
-	loadReferenceCCDAIncorpTree();
-	loadCCDASamplesFromVendorsTree();
-	loadCCDAReferenceTree();
-	loadCCDAReferenceFileUsedTree();
-}
-
-function loadNegativeTestCCDATree(){
-	
-	$("#negTestccdafiletreepanel").jstree({
-		"json_data" : {
-			"ajax" : {
-				"url" : negativeTestCCDATreeURL,
-				"type" : "post",
-			}
-		},
-		
-		"types" : {
-			
-			"valid_children" : ["all"],
-			"type_attr" : "ref",
-			"types" : {
-				"root" : {
-					"icon" : {
-						"image" : window.currentContextPath + "/images/root.png"
-					},
-					"valid_children" : [ "file","folder" ],
-					"max_depth" : 2,
-					"hover_node" : false,
-					"select_node" : function(e) {
-						this.toggle_node(e);
-						return false;
-					}
-				},
-				"file" : {
-					"icon" : {
-						"image" : window.currentContextPath + "/images/file.png"
-					},
-					"valid_children" : [ "none" ],
-		    		"deselect_node" : function (node,e) {
-		    			  
-		    			 $('#negTestForm .formError').hide(0);
-		    			 
-		    			// var textValue = $('#incorpemail').val();
-			  				$('#negTestForm').trigger('reset');
-			  				$('#negTestCCDAsubmit').unbind("click");
-			  				
-			  				$('#negTestfilePathOutput').empty();
-			  				$('#negTestfilepath').val('');
-			  				
-			  				//$('#incorpemail').val(textValue);
-			  				
-		    		  },
-		    		  
-		    		  "select_node" : function (node,e) {
-		    			  
-		    			  $('#negTestForm .formError').hide(0);
-		    			  //populate the textbox
-		    			  $("#negTestfilepath").val(node.data("serverpath"));
-		    			  
-		    			  $("#negTestfilePathOutput").text($("#negTestfilepath").val());
-		    			 
-		    			  
-		    	    	  //hide the drop down panel
-		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
-		    			  
-		    			  
-		    			  $('#dLabel2').focus();
-		    			  $('#dLabel2').dropdown("toggle");
-		    			  }
-		    			  
-		    		  },
-		    		  "folder" : {
-			    		  "icon" : {
-			    	    	  "image" : window.currentContextPath + "/images/folder.png"
-			    	      },
-			    		  "valid_children" : [ "file" ],
-			    		  "select_node" : function (e) {
-			    	    	  e.find('a:first').focus();
-			    			  this.toggle_node(e);
-			    	    	  return false;
-			    	      }
-			    	  }
-				}
-			},
-			"plugins" : [ "themes", "json_data", "ui", "types" ]
-			}).bind('loaded.jstree', function(e, data) {
-				isfiletreeloaded = true;
-				
-				
-				
-				$('#negTestccdafiletreepanel').find('a').each(function() {
-				    $(this).attr('tabindex', '1');
-				});
-			});
-	
-}
-
-$("#negTestCCDAsubmit").click(function(e) {
-	  
-	  var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
-	  	$.blockUI({ css: { 
-	        border: 'none', 
-	        padding: '15px', 
-	        backgroundColor: '#000', 
-	        '-webkit-border-radius': '10px', 
-	        '-moz-border-radius': '10px', 
-	        opacity: .5, 
-	        color: '#fff' 
-  	},
-  	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
-		          '<div class="lbl">Preparing your download...</div></div>' });
-	  	
-			$('#negTestForm .formError').hide(0);
-			
-			$.fileDownload($('#negTestForm').attr('action'), {
-				
-				successCallback: function (url) {
-					$.unblockUI(); 
-	            },
-	            failCallback: function (responseHtml, url) {
-	            	alert("Server error:" + responseHtml);
-	            	alert(url);
-	            	$.unblockUI(); 
-	            },
-		        httpMethod: "POST",
-		        data: $('#negTestForm').serialize()
-		    });
-		return false;
-});
-
-function loadReferenceCCDAIncorpTree(){
-	
-	$("#refccdafiletreepanel").jstree({
-		"json_data" : {
-			"ajax" : {
-				"url" : referenceCCDAIncorpTreeURL,
-				"type" : "post",
-			}
-		},
-		
-		"types" : {
-			
-			"valid_children" : ["all"],
-			"type_attr" : "ref",
-			"types" : {
-				"root" : {
-					"icon" : {
-						"image" : window.currentContextPath + "/images/root.png"
-					},
-					"valid_children" : [ "file","folder" ],
-					"max_depth" : 2,
-					"hover_node" : false,
-					"select_node" : function(e) {
-						this.toggle_node(e);
-						return false;
-					}
-				},
-				"file" : {
-					"icon" : {
-						"image" : window.currentContextPath + "/images/file.png"
-					},
-					"valid_children" : [ "none" ],
-		    		"deselect_node" : function (node,e) {
-		    			  
-		    			 $('#refIncorpForm .formError').hide(0);
-		    			 
-		    			// var textValue = $('#incorpemail').val();
-			  				$('#refIncorpForm').trigger('reset');
-			  				$('#refIncorpCCDAsubmit').unbind("click");
-			  				
-			  				$('#refIncorpfilePathOutput').empty();
-			  				$('#refIncorpfilepath').val('');
-			  				
-			  				//$('#incorpemail').val(textValue);
-			  				
-		    		  },
-		    		  
-		    		  "select_node" : function (node,e) {
-		    			  
-		    			  $('#refIncorpForm .formError').hide(0);
-		    			  //populate the textbox
-		    			  $("#refIncorpfilepath").val(node.data("serverpath"));
-		    			  
-		    			  $("#refIncorpfilePathOutput").text($("#refIncorpfilepath").val());
-		    			 
-		    			  
-		    	    	  //hide the drop down panel
-		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
-		    			  
-		    			  
-		    			  $('#dLabel1').focus();
-		    			  $('#dLabel1').dropdown("toggle");
-		    			  }
-		    			  
-		    		  },
-		    		  "folder" : {
-			    		  "icon" : {
-			    	    	  "image" : window.currentContextPath + "/images/folder.png"
-			    	      },
-			    		  "valid_children" : [ "file" ],
-			    		  "select_node" : function (e) {
-			    	    	  e.find('a:first').focus();
-			    			  this.toggle_node(e);
-			    	    	  return false;
-			    	      }
-			    	  }
-				}
-			},
-			"plugins" : [ "themes", "json_data", "ui", "types" ]
-			}).bind('loaded.jstree', function(e, data) {
-				isfiletreeloaded = true;
-				//alert("Loaded Incorp Tree");
-				
-				
-				$('#refccdafiletreepanel').find('a').each(function() {
-				    $(this).attr('tabindex', '1');
-				});
-			});
-	
-}
-
-$("#refIncorpCCDAsubmit").click(function(e) {
-	  
-	  var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
-	  	$.blockUI({ css: { 
-	        border: 'none', 
-	        padding: '15px', 
-	        backgroundColor: '#000', 
-	        '-webkit-border-radius': '10px', 
-	        '-moz-border-radius': '10px', 
-	        opacity: .5, 
-	        color: '#fff' 
-  	},
-  	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
-		          '<div class="lbl">Preparing your download...</div></div>' });
-	  	
-			$('#refIncorpForm .formError').hide(0);
-			
-		    
-			$.fileDownload($('#refIncorpForm').attr('action'), {
-				
-				successCallback: function (url) {
-					$.unblockUI(); 
-	            },
-	            failCallback: function (responseHtml, url) {
-	            	alert("Server error:" + responseHtml);
-	            	alert(url);
-	            	$.unblockUI(); 
-	            },
-		        httpMethod: "POST",
-		        data: $('#refIncorpForm').serialize()
-		    });
-		return false;
-});
-
-function loadCCDASamplesFromVendorsTree(){
-	$("#ccdafiletreepanel").jstree({
-		 "json_data" : {
-			      "ajax" : {
-				      "url" : sampleCCDATreeURL,
-				      "type" : "post",
-				      /*"data" : function (n) {
-				    	 return { id : n.attr ? n.attr("id") : 0 };
-				      }*/
-				  }
-	      },
-	      
-	      "types" : {
-	    	  "valid_children" : [ "all" ],
-	    	  "type_attr" : "ref",
-	    	  "types" : {
-	    		  "root" : {
-		    	      "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/root.png"
-		    	      },
-		    	      "valid_children" : [ "file","folder" ],
-		    	      "max_depth" : 2,
-		    	      "hover_node" : false,
-		    	      "select_node" : function (e) {
-
-		    	    	  this.toggle_node(e);
-		    	    	  return false;
-		    	      }
-		    	      
-		    	  	},
-		    	  "file" : {
-		    		  "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/file.png"
-		    	      },
-		    		  "valid_children" : [ "none" ],
-		    		  "deselect_node" : function (node,e) {
-		    			  
-		    			  $('#incorpForm .formError').hide(0);
-		    				
-		    			  
-		    			var textValue = $('#incorpemail').val();
-		  				$('#incorpForm').trigger('reset');
-		  				$('#incorpCCDAsubmit').unbind("click");
-		  				
-		  				$('#incorpfilePathOutput').empty();
-		  				$('#incorpfilepath').val('');
-		  				
-		  				$('#incorpemail').val(textValue);
-		    			  
-		    		  },
-		    		  "select_node" : function (node,e) {
-		    			  
-		    			  $('#incorpForm .formError').hide(0);
-		    			  //populate the textbox
-		    			  $("#incorpfilepath").val(node.data("serverpath"));
-		    			  
-		    			  $("#incorpfilePathOutput").text($("#incorpfilepath").val());
-		    			 
-		    			  
-		    	    	  //hide the drop down panel
-		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
-		    			  
-		    			  $('#dLabel').focus();
-		    			  $('#dLabel').dropdown("toggle");
-		    		  }
-		    	  },
-		    	  "folder" : {
-		    		  "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/folder.png"
-		    	      },
-		    		  "valid_children" : [ "file" ],
-		    		  "select_node" : function (e) {
-		    	    	  e.find('a:first').focus();
-		    			  this.toggle_node(e);
-		    	    	  return false;
-		    	      }
-		    	  }
-	    	 }
-	    },
-	    "plugins" : [ "themes", "json_data", "ui", "types" ]
-	}).bind('loaded.jstree', function(e, data) {
-		isfiletreeloaded = true;
-		$('#ccdafiletreepanel').find('a').each(function() {
-		    $(this).attr('tabindex', '1');
-		});
-	});
-}
-
-$("#incorpCCDAsubmit").click(function(e){
-    
-  	var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
-  	$.blockUI({ css: { 
-        border: 'none', 
-        padding: '15px', 
-        backgroundColor: '#000', 
-        '-webkit-border-radius': '10px', 
-        '-moz-border-radius': '10px', 
-        opacity: .5, 
-        color: '#fff' 
-	},
-	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
-	          '<div class="lbl">Preparing your download...</div></div>' });
-  	
-  
-		$('#incorpForm .formError').hide(0);
-		
-	    
-		$.fileDownload($('#incorpForm').attr('action'), {
-			
-			successCallback: function (url) {
-				$.unblockUI(); 
-            },
-            failCallback: function (responseHtml, url) {
-            	alert("Server error:" + responseHtml);
-            	alert(url);
-            	$.unblockUI(); 
-            },
-	        httpMethod: "POST",
-	        data: $('#incorpForm').serialize()
-	    });
-		
-	return false;
-});
-
-function loadCCDAReferenceTree(){
-	
-	$("#referenceDownloadFileTreePanel").jstree({
-		"core" : {
-		    "multiple" : false,
-		    "animation" : 0
-		  },
-		 "json_data" : {
-			      "ajax" : {
-				      "url" : referenceCCDATreeURL,
-				      "type" : "post",
-				  }
-	      },
-	      
-	      "types" : {
-	    	  "valid_children" : [ "all" ],
-	    	  "type_attr" : "ref",
-	    	  "types" : {
-		    	  "file" : {
-		    		  "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/file.png"
-		    	      },
-		    		  "valid_children" : [ "none" ],
-		    		  "deselect_node" : function (node,e) {
-		    			$('#referenceDownloadForm .formError').hide(0);
-		  				$('#referenceDownloadForm').trigger('reset');
-		  				$('#referenceDownloadFormCCDAsubmit').unbind("click");
-		  				$('#referenceDownloadFilePathOutput').empty();
-		  				$('#referenceDownloadFilepath').val('');
-		    		  },
-		    		  "select_node" : function (node,e) {
-		    			  $('#referenceDownloadForm .formError').hide(0);
-		    			  //populate the textbox
-		    			  $("#referenceDownloadFilepath").val(node.data("serverpath"));
-		    			  
-		    			  $("#referenceDownloadFilePathOutput").text($("#referenceDownloadFilepath").val());
-		    			  
-		    	    	  //hide the drop down panel
-		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
-		    			  $('#referenceDownloaddLabel').focus();
-		    			  $('#referenceDownloaddLabel').dropdown("toggle");
-		    		  }
-		    	  }
-	    	 }
-	    },
-	    "plugins" : [ "themes", "json_data", "ui", "types" ]
-	}).bind('loaded.jstree', function(e, data) {
-		isfiletreeloaded = true;
-		$('#referenceDownloadFileTreePanel').find('a').each(function() {
-		    $(this).attr('tabindex', '1');
-		});
-	});
-}
-
-$("#referenceDownloadCCDAsubmit").click(function(e){
-  	var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
-  	$.blockUI({ css: { 
-        border: 'none', 
-        padding: '15px', 
-        backgroundColor: '#000', 
-        '-webkit-border-radius': '10px', 
-        '-moz-border-radius': '10px', 
-        opacity: .5, 
-        color: '#fff' 
-	},
-	message: '<div class="progressorpanel"><img src="'+ ajaximgpath + '" alt="loading">'+
-	          '<div class="lbl">Preparing your download...</div></div>' });
-  	
-	{
-		$('#referenceDownloadForm .formError').hide(0);
-		
-	    
-		$.fileDownload($('#referenceDownloadForm').attr('action'), {
-			
-			successCallback: function (url) {
-				$.unblockUI(); 
-            },
-            failCallback: function (responseHtml, url) {
-            	alert("Server error:" + responseHtml);
-            	alert(url);
-            	$.unblockUI();
-            },
-	        httpMethod: "POST",
-	        data: $('#referenceDownloadForm').serialize()
-	    });
-		
-	}
-	return false;
-});
-
-function loadCCDAReferenceFileUsedTree(){
-	
-	$("#referenceFileUsedTreePanel").jstree({
-		 "json_data" : {
-			      "ajax" : {
-				      "url" : referenceCCDATreeURL,
-				      "type" : "post",
-				  }
-	      },
-	      
-	      "types" : {
-	    	  "valid_children" : [ "all" ],
-	    	  "type_attr" : "ref",
-	    	  "types" : {
-	    		  "root" : {
-		    	      "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/root.png"
-		    	      },
-		    	      "valid_children" : [ "file","folder" ],
-		    	      "max_depth" : 2,
-		    	      "hover_node" : false,
-		    	      "select_node" : function (e) {
-
-		    	    	  this.toggle_node(e);
-		    	    	  return false;
-		    	      }
-		    	      
-		    	  	},
-		    	  "file" : {
-		    		  "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/file.png"
-		    	      },
-		    		  "valid_children" : [ "none" ],
-		    		  "deselect_node" : function (node,e) {
-		    			$('#referenceDownloadForm .formError').hide(0);
-		  				$('#referenceFileUsed').empty();
-		  				$('#referenceFileUsedFilepath').val('');
-		    		  },
-		    		  "select_node" : function (node,e) {
-		    			  $('#CCDAR2_0ValidationForm .formError').hide(0);
-		    			  //populate the textbox
-		    			  $("#referenceFileUsedFilepath").val(node.data("serverpath"));
-		    			
-		    			  
-		    			  $("#referenceFileUsed").text($("#referenceFileUsedFilepath").val());
-		    			  
-		    	    	  //hide the drop down panel
-		    			  $('[data-toggle="dropdown"]').parent().removeClass('open');
-		    			  
-		    			  $('#referenceFileUsedLabel').focus();
-		    			  $('#referenceFileUsedLabel').dropdown("toggle");
-		    		  }
-		    	  },
-		    	  "folder" : {
-		    		  "icon" : {
-		    	    	  "image" : window.currentContextPath + "/images/folder.png"
-		    	      },
-		    		  "valid_children" : [ "file" ],
-		    		  "select_node" : function (e) {
-		    	    	  e.find('a:first').focus();
-		    			  this.toggle_node(e);
-		    	    	  return false;
-		    	      }
-		    	  }
-	    	 }
-	    },
-	    "plugins" : [ "themes", "json_data", "ui", "types" ]
-	}).bind('loaded.jstree', function(e, data) {
-		isfiletreeloaded = true;
-		
-		//loadReferenceCCDAIncorpTree();
-		
-		$('#referenceDownloadFileTreePanel').find('a').each(function() {
-		    $(this).attr('tabindex', '1');
-		});
-	});
-}
-
-
 $(function(){
-	$('#smartCCDAValidationBtn').bind('click', function(e, data) {
+	$('.smartCCDAValidationBtn').bind('click', function(e, data) {
 		smartCCDAValidation();
 	});
 	
@@ -921,7 +351,7 @@ $(function(){
 	
 	
 	
-	$('#saveResultsBtn').on('click', function(e){
+	$('.saveResultsBtn').on('click', function(e){
 		e.preventDefault();
 		
 		var ajaximgpath = window.currentContextPath + "/css/ajax-loader.gif";
@@ -960,5 +390,75 @@ $(function(){
 	    });
 		
 	});
-	loadSampleTrees();
 });
+
+function getTestDocuments(endpointToDocuments){
+    $.getJSON(endpointToDocuments, function(data){
+        $("#scenariofiledownload").hide();
+        $("#CCDAR2_0_type_val option").remove();
+        $("#CCDAR2_refdocsfordocumenttype option").remove();
+        $("#CCDAR2_0_type_val").append(
+            $("<option></option>")
+                .text('-- select one ---')
+                .val(''));
+        $.each(data.data, function(index, item){
+            var optionText = item.name;
+            var optionValue = item.url;
+            $("#CCDAR2_0_type_val").append(
+                $("<option></option>")
+                    .text(optionText)
+                    .val(optionValue));
+        })
+    });
+};
+
+$('#CCDAR2_0_type_val').change(function(){
+    documentLocationMap = new Object();
+    $("#scenariofiledownload").hide();
+    if($( this ).val() != ''){
+        $.getJSON($( this ).val()+ '&callback=?', function(data){
+            $("#CCDAR2_refdocsfordocumenttype option").remove();
+            $("#CCDAR2_refdocsfordocumenttype").append(
+                $("<option></option>")
+                    .text('-- select one ---')
+                    .val(''));
+            $.each(data.data, function(index, item){
+                var optionText = item.name;
+                var documentDownloadUrl = item.html_url;
+                documentLocationMap[optionText] = documentDownloadUrl;
+                $("#CCDAR2_refdocsfordocumenttype").append(
+                    $("<option></option>")
+                        .text(optionText)
+                        .val(optionText));
+            });
+			$("#CCDAR2_refdocsfordocumenttype").append(
+				$("<option></option>")
+					.text('No Scenario File')
+					.val('noscenariofile'));
+        });
+    }else{
+        $("#CCDAR2_refdocsfordocumenttype option").remove();
+    }
+
+});
+
+$('#CCDAR2_refdocsfordocumenttype').change(function(){
+    if($( this ).val() != '' && $( this ).val() !== 'noscenariofile'){
+        $("#scenariofiledownload").attr({'href' : documentLocationMap[$( this ).val()], target : '_blank'});
+        $("#scenariofiledownload").show();
+    }else{
+        $("#scenariofiledownload").hide();
+    }
+
+});
+
+$( "#messagetype").click(function(){
+    $(this).find('.btn').toggleClass('active');
+    if($(this).find('.active').val() == 'sender'){
+        getTestDocuments(senderGitHubUrl);
+    }else{
+        getTestDocuments(receiverGitHubUrl);
+    }
+});
+
+getTestDocuments(senderGitHubUrl);
