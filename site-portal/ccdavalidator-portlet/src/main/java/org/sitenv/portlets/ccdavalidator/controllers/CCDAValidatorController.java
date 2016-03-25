@@ -107,6 +107,7 @@ public class CCDAValidatorController extends BaseController {
 			JSONObject jsono = new JSONObject();
 			jsono.put("name", file.getOriginalFilename());
 			jsono.put("size", file.getSize());
+			jsono.put("content", new String(file.getBytes()));
 
 			responseJSON.getFileJson().put(jsono);
 
@@ -193,6 +194,7 @@ public class CCDAValidatorController extends BaseController {
 			JSONObject jsono = new JSONObject();
 			jsono.put("name", file.getOriginalFilename());
 			jsono.put("size", file.getSize());
+			jsono.put("content", new String(file.getBytes()));
 
 			responseJSON.getFileJson().put(jsono);
 

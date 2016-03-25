@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "DcdtHostingVerificationDAO")
 public class DcdtHostingVerificationDAOImpl extends BaseDAOImpl implements DcdtHostingVerificationDAO 
 {
-	public void createDcdtHostingVerification(String testcase, String directAddress, String response) 
+	public void createDcdtHostingVerification(String testcase, String directAddress, String response , String dcdtVersion) 
 	{
 		DcdtHostingVerificationEntity entity = new DcdtHostingVerificationEntity();
 		entity.setVerificationTestcase(testcase);
 		entity.setVerificationDirectAddress(directAddress);
 		entity.setVerificationResponse(response);
+		entity.setDcdtVersion(dcdtVersion);
 		entityManager.persist(entity);
 	}
 }

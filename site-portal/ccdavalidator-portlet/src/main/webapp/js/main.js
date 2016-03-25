@@ -1,3 +1,7 @@
+var documentLocationMap;
+var senderGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Sender SUT Test Data?callback=?';
+var receiverGitHubUrl = 'https://api.github.com/repos/siteadmin/2015-Certification-C-CDA-Test-Data/contents/Receiver SUT Test Data?callback=?';
+
 (function($) {
 $.fn.serializefiles = function() {
     var obj = $(this);
@@ -236,7 +240,7 @@ function writeSmartCCDAResultHTML(data){
     		
     		
     		$("#resultModalTabs a[href='#tabs-3']").show();
-    		
+			$('#saveResultsBtn').show();
     		$(".modal-body").scrollTop(0);
     		
     		$("#resultModalTabs a[href='#tabs-3']").tab("show");
@@ -962,3 +966,70 @@ $(function(){
 	});
 	loadSampleTrees();
 });
+
+function getTestDocuments(endpointToDocuments){
+    $.getJSON(endpointToDocuments, function(data){
+        $("#scenariofiledownload").hide();
+        $("#CCDAR2_0_type_val option").remove();
+        $("#CCDAR2_refdocsfordocumenttype option").remove();
+        $("#CCDAR2_0_type_val").append(
+            $("<option></option>")
+                .text('-- select one ---')
+                .val(''));
+        $.each(data.data, function(index, item){
+            var optionText = item.name;
+            var optionValue = item.url;
+            $("#CCDAR2_0_type_val").append(
+                $("<option></option>")
+                    .text(optionText)
+                    .val(optionValue));
+        })
+    });
+};
+
+$('#CCDAR2_0_type_val').change(function(){
+    documentLocationMap = new Object();
+    $("#scenariofiledownload").hide();
+    if($( this ).val() != ''){
+        $.getJSON($( this ).val()+ '&callback=?', function(data){
+            $("#CCDAR2_refdocsfordocumenttype option").remove();
+            $("#CCDAR2_refdocsfordocumenttype").append(
+                $("<option></option>")
+                    .text('-- select one ---')
+                    .val(''));
+            $.each(data.data, function(index, item){
+                var optionText = item.name;
+                var documentDownloadUrl = item.html_url;
+                documentLocationMap[optionText] = documentDownloadUrl;
+                $("#CCDAR2_refdocsfordocumenttype").append(
+                    $("<option></option>")
+                        .text(optionText)
+                        .val(optionText));
+            })
+        });
+    }else{
+        $("#CCDAR2_refdocsfordocumenttype option").remove();
+    }
+
+});
+
+$('#CCDAR2_refdocsfordocumenttype').change(function(){
+    if($( this ).val() != ''){
+        $("#scenariofiledownload").attr({'href' : documentLocationMap[$( this ).val()], target : '_blank'});
+        $("#scenariofiledownload").show();
+    }else{
+        $("#scenariofiledownload").hide();
+    }
+
+});
+
+$( "#messagetype").click(function(){
+    $(this).find('.btn').toggleClass('active');
+    if($(this).find('.active').val() == 'sender'){
+        getTestDocuments(senderGitHubUrl);
+    }else{
+        getTestDocuments(receiverGitHubUrl);
+    }
+});
+
+getTestDocuments(senderGitHubUrl);
