@@ -87,18 +87,22 @@
 				<ul>
 					<li>SITE's Direct instantiation synchronizes with the <a
 						href="https://secure.bluebuttontrust.org/" target="_blank"
-						tabindex="1">BlueButton</a> Patient and Provider Test bundles
+						tabindex="1">BlueButton</a><span class="inline-ext"><a class="ext-icon" href="http://www.hhs.gov/disclaimer.html" tabindex="1" target="_blank" title="Web Site Disclaimers"><span class="hiddenText">Web Site Disclaimers</span></a></span>
+						 Patient and Provider Test bundles
 						every minute. The SITE's Trust Anchor is already part of the <a
 						href="https://secure.bluebuttontrust.org/" target="_blank"
-						tabindex="1">BlueButton</a> Patient and Provider Test bundles.
+						tabindex="1">BlueButton</a><span class="inline-ext"><a class="ext-icon" href="http://www.hhs.gov/disclaimer.html" tabindex="1" target="_blank" title="Web Site Disclaimers"><span class="hiddenText">Web Site Disclaimers</span></a></span>
+						 Patient and Provider Test bundles.
 						<ul>
 							<li>Implementers can download the SITE Trust Anchor from the
 								<a href="https://secure.bluebuttontrust.org/" target="_blank"
-								tabindex="1">BlueButton</a> bundles.
+								tabindex="1">BlueButton</a><span class="inline-ext"><a class="ext-icon" href="http://www.hhs.gov/disclaimer.html" tabindex="1" target="_blank" title="Web Site Disclaimers"><span class="hiddenText">Web Site Disclaimers</span></a></span>
+								 bundles.
 							</li>
 							<li>Implementers can submit their Trust Anchors on the <a
 								href="https://secure.bluebuttontrust.org/" target="_blank"
-								tabindex="1">BlueButton</a> website.
+								tabindex="1">BlueButton</a><span class="inline-ext"><a class="ext-icon" href="http://www.hhs.gov/disclaimer.html" tabindex="1" target="_blank" title="Web Site Disclaimers"><span class="hiddenText">Web Site Disclaimers</span></a></span>
+								 website.
 							</li>
 						</ul>
 					</li>

@@ -29,7 +29,15 @@
 								<li>
 							#end
 								<a href="$nav_child.getURL()" $nav_child.getTarget()  tabindex="1">$nav_child.getName()</a>
-								#if ($nav_child.getName() == "Direct Project Wiki" || $nav_child.getName() == "C-CDA Forum")
+								#if ($nav_item.getName() != "Home" 
+									&& $nav_child.getName() != "C-CDA Validator"
+									&& $nav_child.getName() != "Direct Certificate Discovery Tool"
+									&& $nav_child.getName() != "Direct Transport Test Tool"
+									&& $nav_child.getName() != "Direct SMTP Edge Test Tool"
+									&& $nav_child.getName() != "Direct XDR Edge Test Tool"
+									&& $nav_child.getName() != "Provider Directory Test Tool"
+									&& $nav_child.getName() != "QRDA Validator"
+									&& $nav_child.getName() != "Direct Certificate Discovery Tool 2015")
 									<span class="external-page"><a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1"><span class="hiddenText">Web Site Disclaimers</span></a></span>
 								#end
 							</li>

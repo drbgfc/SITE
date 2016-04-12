@@ -1,114 +1,36 @@
+var parsleyOptions = {
+		trigger: 'change',
+		successClass: "has-success",
+		errorClass: "alert alert-danger",
+		classHandler: function (el) {
+			return el.$element.closest(".form-group").children(".infoArea");
+		},
+		errorsContainer: function (el) {
+			return el.$element.closest(".form-group").children(".infoArea");
+		},
+		errorsWrapper: '<ul></ul>',
+		errorElem: '<li></li>'
+};
+
+//Set Parsley Validators
+$(function(){
+	// Parsley validator to validate xml extension.
+	window.ParsleyValidator.addValidator('filetype',function(value,requirement){
+		var ext=value.split('.').pop().toLowerCase();
+		return ext === requirement;	
+	},32).addMessage('en','filetype','The selected C-CDA file must be an xml file(.xml)');
+	
+	
+	// parsley Validator to validate the file size
+	window.ParsleyValidator.addValidator('maxsize',function(value,requirement){
+		var file_size=$('#ccdauploadfile')[0].files[0];
+		return file_size.size < requirement*1024*1024;
+	},32).addMessage('en','maxsize','The uploaded file size exceeds the maximum file size of 3 MB.');
+	
+});
+
 $(function() {
 	'use strict';
-
-	// Change this to the location of your server-side upload handler:
-	$('#anchoruploadprogress').hide();
-	$('#anchoruploadfile').fileupload({
-		url : $( '#anchoruploadform' ).attr( 'action' ),
-		dataType : 'json',
-		autoUpload : false,
-		type : 'POST',
-		contenttype : false,
-		replaceFileInput : false,
-		done : function(e, data) {
-			
-			var results = data.result.body;
-        	
-        	var iconurl = (results.IsSuccess == "true")? window.currentContextPath + "/images/icn_alert_success.png" :
-        									window.currentContextPath + "/images/icn_alert_error.png" ;
-        	
-        	$('#anchoruploadwidget .blockMsg .progressorpanel img').attr('src',iconurl);
-      
-        	
-        	$('#anchoruploadwidget .blockMsg .progressorpanel .lbl').text(results.ErrorMessage);
-        	
-        	if(window.anchorUploadWidget)
-        	{
-        		window.anchorUploadTimeout = setTimeout(function(){
-        				window.anchorUploadWidget.unbind("click");
-        				window.anchorUploadWidget.unblock();
-        			},10000);
-        		
-        		
-        		window.anchorUploadWidget.bind("click", function() { 
-        			window.anchorUploadWidget.unbind("click");
-        			clearTimeout(window.anchorUploadTimeout);
-        			window.anchorUploadWidget.unblock(); 
-        			window.anchorUploadWidget.attr('title','Click to hide this message.').click($.unblockUI); 
-	            });
-        		
-        	}
-        	
-        	Liferay.Portlet.refresh("#p_p_id_Statistics_WAR_siteportalstatisticsportlet_"); // refresh the counts
-
-			window.setTimeout(function() {
-				$('#anchoruploadprogress').fadeOut(400, function() {
-					$('#anchoruploadprogress .progress-bar').css('width', '0%');
-					
-				});
-
-			}, 1000);
-		},
-		progressall : function(e, data) {
-			var progressval = parseInt(data.loaded / data.total * 100, 10);
-			//$('#progress').fadeIn();
-			//$('#progress .progress-bar').css('width', progress + '%');
-			
-			if(progressval < 99)
-		    {
-		    	$('#anchoruploadwidget .blockMsg .progressorpanel .lbl').text('Uploading...');
-		   		$('#anchoruploadwidget .blockMsg .progressorpanel .progressor').text( floorFigure(data.loaded/data.total*100,0).toString()+"%" );
-		    }
-		    else
-		    {
-		    	$('.blockMsg .progressorpanel .lbl').text('Updating Bundle...');
-		    	$('.blockMsg .progressorpanel .progressor').text('');
-		    }
-		}
-	}).on('fileuploadadd', function(e, data) {
-		$('#anchoruploadsubmit').unbind("click");
-		$('#anchoruploadfiles').empty();
-		data.context = $('<div/>').appendTo('#anchoruploadfiles');
-		$.each(data.files, function(index, file) {
-
-			var node = $('<p/>').append($('<span/>').text(file.name));
-
-			node.appendTo(data.context);
-		});
-
-		$('#anchoruploadform .formError').hide(0);
-		
-		data.context = $('#anchoruploadsubmit').click(function(e) {
-			var jform = $('#anchoruploadform');
-			//jform.validationEngine('hideAll');
-			jform.validationEngine({promptPosition:"centerRight", validateNonVisibleFields: true, updatePromptsPosition:true});
-			if(jform.validationEngine('validate'))
-			{
-				$('#anchoruploadform .formError').hide(0);
-				
-				blockAnchorUploadWidget();
-						
-				data.submit();
-			}
-			else
-			{
-				//jform.validationEngine({validateNonVisibleFields: true, updatePromptsPosition:true});
-				
-				$('#anchoruploadform .formError').show(0);
-				
-				$('#anchoruploadform .anchoruploadfileformError').prependTo('#anchoruploaderrorlock');
-			}
-		});
-	}).prop('disabled', !$.support.fileInput).parent().addClass(
-			$.support.fileInput ? undefined : 'disabled');
-
-	$('#anchoruploadfile').bind('fileuploaddrop', function(e, data) {
-		e.preventDefault();
-	}).bind('fileuploaddragover', function(e) {
-		e.preventDefault();
-	});
-
-	
 	// Change this to the location of your server-side upload handler:
 	$('#ccdauploadprogress').hide();
 	$('#ccdauploadfile').fileupload({
@@ -120,18 +42,14 @@ $(function() {
 		replaceFileInput : false,
 		error: function (e, data) {
 			var iconurl = window.currentContextPath + "/images/icn_alert_error.png" ;
-			
 			$('#directreceivewidget .blockMsg .progressorpanel img').attr('src',iconurl);
-        	
         	$('#directreceivewidget .blockMsg .progressorpanel .lbl').text('Error uploading file.');
 			
-			if(window.directReceiveWdgt)
-        	{
+			if(window.directReceiveWdgt){
         		window.directReceiveUploadTimeout = setTimeout(function(){
         				window.directReceiveWdgt.unbind("click");
         				window.directReceiveWdgt.unblock();
         			},10000);
-        		
         		
         		window.directReceiveWdgt.bind("click", function() { 
         			window.directReceiveWdgt.unbind("click");
@@ -139,36 +57,28 @@ $(function() {
         			window.directReceiveWdgt.unblock(); 
         			window.directReceiveWdgt.attr('title','Click to hide this message.').click($.unblockUI); 
 	            });
-        		
         	}
         },
 		done : function(e, data) {
-			
-			
 			var results = data.result.body;
-        	
         	var iconurl = (results.IsSuccess == "true")? window.currentContextPath + "/images/icn_alert_success.png" :
         									window.currentContextPath + "/images/icn_alert_error.png" ;
-        	
         	$('#directreceivewidget .blockMsg .progressorpanel img').attr('src',iconurl);
         	
         	$('#directreceivewidget .blockMsg .progressorpanel .lbl').text(results.ErrorMessage);
         	
-        	if(window.directReceiveWdgt)
-        	{
+        	if(window.directReceiveWdgt){
         		window.directReceiveUploadTimeout = setTimeout(function(){
         				window.directReceiveWdgt.unbind("click");
         				window.directReceiveWdgt.unblock();
         			},10000);
-        		
-        		
+
         		window.directReceiveWdgt.bind("click", function() { 
         			window.directReceiveWdgt.unbind("click");
         			clearTimeout(window.directReceiveUploadTimeout);
         			window.directReceiveWdgt.unblock(); 
         			window.directReceiveWdgt.attr('title','Click to hide this message.').click($.unblockUI); 
 	            });
-        		
         	}
         	
         	Liferay.Portlet.refresh("#p_p_id_Statistics_WAR_siteportalstatisticsportlet_"); // refresh the counts
@@ -176,23 +86,15 @@ $(function() {
 			window.setTimeout(function() {
 				$('#ccdauploadprogress').fadeOut(400, function() {
 					$('#ccdauploadprogress .progress-bar').css('width', '0%');
-					
 				});
-
 			}, 1000);
 		},
 		progressall : function(e, data) {
 			var progressval = parseInt(data.loaded / data.total * 100, 10);
-			//$('#progress').fadeIn();
-			//$('#progress .progress-bar').css('width', progress + '%');
-			
-			if(progressval < 99)
-		    {
+			if(progressval < 99){
 		    	$('#directreceivewidget .blockMsg .progressorpanel .lbl').text('Uploading...');
 		   		$('#directreceivewidget .blockMsg .progressorpanel .progressor').text( floorFigure(data.loaded/data.total*100,0).toString()+"%" );
-		    }
-		    else
-		    {
+		    }else{
 		    	$('#directreceivewidget .blockMsg .progressorpanel .lbl').text('Sending...');
 		    	$('#directreceivewidget .blockMsg .progressorpanel .progressor').text('');
 		    }
@@ -202,33 +104,21 @@ $(function() {
 		$('#ccdauploadfiles').empty();
 		data.context = $('<div/>').appendTo('#ccdauploadfiles');
 		$.each(data.files, function(index, file) {
-
 			var node = $('<p/>').append($('<span/>').text(file.name));
-
 			node.appendTo(data.context);
 		});
-		
-		$('#ccdauploadform .formError').hide(0);
-
 		data.context = $('#ccdauploadsubmit').click(function(e) {
-			var jform = $('#ccdauploadform');
-			//jform.validationEngine('hideAll');
-			jform.validationEngine({promptPosition:"centerRight", validateNonVisibleFields: true, updatePromptsPosition:true});
-			if(jform.validationEngine('validate'))
-			{
-				$('#ccdauploadform .formError').hide(0);
+			// unsubscribe callbacks from previous uploads
+			$('#ccdauploadform').parsley(parsleyOptions).unsubscribe('parsley:form:validate');
+			// calling the Parsley Validator.
+			$('#ccdauploadform').parsley(parsleyOptions).subscribe('parsley:form:validate',function(formInstance){
 				
-				blockDirectReceiveWidget();
-						
-				data.submit();
-			}
-			else
-			{
-				//jform.validationEngine({validateNonVisibleFields: true, updatePromptsPosition:true});
-				$('#ccdauploadform .formError').show(0);
-				
-				$('#ccdauploadform .ccdauploadfileformError').prependTo('#ccdauploaderrorlock');
-			}
+				formInstance.submitEvent.preventDefault();
+				if(formInstance.isValid()==true){
+					blockDirectReceiveWidget();
+					data.submit();
+				}
+			});
 		});
 	}).prop('disabled', !$.support.fileInput).parent().addClass(
 			$.support.fileInput ? undefined : 'disabled');
@@ -239,29 +129,19 @@ $(function() {
 		e.preventDefault();
 	});
 	
-	
-	$('#anchoruploadfile-btn').bind('click', function(e, data)
-			{
-				$('#anchoruploadform').trigger('reset');
-				$('#anchoruploadsubmit').unbind("click");
-				
-				$('#anchoruploadfiles').empty();
-				
-				$('#anchoruploadform .formError').hide(0);
-				
-			});
-	
-	$('#ccdauploadfile-btn').bind('click', function(e, data)
-			{
-				var textValue = $('#ccdauploademail').val();
-				$('#ccdauploadform .formError').hide(0);
-				$('#ccdauploadform').trigger('reset');
-				$('#ccdauploadsubmit').unbind("click");
-				
-				$('#ccdauploadfiles').empty();
-				
-				$('#ccdauploademail').val(textValue);
-				
-			});
+	$('#ccdauploadsubmit').click(function(e) {
+		
+		// unsubscribe callbacks from previous uploads
+		$('#ccdauploadform').parsley(parsleyOptions).unsubscribe('parsley:form:validate');
+		// calling the Parsley Validator.
+		$('#ccdauploadform').parsley(parsleyOptions).subscribe('parsley:form:validate',function(formInstance){
+			
+			formInstance.submitEvent.preventDefault();
+			if(formInstance.isValid()==true){
+				var hideMsg3 = $("#CCDA1fileupload").parsley();
+				window.ParsleyUI.removeError(hideMsg3,'required');
+			}
+		});
+});	
 
 });

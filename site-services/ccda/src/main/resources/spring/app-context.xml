@@ -6,7 +6,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx" 
        xmlns:p="http://www.springframework.org/schema/p"
-       
+       xmlns:aop="http://www.springframework.org/schema/aop"
        
        
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -14,7 +14,9 @@
                            http://www.springframework.org/schema/tx
                            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
                            http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+                           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/aop
+  						   http://www.springframework.org/schema/aop/spring-aop.xsd"
                            >
                            
                            
@@ -24,10 +26,10 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
     -->
 	
-	<!--context:property-placeholder location="classpath:db.properties" / -->
+	<context:property-placeholder location="classpath*:environment.properties" ignore-resource-not-found="false"/>
 	<context:annotation-config />
 	<context:component-scan base-package="org.sitenv" />
-	
+	<aop:aspectj-autoproxy />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="true" />
@@ -39,6 +41,11 @@
 	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<bean id="ccdaValidationServiceFactory"
+		class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+		<property name="serviceLocatorInterface" value="org.sitenv.services.ccda.service.factory.CcdaValidationServiceFactory"/>
 	</bean>
 
 </beans>

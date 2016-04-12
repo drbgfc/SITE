@@ -1,24 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-	  <groupId>org.sitenv.services</groupId>
-	  <version>1.0-SNAPSHOT</version>
-	  <artifactId>site-services</artifactId>
-  </parent>
-  
-  <artifactId>site-services-ccda</artifactId>
-  <packaging>war</packaging>
-  <name>sitenv-services-ccda</name>
-  
-  <build>
-        <finalName>CCDAValidatorServices</finalName>
-        <plugins>
-            <plugin>
-            	<groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
-            </plugin>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sitenv.services</groupId>
+		<version>1.0-SNAPSHOT</version>
+		<artifactId>site-services</artifactId>
+	</parent>
+
+	<artifactId>site-services-ccda</artifactId>
+	<packaging>war</packaging>
+	<name>sitenv-services-ccda</name>
+
+	<build>
+		<finalName>CCDAValidatorServices</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -36,7 +37,8 @@
 									file="src/main/resources/environment.${environment.name}.properties"
 									tofile="${project.build.outputDirectory}/environment.properties" />
 								<delete>
-									<fileset dir="${project.build.outputDirectory}" includes="**/environment.development-*.properties" />
+									<fileset dir="${project.build.outputDirectory}"
+										includes="**/environment.development-*.properties" />
 								</delete>
 								<delete
 									file="${project.build.outputDirectory}/environment.test.properties" />
@@ -58,19 +60,18 @@
 								<if>
 									<equals arg1="${environment.name}" arg2="test" />
 									<then>
-											<echo message="Copying file (${project.build.directory}/CCDAValidatorServices.war) to location: ${liferay.auto.deploy.dir}"/>
+										<echo
+											message="Copying file (${project.build.directory}/CCDAValidatorServices.war) to location: ${liferay.auto.deploy.dir}" />
 										<exec executable="cp">
-											<arg
-												value="${project.build.directory}/CCDAValidatorServices.war" />
+											<arg value="${project.build.directory}/CCDAValidatorServices.war" />
 											<arg value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
 										</exec>
 										<echo message="Uploading file to location: ${deploy.location}" />
 										<exec executable="scp">
-											<arg
-												value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
+											<arg value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
 											<arg value="${deploy.location}" />
 										</exec>
-											<echo message="...Uploaded." />
+										<echo message="...Uploaded." />
 										<echo message="Deploying to tomcat7..." />
 										<exec executable="ssh">
 											<arg value="site-dev-ccda" />
@@ -82,18 +83,17 @@
 									<elseif>
 										<equals arg1="${environment.name}" arg2="production" />
 										<then>
-											<echo message="Copying file (${project.build.directory}/CCDAValidatorServices.war) to location: ${liferay.auto.deploy.dir}"/>
-										<exec executable="cp">
-											<arg
-												value="${project.build.directory}/CCDAValidatorServices.war" />
-											<arg value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
-										</exec>
-										<echo message="Uploading file to location: ${deploy.location}" />
-										<exec executable="scp">
-											<arg
-												value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
-											<arg value="${deploy.location}" />
-										</exec>
+											<echo
+												message="Copying file (${project.build.directory}/CCDAValidatorServices.war) to location: ${liferay.auto.deploy.dir}" />
+											<exec executable="cp">
+												<arg value="${project.build.directory}/CCDAValidatorServices.war" />
+												<arg value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
+											</exec>
+											<echo message="Uploading file to location: ${deploy.location}" />
+											<exec executable="scp">
+												<arg value="${liferay.auto.deploy.dir}/CCDAValidatorServices.war" />
+												<arg value="${deploy.location}" />
+											</exec>
 											<echo message="...Uploaded." />
 											<echo message="Deploying to tomcat7..." />
 											<exec executable="ssh">
@@ -135,42 +135,42 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-        </plugins>
-        <directory>${project.basedir}/target</directory>
-    </build>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+		<directory>${project.basedir}/target</directory>
+	</build>
 
-    <dependencies>
-        
+	<dependencies>
 
-        <!-- Spring framework -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>${org.springframework.version}</version>
-        </dependency>
-        
-        <!-- Spring MVC for Servlet Environments (depends on spring-core, spring-beans, 
+		<!-- Spring framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+
+		<!-- Spring MVC for Servlet Environments (depends on spring-core, spring-beans, 
 			spring-context, spring-web) Define this if you use Spring MVC with a Servlet 
 			Container such as Apache Tomcat (org.springframework.web.servlet.*) -->
 		<dependency>
@@ -178,13 +178,27 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-        
-        
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
@@ -196,9 +210,9 @@
 			<version>3.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.codehaus.jackson</groupId>
-		  <artifactId>jackson-jaxrs</artifactId>
-		  <version>1.9.13</version>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -215,8 +229,8 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
@@ -242,7 +256,7 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -258,8 +272,8 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.2.3</version>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -285,15 +299,21 @@
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.sitenv.common</groupId>
 			<artifactId>site-common-statistics</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		
-		
-		
+
+		<dependency>
+			<groupId>org.sitenv.common</groupId>
+			<artifactId>site-common-utilities</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+
+
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -306,13 +326,13 @@
 			<version>2.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		
-	
-    </dependencies>
-    <properties>
-        <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
-        <cxf.version>2.7.7</cxf.version>
-    </properties>
-  
+
+
+
+	</dependencies>
+	<properties>
+		<org.springframework.version>4.1.1.RELEASE</org.springframework.version>
+		<cxf.version>2.7.7</cxf.version>
+	</properties>
+
 </project>

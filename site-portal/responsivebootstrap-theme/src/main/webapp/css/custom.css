@@ -647,8 +647,39 @@ a.ext-icon {
 }
 
 .embedded {
-	right: 20px;
-	z-index: 100;
+	position:relative;
+	right: 5px;
+  	z-index: 100;
+  	float: right;
+  	margin-top: -35px;
+}
+
+.thumbnail-ext {	
+  position: absolute;
+  right: 20px;
+  z-index: 100;
+}
+
+.thumbnail-ext-sandbox {
+	position: absolute;
+  right: 20px;
+  z-index: 100;
+  top: -15px;
+}
+
+.embedded + .btn {
+	border-top: none;
+}
+
+.inline-ext {
+	left: 3px;
+	position: relative;
+}
+
+.btn-group-vertical > .btn:last-of-type {
+  	border-bottom-left-radius: 4px !important;
+  	border-bottom-right-radius: 4px !important;
+  	
 }
 
 .dropdown-menu > li > a {

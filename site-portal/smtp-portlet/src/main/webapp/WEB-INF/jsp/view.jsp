@@ -32,12 +32,6 @@
     <portlet:param name="javax.portlet.action" value="sampleCCDATree"/>
 </portlet:actionURL>
 
-<portlet:resourceURL id="getTrustBundle" var="getTrustBundleResource"/>
-
-<portlet:actionURL var="uploadTrustAnchor" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-    <portlet:param name="javax.portlet.action" value="uploadTrustAnchor"/>
-</portlet:actionURL>
-
 <portlet:actionURL var="uploadCCDADirectEdgeReceive" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
     <portlet:param name="javax.portlet.action" value="uploadCCDADirectEdgeReceive"/>
 </portlet:actionURL>
@@ -80,16 +74,17 @@
 		<br/>
 		<div class="well">
 			<form id="smtpsearchform"  action="${smtpSearch}" method="POST">
+			<div class="form-group">
 			<label for="smtpsearchinput">Enter address to search:</label>
-				<input type="text" name="smtpsearchinput" id="smtpsearchinput" class="validate[required,custom[email]] form-control" 
-						data-errormessage-value-missing="from address is required!"
-						data-errormessage-custom-error="from address format is invalid (hint:example@test.org)" tabindex="1"/>
-				
+				<input type="text" name="smtpsearchinput" id="smtpsearchinput" class="form-control" 
+						data-parsley-required data-parsley-type="email" data-parsley-trigger="change" data-parsley-required-message="Email address is required." tabindex="1"/>
+				<div id="smtpsearchinputInfoArea" class="infoArea alert-danger"></div>
 			<hr />
 				<button id="smtpsearchsubmit" type="submit"
-					class="btn btn-primary start" onclick="return false;"  tabindex="1">
+					class="btn btn-primary start"  tabindex="1">
 					<i class="glyphicon glyphicon-search"></i> <span>Lookup Messages</span>
-				</button>	
+				</button>
+			</div>	
 			</form>
 		</div>
 	</div>
@@ -129,26 +124,25 @@
   			<div class="tab-pane active" id="precanned">
   				<div id="precannedFormWrapper">
 			<form id="precannedForm"  action="${precannedCCDADirectEdgeReceive}" method="POST">
-				<p>
+				<div class="form-group">
 				<label for="fromemail">Enter Edge System From Address:</label><br/>
 					<input id="fromemail"
-						class="validate[required,custom[email]] form-control" 
-						data-errormessage-value-missing="from address is required!"
-						data-errormessage-custom-error="from address format is invalid (hint:example@test.org)"
+						class="form-control" 
 						name="fromemail"
 						placeholder="from email address"
-						style="display: inline;" type="text"  tabindex="1"/>
-				</p>
+						style="display: inline;" type="text"
+						data-parsley-required data-parsley-type="email" data-parsley-trigger="change" data-parsley-required-message="Email address is required."  tabindex="1"/>
+						<div id="fromemail" class="infoArea alert-danger"></div>
+				</div>
 				
 				<br />
 				<noscript><input type="hidden" name="redirect" value="true"  /></noscript>
-				<div id="precannederrorlock" style="position: relative;">
-					<div class="row">
-					<div class="col-md-12">
+				
+					<div class="form-group">
+					
 					<div style="display: inline-block; margin-bottom: 5px; font-weight: bold;">Select a Precanned Sample C-CDA File to Send:</div><br/>
 									<div class="dropdown">
-										<button id="dLabel" data-toggle="dropdown"
-											class="btn btn-success dropdown-toggle validate[funcCall[precannedRequired]]" type="button" 	tabindex="1">
+										<button id="dLabel" data-toggle="dropdown" class="btn btn-success dropdown-toggle" type="button" tabindex="1">
 											Pick Sample <i class="glyphicon glyphicon-play"></i>
 										</button>
 
@@ -158,57 +152,54 @@
 											</li>
 										</ul>
 									</div>
-									<div>
-									<span id="precannedfilePathOutput"></span>
-									</div>
+					<span id="precannedfilePathOutput"></span>
+					<!-- display:none is used because configuring parsley validation to validate hidden form fields is broken as of 2.x -->
+					<input id="precannedfilepath" value="" type="text" data-parsley-required data-parsley-required-message="Please select a CCDA from the dropdown." name="precannedfilepath" style="display:none;" />
+					<div id="precannedfilepath" class="infoArea alert-danger"></div>
 					</div>
-					</div>
-				</div>
+				
 				<hr />
-				<button id="precannedCCDAsubmit" type="submit"
-					class="btn btn-primary start" onclick="return false;"  tabindex="1">
-					<i class="glyphicon glyphicon-envelope"></i> <span>Send
-						Message</span>
+				<button id="precannedCCDAsubmit" type="submit" class="btn btn-primary start" tabindex="1">
+					<i class="glyphicon glyphicon-envelope"></i> <span>Send Message</span>
 				</button>
-				<input id="precannedfilepath"
-						name="precannedfilepath" type="hidden">
+				
 			</form>
 		</div>
   			</div>
   			<div class="tab-pane" id="choosecontent">
   			<div id="uploadFormWrapper">
 			<form id="ccdauploadform" action="${uploadCCDADirectEdgeReceive}" method="POST" enctype="multipart/form-data">
-				<p>
+				<div class="form-group">
 					<label for="ccdauploademail">Enter Edge System From Address:</label><br/>
 					 <input id="ccdauploademail"
-						class="validate[required,custom[email]] form-control"
-						data-errormessage-value-missing="end point is required!"
-						data-errormessage-custom-error="end point format is invalid (hint:example@test.org)"
+						class="form-control"
 						name="ccdauploademail"
 						placeholder="from email address"
-						style="display: inline;" type="text"  tabindex="1"/>
-				</p>
+						style="display: inline;" type="text" 
+						data-parsley-required data-parsley-type="email" data-parsley-trigger="change" data-parsley-required-message="Email address is required."
+						tabindex="1"/>
+						<div id="ccdauploademail" class="infoArea alert-danger"></div>
+				</div>
 				<br />
 				<noscript><input type="hidden" name="redirect" value="true" /></noscript>
 				<div id="ccdauploaderrorlock" style="position: relative;">
 					<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-12 form-group">
 						<label for="ccdauploadfile">Select a Local C-CDA File to Send:</label><br/>
-							<span
-								class="btn btn-success fileinput-button" id="ccdauploadfile-btn"> <i
-									class="glyphicon glyphicon-plus"></i>&nbsp;<span>Upload C-CDA</span> <!-- The file input field used as target for the file upload widget -->
-									<input id="ccdauploadfile" type="file"
-									name="ccdauploadfile" class="validate[required, custom[maxCCDAFileSize]]"  tabindex="1"/>
+							<span class="btn btn-success fileinput-button" id="ccdauploadfile-btn"> 
+								<i class="glyphicon glyphicon-plus"></i>&nbsp;<span>Upload C-CDA</span> <!-- The file input field used as target for the file upload widget -->
+								<input id="ccdauploadfile" type="file" name="ccdauploadfile" data-parsley-maxsize="3" data-parsley-filetype="xml" data-parsley-required data-parsley-trigger="change" data-parsley-required-message="Please select a C-CDA file." tabindex="1"/>
 							</span>
 							
-								<div id="ccdauploadfiles" class="files"></div>
+							<div id="ccdauploadfiles" class="files"></div>
+							<div id="CCDA1InfoArea" class="infoArea alert-danger"></div>
 					</div>
 					</div>
 				</div>
 				<hr />
-				<button id="ccdauploadsubmit" type="submit"
-					class="btn btn-primary start" onclick="return false;"  tabindex="1">
-					<i class="glyphicon glyphicon-envelope"></i> <span>Send Message</span>
+				<button id="ccdauploadsubmit" type="submit" class="btn btn-primary start" tabindex="1">
+					<i class="glyphicon glyphicon-envelope"></i> 
+					<span>Send Message</span>
 				</button>
 			</form>
 		</div>
