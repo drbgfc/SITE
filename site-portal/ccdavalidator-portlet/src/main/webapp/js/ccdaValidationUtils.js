@@ -209,7 +209,7 @@ function highlightCcdaXMLResults(resultsMap){
 									title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
 									html: true,
 									content: popOverContent,
-									trigger: "click",
+									trigger: "focus",
 									placement: "auto",
 									template:popoverTemplate
 								});
@@ -220,7 +220,7 @@ function highlightCcdaXMLResults(resultsMap){
 									title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
 									html: true,
 									content: popOverContent,
-									trigger: "click",
+									trigger: "focus",
 									placement: "auto",
 									template: popoverTemplate
 								});
@@ -231,7 +231,7 @@ function highlightCcdaXMLResults(resultsMap){
 									title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + descriptionsLength + " " + type + "(s)",
 									html: true,
 									content:  popOverContent,
-									trigger: "click",
+									trigger: "focus",
 									placement: "auto",
 									template: popoverTemplate
 								});
@@ -247,9 +247,8 @@ function highlightCcdaXMLResults(resultsMap){
 }
 
 function addTitleAttributeToHighlightedDivs(){
-	$("div[class$='Highlight']").hover(function(){
-		$(this).attr('title', 'Show validation result details for this line.')
-	});
+	$("div[class$='Highlight']").attr('title', 'Show validation result details for this line.');
+	$("div[class$='Highlight']").attr('tabindex', '0');
 }
 
 function hideSummaryHeadersOfNotYetImplementedValidators(){
@@ -592,7 +591,7 @@ function highlightXMLResults(resultsToHighlight, validationLevel){
 	if($.map(resultsToHighlight, function(n, i) { return i; }).length > 0){
 		for (var key in resultsToHighlight){
 			if(key.hasOwnProperty){
-				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-up" style="float:right !important" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="true" class="glyphicon glyphicon-arrow-down" style="float:right !important" title="go to next result"></span></div></span>';
+				var popoverTemplate = '<span class="popover resultpopover"><div class="clearfix"><span aria-hidden="false" class="glyphicon glyphicon-arrow-up" style="float:right !important" title="go to previous result"></span></div><span class="arrow"></span><h3 class="popover-title result-title"></h3><div class="popover-content"></div><div class="clearfix"><span aria-hidden="false" class="glyphicon glyphicon-arrow-down" style="float:right !important" title="go to next result"></span></div></span>';
 				var result = resultsToHighlight[key];
 				var lineNum = key;
 				var popOverContent = createResultListPopoverHtml(result);
@@ -611,10 +610,10 @@ function highlightXMLResults(resultsToHighlight, validationLevel){
 					$(".code .container .line.number" + lineNum).data('bs.popover').options.content += "<h3 class='popover-title result-title'>" + title + "</h3>" + popOverContent;
 				}else{
 					if(validationLevel == 'error'){
-						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-exclamation-sign alert-danger' aria-hidden='false' style='font-size: .8em;'></span>" );
 						$(".code .container .line.number" + lineNum).addClass("ccdaErrorHighlight").popover(
 								{ 
-									title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span> " + result.length + " Error(s)",
+									title: "<span class='glyphicon glyphicon-exclamation-sign' aria-hidden='false'></span> " + result.length + " Error(s)",
 									html: true,
 									content: popOverContent,
 									trigger: "click",
@@ -622,10 +621,10 @@ function highlightXMLResults(resultsToHighlight, validationLevel){
 									template:popoverTemplate
 								});
 					}else if(validationLevel == 'warning'){
-						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-warning-sign alert-warning' aria-hidden='false' style='font-size: .8em;'></span>" );
 						$(".code .container .line.number" + lineNum).addClass("ccdaWarningHighlight").popover(
 								{ 
-									title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> " + result.length + " Warning(s)",
+									title: "<span class='glyphicon glyphicon-warning-sign' aria-hidden='false'></span> " + result.length + " Warning(s)",
 									html: true,
 									content: popOverContent,
 									trigger: "click",
@@ -633,10 +632,10 @@ function highlightXMLResults(resultsToHighlight, validationLevel){
 									template: popoverTemplate
 								});
 					}else if(validationLevel == 'info'){
-						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='true' style='font-size: .8em;'></span>" );
+						$(".code .container .line.number" + lineNum).prepend( "<span class='glyphicon glyphicon-info-sign alert-info' aria-hidden='false' style='font-size: .8em;'></span>" );
 						$(".code .container .line.number" + lineNum).addClass("ccdaInfoHighlight").popover(
 								{ 
-									title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='true'></span> " + result.length + " Info",
+									title: "<span class='glyphicon glyphicon-info-sign' aria-hidden='false'></span> " + result.length + " Info",
 									html: true,
 									content:  popOverContent,
 									trigger: "click",
