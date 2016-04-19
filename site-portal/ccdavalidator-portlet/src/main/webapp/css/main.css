@@ -377,15 +377,15 @@ div.line:hover{
     box-shadow: 0px 0px 5px #fff;
 }
 
-.syntaxhighlighter div.line.alt2.ccdaErrorHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaErrorHighlight:hover {
+.syntaxhighlighter div.line.alt2.ccdaErrorHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaErrorHighlight:hover, .syntaxhighlighter div.line.alt2.ccdaErrorHighlight:focus, .syntaxhighlighter div.line.alt1.ccdaErrorHighlight:focus{
     box-shadow: inset  0 0 5px red;
 }
 
-.syntaxhighlighter div.line.alt2.ccdaWarningHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaWarningHighlight:hover {
+.syntaxhighlighter div.line.alt2.ccdaWarningHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaWarningHighlight:hover, .syntaxhighlighter div.line.alt2.ccdaWarningHighlight:focus, .syntaxhighlighter div.line.alt1.ccdaWarningHighlight:focus {
     box-shadow: inset  0 0 5px yellow;
 }
 
-.syntaxhighlighter div.line.alt2.ccdaInfoHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaInfoHighlight:hover {
+.syntaxhighlighter div.line.alt2.ccdaInfoHighlight:hover, .syntaxhighlighter div.line.alt1.ccdaInfoHighlight:hover, .syntaxhighlighter div.line.alt2.ccdaInfoHighlight:focus, .syntaxhighlighter div.line.alt1.ccdaInfoHighlight:focus {
     box-shadow: inset  0 0 5px blue;
 }
 
