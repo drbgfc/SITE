@@ -224,23 +224,46 @@ public class TrustBundleController extends BaseController {
 
 					CertificateFactory cf = CertificateFactory.getInstance(
 							"X.509", "BC");
-					X509Certificate x509cert = (X509Certificate) cf
+					X509Certificate x509cert = null;
+					
+					try {
+						x509cert = (X509Certificate) cf
 							.generateCertificate(new ByteArrayInputStream(
 									fileBytes));
-
-					if (x509cert != null) {
-						logger.trace(String
-								.format("file uploaded %s", fileName));
-						savedFilePath = uploadAnchorFileDir + File.separator
-								+ fileName;
-						File storeFile = new File(savedFilePath);
-						FileOutputStream fos = new FileOutputStream(storeFile);
-						fos.write(fileBytes);
-						fos.close();
-					} else {
+						
+						if (x509cert != null) {
+							logger.trace(String
+									.format("file uploaded %s", fileName));
+							
+							// added this code to do additional verification of the certificate
+							// if it fails, then it's not really an x.509 certificate
+							byte[] tempBytes = x509cert.getEncoded();
+							ASN1InputStream in = new ASN1InputStream(tempBytes);
+							ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+							DEROutputStream dOut = new DEROutputStream(bOut);
+							dOut.writeObject(in.readObject());
+							byte[] derData = bOut.toByteArray();
+							
+							in.close();
+							dOut.close();
+							
+							savedFilePath = uploadAnchorFileDir + File.separator
+									+ fileName + ".der";
+							File storeFile = new File(savedFilePath);
+							FileOutputStream fos = new FileOutputStream(storeFile);
+							fos.write(derData);
+							fos.close();
+						} else {
+							throw new Exception(
+									"Certificates must be in binary or base64 encoded X.509 format.");
+						}
+					} catch (Exception e)
+					{
 						throw new Exception(
 								"Certificates must be in binary or base64 encoded X.509 format.");
 					}
+
+					
 				}
 
 				logger.info(String.format("Anchor file uploaded to %s",
@@ -272,7 +295,7 @@ public class TrustBundleController extends BaseController {
 							uploadAnchorFileDir, trustBundleFile);
 					logger.trace(bundleGenRsltStr);
 
-					if (bundleGenRsltStr.contains("Bundle Creation Failed")) {
+					if (bundleGenRsltStr.contains("Error")) {
 						// delete the uploaded file;
 						FileUtils.forceDelete(new File(savedFilePath));
 						errorMsg = "Failed to include the certificate into the bundle, please verify the format of the anchor file uploaded.";
@@ -281,6 +304,10 @@ public class TrustBundleController extends BaseController {
 					logger.info("Trust bundle generated at:" + trustBundleFile);
 				} catch (ClassNotFoundException e) {
 					errorMsg = e.getMessage();
+					if (errorMsg == null)
+					{
+						errorMsg = "Failed to generate the trustbundle";
+					}
 					logger.error("Failed to generate the trustbundle", e);
 				}
 
