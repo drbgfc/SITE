@@ -1,18 +1,7 @@
 package org.sitenv.portlets.xdrvalidator.controllers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +19,16 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.multipart.MultipartActionRequest;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
@@ -156,6 +155,8 @@ public class XdrValidationController extends BaseController {
 		String serverFilePath = sampleCcdaDir + "/" + precannedfile;
 		
 		File ccdaFile = new File(serverFilePath);
+
+		String fileContents = FileUtils.readFileToString(ccdaFile);
 		
 		byte[] byteArray = this.read(ccdaFile);
 		
@@ -169,11 +170,11 @@ public class XdrValidationController extends BaseController {
 		
 		if (precannedMessageType.equalsIgnoreCase("full")) 
 		{
-			xdrResponse = XDR.sendValidFullXDRMessage(endpoint, base64String, ccdaFile.getName(), toDirectAddress, fromDirectAddress, endpoint);
+			xdrResponse = XDR.sendValidFullXDRMessage(endpoint, fileContents, ccdaFile.getName(), toDirectAddress, fromDirectAddress, endpoint);
 			}
 		else
 		{
-			xdrResponse = XDR.sendValidMinimalXDRMessage(endpoint, base64String, ccdaFile.getName(), toDirectAddress, fromDirectAddress, endpoint);
+			xdrResponse = XDR.sendValidMinimalXDRMessage(endpoint, fileContents, ccdaFile.getName(), toDirectAddress, fromDirectAddress, endpoint);
 		}
 		logger.info(xdrResponse);
 		
