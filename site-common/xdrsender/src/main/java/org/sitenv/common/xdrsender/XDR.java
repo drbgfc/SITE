@@ -6,26 +6,15 @@ import java.net.UnknownHostException;
 
 public class XDR {
 	
-	public static String sendValidMinimalXDRMessage(
-			String endpoint,String doc, String name, String directTo, String directFrom, String replyTo)
-	{
-		// Send full metadata for now
-		String metadata = XDRUtilities.getXDRFullTemplate("Xdr_full_metadata_only.xml");
+	private static String sendMessage(String endpoint,String doc, String name, String directTo, String directFrom, String replyTo, String metadata) {
 		metadata = XDRUtilities.replaceHeaders(metadata, directFrom, directTo, replyTo);
-		
-		//String ccda = XDRUtilities.getFileContent("encodedCCDA.txt");
-		
 		String ccda = doc;
-		
 		String mtomPackage = XDRUtilities.createMtomPackage(metadata, ccda);
-		
 		String payload = XDRUtilities.addHTTPHeadersToPayload(endpoint, mtomPackage);
 		
 		System.out.println(" PAYLOAD === " + payload);
 		
-		
 		String response = "";
-		
 		try {
 			response = SocketSender.sendMessage(endpoint, payload);
 			
@@ -39,29 +28,17 @@ public class XDR {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		System.out.println("Response = " + response);
 		return response;
 	}
 	
-	public static String sendValidFullXDRMessage(
-			String endpoint,String doc, String name, String directTo, String from, String replyTo)
-	{
-		return sendValidMinimalXDRMessage(endpoint,doc,name,directTo,from,replyTo);
+	public static String sendValidFullXDRMessage(String endpoint,String doc, String name, String directTo, String from, String replyTo) {
+		String metadata = XDRUtilities.getXDRFullTemplate("Xdr_full_metadata_only.xml");
+		return sendMessage(endpoint,doc,name,directTo,from,replyTo, metadata);
 	}
 	
-	public static String sendInValidMinimalXDRMessage(
-			String endpoint,String doc, String name, String directTo, String directFrom, String replyTo)
-	{
-		return sendValidMinimalXDRMessage(endpoint,doc,name,directTo,directFrom,replyTo);
-	//	return null;
+	public static String sendValidMinimalXDRMessage(String endpoint,String doc, String name, String directTo, String directFrom, String replyTo) {
+		String metadata = XDRUtilities.getXDRFullTemplate("Xdr_minimal_metadata_only.xml");
+		return sendMessage(endpoint,doc,name,directTo,directFrom,replyTo, metadata);
 	}
-	
-	public static String sendInValidFullXDRMessage(
-			String endpoint,String doc, String name, String directTo, String from, String replyTo)
-	{
-		return sendValidMinimalXDRMessage(endpoint,doc,name,directTo,from,replyTo);
-	}
-	
-
 }
