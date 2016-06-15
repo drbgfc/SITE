@@ -1,12 +1,12 @@
 package org.sitenv.common.xdrsender;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.UUID;
-
-import org.apache.commons.io.IOUtils;
 
 public class XDRUtilities {
 
@@ -72,7 +72,7 @@ public class XDRUtilities {
 	        mtom.append(metadata);
 	        mtom.append("\r\n");
 	        mtom.append("--MIMEBoundary_1293f28762856bdafcf446f2a6f4a61d95a95d0ad1177f20\r\n");
-	        mtom.append("Content-Type: application/octet-stream\r\n");
+	        mtom.append("Content-Type: text/plain\r\n");
 	        mtom.append("Content-Transfer-Encoding: binary\r\n");
 	        mtom.append("Content-ID: <1.3293f28762856bdafcf446f2a6f4a61d95a95d0ad1177f20@apache.org>\r\n");
 	        mtom.append("\r\n");
